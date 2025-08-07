@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <title>E-Waste Image Classifier</title>
 
-  <!-- TensorFlow.js core (CPU backend only) -->
+  <!-- TensorFlow.js core (CPU backend) -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-
-  <!-- Helper so TF-JS can pull models from TensorFlow Hub -->
+  <!-- Helper so TF-JS can pull models from TF-Hub / GCS -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tfhub@0.8.0/dist/tfjs_tfhub.min.js"></script>
 
   <style>
-    body{font-family:sans-serif;text-align:center;padding:2rem}
-    canvas,img{max-width:100%;margin-top:1rem}
-    #out{margin-top:1rem;font-size:1.1rem;white-space:pre-wrap}
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    canvas, img { max-width: 100%; margin-top: 1rem; }
+    #out { margin-top: 1rem; font-size: 1.1rem; white-space: pre-wrap; }
   </style>
 </head>
 <body>
@@ -26,20 +25,20 @@
 
   <script>
   (async () => {
-    /* 1 – use the always-available CPU backend */
+    /* 1️⃣  always-available CPU backend */
     await tf.setBackend('cpu');
     await tf.ready();
 
-    /* 2 – load Google’s CircularNet waste detector */
+    /* 2️⃣  load CircularNet from Google Cloud Storage (CORS-safe) */
     const MODEL =
-      'https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1';
-    const model = await tf.loadGraphModel(MODEL, {fromTFHub:true});
+      'https://storage.googleapis.com/tfjs-models/savedmodel/circularnet/waste/detector/1/model.json';
+    const model = await tf.loadGraphModel(MODEL, {fromTFHub: true});
 
     document.getElementById('out').textContent =
       'Model ready – choose an image.';
 
-    /* label list for class IDs */
-    const names=[
+    /* 3️⃣  class ID ➜ readable label list */
+    const names = [
       'battery','beer_can','bottle_cap','cardboard','charger','cigarette',
       'drink_carton','glass_bottle','glass_cup','metal_can','paper','paper_cup',
       'paper_plate','phone','plastic_bag','plastic_bottle','plastic_cutlery',
@@ -47,43 +46,66 @@
       'takeaway_container','toothbrush','wrapping_paper'
     ];
 
-    /* 3 – run detection on each upload */
-    document.getElementById('pick').addEventListener('change',async ev=>{
-      const file=ev.target.files[0]; if(!file)return;
+    /* 4️⃣  run detection when a file is chosen */
+    document.getElementById('pick').addEventListener('change', async ev => {
+      const file = ev.target.files[0];
+      if (!file) return;
 
-      const img=document.getElementById('preview');
-      img.src=URL.createObjectURL(file); await img.decode();
-      document.getElementById('out').textContent='Detecting…';
+      const img = document.getElementById('preview');
+      img.src = URL.createObjectURL(file);
+      await img.decode();
 
-      const input=tf.tidy(()=>tf.browser.fromPixels(img)
-        .resizeBilinear([640,640]).div(255).expandDims(0));
-      const [bT,sT,cT,nT]=await model.executeAsync(input);
+      document.getElementById('out').textContent = 'Detecting…';
+
+      /* prepare tensor [1,640,640,3] in 0-1 range */
+      const input = tf.tidy(() =>
+        tf.browser.fromPixels(img)
+          .resizeBilinear([640, 640])
+          .div(255)
+          .expandDims(0)
+      );
+
+      const [bT, sT, cT, nT] = await model.executeAsync(input);
       tf.dispose(input);
 
-      const boxes=bT.dataSync(),scores=sT.dataSync(),
-            classes=cT.dataSync(),n=nT.dataSync()[0];
-      tf.dispose([bT,sT,cT,nT]);
+      const boxes   = bT.dataSync();
+      const scores  = sT.dataSync();
+      const classes = cT.dataSync();
+      const n       = nT.dataSync()[0];
+      tf.dispose([bT, sT, cT, nT]);
 
-      const cvs=document.createElement('canvas');
-      cvs.width=img.naturalWidth;cvs.height=img.naturalHeight;
-      const ctx=cvs.getContext('2d'); ctx.drawImage(img,0,0);
-      ctx.lineWidth=2;ctx.strokeStyle='#0f0';ctx.fillStyle='#0f0';ctx.font='18px Arial';
+      /* draw results on a canvas */
+      const cvs = document.createElement('canvas');
+      cvs.width  = img.naturalWidth;
+      cvs.height = img.naturalHeight;
+      const ctx  = cvs.getContext('2d');
+      ctx.drawImage(img, 0, 0);
 
-      let out='';
-      for(let i=0;i<n;i++){
-        if(scores[i]<.40)continue;
-        const cls=names[classes[i]]||'item';
-        const [y1,x1,y2,x2]=[
-          boxes[i*4]*cvs.height,boxes[i*4+1]*cvs.width,
-          boxes[i*4+2]*cvs.height,boxes[i*4+3]*cvs.width];
-        ctx.strokeRect(x1,y1,x2-x1,y2-y1);
-        ctx.fillText(`${cls} ${(scores[i]*100).toFixed(1)}%`,
-                     x1,y1>20?y1-5:y1+20);
-        out+=`${cls} — ${(scores[i]*100).toFixed(1)} %\n`;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#00FF00';
+      ctx.fillStyle   = '#00FF00';
+      ctx.font        = '18px Arial';
+
+      let summary = '';
+      for (let i = 0; i < n; i++) {
+        if (scores[i] < 0.40) continue;              // skip weak detections
+        const label = names[classes[i]] || 'item';
+        const [y1, x1, y2, x2] = [
+          boxes[i * 4 + 0] * cvs.height,
+          boxes[i * 4 + 1] * cvs.width,
+          boxes[i * 4 + 2] * cvs.height,
+          boxes[i * 4 + 3] * cvs.width
+        ];
+        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        ctx.fillText(`${label} ${(scores[i] * 100).toFixed(1)}%`,
+                     x1, y1 > 20 ? y1 - 5 : y1 + 20);
+        summary += `${label} — ${(scores[i] * 100).toFixed(1)} %\n`;
       }
-      document.getElementById('preview').replaceWith(cvs); cvs.id='preview';
+
+      document.getElementById('preview').replaceWith(cvs);
+      cvs.id = 'preview';
       document.getElementById('out').textContent =
-        out || 'No e-waste items detected.';
+        summary || 'No e-waste items detected.';
     });
   })();
   </script>
