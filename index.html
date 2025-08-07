@@ -2,53 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Custom E-Waste Classifier</title>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+  <title>Simple E-Waste Classifier</title>
+  <!-- TensorFlow.js core (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+  <!-- MobileNet pre-trained classifier -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.2.1/dist/mobilenet.min.js"></script>
   <style>
-    body { font-family: sans-serif; text-align:center; padding:2rem;}
-    #preview { max-width: 100%; margin-top:1rem; }
-    #label   { margin-top:1rem; font-size:1.5rem; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 2rem; }
+    img  { max-width: 80%; margin-top: 1rem; }
+    #results { margin-top: 1rem; font-size: 1.1rem; white-space: pre-wrap; }
+    input { margin-top: 1rem; }
   </style>
 </head>
 <body>
-  <h1>E-Waste Classifier</h1>
-  <p>Upload a photo of your gadget:</p>
-  <input type="file" id="upload" accept="image/*">
-  <img id="preview" src="" alt="Preview…">
-  <div id="label">Model loading…</div>
+  <h1>E-Waste Image Classifier</h1>
+  <p>Upload a photo of your gadget (phone, charger, battery, etc.)</p>
+  <input type="file" id="upload" accept="image/*"><br>
+  <img id="preview" src="" alt="Your image will appear here">
+  <div id="results">Loading model…</div>
 
-  <script type="module">
-    import * as tmImage from "https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js";
+  <script>
+    let model;
+    const resultsEl = document.getElementById("results");
+    const imgEl     = document.getElementById("preview");
 
-    const URL = "./model/";  // the folder you unzipped
-    let model, maxPredictions;
-
-    // 1️⃣ load your custom model
-    tmImage.load(URL + "model.json", URL + "metadata.json").then(m => {
+    // 1️⃣ Load MobileNet
+    mobilenet.load().then(m => {
       model = m;
-      maxPredictions = m.getTotalClasses();
-      document.getElementById("label").innerText = "Model loaded - select an image!";
+      resultsEl.innerText = "Model loaded! Upload an image above.";
+    }).catch(err => {
+      console.error(err);
+      resultsEl.innerText = "Failed to load model.";
     });
 
-    // 2️⃣ when user picks a file…
-    document.getElementById("upload").addEventListener("change", async e => {
+    // 2️⃣ When user uploads an image…
+    document.getElementById("upload").addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (!file || !model) return;
 
-      // show preview
-      const imgEl = document.getElementById("preview");
+      // Show preview
       imgEl.src = URL.createObjectURL(file);
-      await imgEl.decode();
+      await new Promise(r => imgEl.onload = r);
 
-      // run prediction
-      const predictions = await model.predict(imgEl);
-      // find best class
-      predictions.sort((a,b)=>b.probability - a.probability);
-      const top = predictions[0];
+      resultsEl.innerText = "Classifying…";
 
-      // display result
-      document.getElementById("label").innerText =
-        `${top.className} — ${(top.probability*100).toFixed(1)}%`;
+      // 3️⃣ Classify the image
+      const predictions = await model.classify(imgEl, 3);
+      // 4️⃣ Show top 3
+      resultsEl.innerText = predictions
+        .map(p => `${p.className} — ${(p.probability*100).toFixed(1)}%`)
+        .join("\n");
     });
   </script>
 </body>
