@@ -1,72 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>E-Waste Detector</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <meta charset="UTF-8" />
+  <title>E-Waste Detector (Roboflow)</title>
+  <script src="https://cdn.jsdelivr.net/npm/inferencejs"></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    body { font-family: sans-serif; text-align:center; padding:20px; }
     #canvas { max-width: 100%; margin-top: 20px; }
-    #results { margin-top: 20px; font-size: 1.1rem; white-space: pre-wrap; }
+    #results { margin-top: 20px; white-space: pre-wrap; font-size: 1.1rem; }
   </style>
 </head>
 <body>
   <h1>E-Waste Detector</h1>
+  <p>Upload a photo of your old gadgets and see what e-waste items are detected!</p>
   <input type="file" id="upload" accept="image/*">
   <canvas id="canvas"></canvas>
   <div id="results">Loading model…</div>
 
-  <script>
-    let model;
-    cocoSsd.load().then(m => {
-      model = m;
-      document.getElementById('results').innerText = 
-        'Model Loaded. Choose an image to detect electronics.';
-    });
+  <script type="module">
+    import { InferenceEngine } from "inferencejs";
 
-    document.getElementById('upload').addEventListener('change', async event => {
-      const file = event.target.files[0];
+    // 1️⃣ Initialize the inference engine
+    const inferEngine = new InferenceEngine();
+
+    // 2️⃣ Start a worker for the Roboflow model
+    //    - model name: "e-waste-dataset"
+    //    - version:   "43"  (pre-trained on 19613 images)
+    //    - replace YOUR_PUBLISHABLE_KEY below with your Roboflow key
+    const workerId = await inferEngine.startWorker(
+      "e-waste-dataset", 
+      "43", 
+      "YOUR_PUBLISHABLE_KEY", 
+      { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 20 }
+    );
+
+    document.getElementById("results").innerText = "Model loaded! Choose an image.";
+
+    // 3️⃣ When the user uploads an image, run inference
+    document.getElementById("upload").addEventListener("change", async (evt) => {
+      const file = evt.target.files[0];
       if (!file) return;
-      const img = document.createElement('img');
+
+      // Load image into a canvas
+      const img = new Image();
       img.src = URL.createObjectURL(file);
       await img.decode();
 
-      const canvas = document.getElementById('canvas');
+      const canvas = document.getElementById("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
 
-      document.getElementById('results').innerText = 'Detecting…';
-      const predictions = await model.detect(img);
+      // 4️⃣ Run detection
+      document.getElementById("results").innerText = "Detecting…";
+      const predictions = await inferEngine.infer(workerId, img);
 
-      const electronics = predictions.filter(p =>
-        ['cell phone','laptop','tv','remote'].includes(p.class)
-      );
-
-      ctx.strokeStyle = '#00FFFF';
+      // 5️⃣ Draw boxes + show results
+      ctx.strokeStyle = "#00FF00";
       ctx.lineWidth = 2;
-      ctx.font = '18px Arial';
-      ctx.fillStyle = '#00FFFF';
+      ctx.font = "18px sans-serif";
+      ctx.fillStyle = "#00FF00";
 
-      let output = '';
-      if (electronics.length === 0) {
-        output = 'No electronics detected.';
+      if (predictions.length === 0) {
+        document.getElementById("results").innerText = "No e-waste items detected.";
       } else {
-        electronics.forEach(p => {
-          const [x, y, width, height] = p.bbox;
+        let output = "";
+        predictions.forEach(p => {
+          const [x, y, w, h] = p.bbox;
+          // draw box
           ctx.beginPath();
-          ctx.rect(x, y, width, height);
+          ctx.rect(x, y, w, h);
           ctx.stroke();
-          ctx.fillText(
-            `${p.class} ${(p.score * 100).toFixed(1)}%`,
-            x, y > 20 ? y - 5 : y + 20
-          );
-          output += `${p.class} — ${(p.score * 100).toFixed(1)}% confidence\n`;
+          // draw label
+          const label = `${p.class} ${(p.score * 100).toFixed(1)}%`;
+          ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
+          output += label + "\n";
         });
+        document.getElementById("results").innerText = output;
       }
-      document.getElementById('results').innerText = output;
     });
   </script>
 </body>
