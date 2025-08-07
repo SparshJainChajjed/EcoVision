@@ -2,43 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>E-Waste Detector • CircularNet</title>
+  <title>E-Waste Image Classifier (CircularNet)</title>
 
   <!-- TensorFlow.js core -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-
-  <!-- Faster WASM backend (optional but recommended) -->
+  <!-- Optional but faster WASM backend -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.21.0/dist/tf-backend-wasm.min.js"></script>
-
-  <!-- Helper so we can load a model straight from TensorFlow Hub -->
+  <!-- Helper so TF-JS can pull models from TensorFlow Hub -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tfhub@0.8.0/dist/tfjs_tfhub.min.js"></script>
 
   <style>
-    body  { font-family:Arial, sans-serif; text-align:center; padding:2rem; }
-    #prev { max-width:100%; margin-top:1rem; }
-    #log  { margin-top:1rem; white-space:pre-wrap; font-size:1.1rem; }
-    input { margin-top:1rem; }
+    body {font-family:sans-serif;text-align:center;padding:2rem}
+    canvas,img {max-width:100%;margin-top:1rem}
+    #out {margin-top:1rem;font-size:1.1rem;white-space:pre-wrap}
+    input {margin-top:1rem}
   </style>
 </head>
 <body>
-  <h1>E-Waste Image Detector</h1>
+  <h1>E-Waste Image Classifier</h1>
   <p>Upload a photo of a phone, charger, battery, cable, etc.</p>
 
-  <input type="file" id="file" accept="image/*"><br>
-  <canvas id="prev"></canvas>
-  <div id="log">Loading model… first load ≈ 7 MB.</div>
+  <input type="file" id="pick" accept="image/*">
+  <img id="preview" alt="preview">
+  <div id="out">Loading model … first load ≈ 5-10 s</div>
 
   <script>
   (async () => {
-    /* 1️⃣ use WASM for speed */
-    await tf.setBackend('wasm'); await tf.ready();
+    /* 1 – choose the fastest backend available */
+    await tf.setBackend('wasm');
+    await tf.ready();
 
-    /* 2️⃣ load CircularNet waste-detector from TF-Hub */
-    const modelURL =
+    /* 2 – load Google’s CircularNet waste-detector (no keys) */
+    const MODEL_URL =
       'https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1';
-    const model = await tf.loadGraphModel(modelURL, { fromTFHub:true });
+    const model = await tf.loadGraphModel(MODEL_URL, {fromTFHub:true});
 
-    const classNames = [
+    document.getElementById('out').textContent =
+      'Model ready – choose an image.';
+
+    /* 3 – class-ID ➜ readable label list */
+    const names = [
       'battery','beer_can','bottle_cap','cardboard','charger','cigarette',
       'drink_carton','glass_bottle','glass_cup','metal_can','paper','paper_cup',
       'paper_plate','phone','plastic_bag','plastic_bottle','plastic_cutlery',
@@ -46,11 +49,44 @@
       'takeaway_container','toothbrush','wrapping_paper'
     ];
 
-    document.getElementById('log').textContent =
-      'Model ready – pick an image.';
+    /* 4 – run detection on each upload */
+    document.getElementById('pick').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    /* 3️⃣ on image upload */
-    document.getElementById('file').onchange = async ev => {
-      const f = ev.target.files[0]; if (!f) return;
-      const img = new Image();
-      img.src = URL.createObjectURL(f); await img.
+      /* show image preview */
+      const img = document.getElementById('preview');
+      img.src = URL.createObjectURL(file);
+      await img.decode();
+
+      document.getElementById('out').textContent = 'Detecting…';
+
+      /* prepare tensor [1,640,640,3] */
+      const input = tf.tidy(() =>
+        tf.browser.fromPixels(img)
+          .resizeBilinear([640,640])
+          .div(255).expandDims(0)
+      );
+
+      const t0 = performance.now();
+      const [boxesT,scoresT,classesT,numsT] = await model.executeAsync(input);
+      const t1 = performance.now();
+      tf.dispose([input]);
+
+      const boxes   = boxesT.dataSync();
+      const scores  = scoresT.dataSync();
+      const classes = classesT.dataSync();
+      const n       = numsT.dataSync()[0];
+      tf.dispose([boxesT,scoresT,classesT,numsT]);
+
+      /* draw results on a canvas */
+      const cvs = document.createElement('canvas');
+      cvs.width  = img.naturalWidth;
+      cvs.height = img.naturalHeight;
+      const ctx  = cvs.getContext('2d');
+      ctx.drawImage(img,0,0);
+      ctx.lineWidth = 2; ctx.strokeStyle = '#0f0';
+      ctx.font='18px Arial'; ctx.fillStyle='#0f0';
+
+      let summary = '';
+      for (let i=0;i<n;i++){
