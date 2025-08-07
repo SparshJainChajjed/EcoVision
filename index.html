@@ -2,56 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>E-Waste Image Classifier (one-file, CDN only)</title>
+  <title>E-Waste Detector • CircularNet</title>
 
-  <!-- 1️⃣  TensorFlow.js core -->
+  <!-- TensorFlow.js core -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <!-- 2️⃣  MobileNet-v2 UMD bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+
+  <!-- Faster WASM backend (optional but recommended) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.21.0/dist/tf-backend-wasm.min.js"></script>
+
+  <!-- Helper so we can load a model straight from TensorFlow Hub -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tfhub@0.8.0/dist/tfjs_tfhub.min.js"></script>
 
   <style>
-    body {font-family:sans-serif;text-align:center;padding:2rem;}
-    img  {max-width:100%;margin-top:1rem;}
-    #out {margin-top:1rem;font-size:1.2rem;white-space:pre-wrap;}
+    body  { font-family:Arial, sans-serif; text-align:center; padding:2rem; }
+    #prev { max-width:100%; margin-top:1rem; }
+    #log  { margin-top:1rem; white-space:pre-wrap; font-size:1.1rem; }
+    input { margin-top:1rem; }
   </style>
 </head>
 <body>
-  <h1>E-Waste Image Classifier</h1>
-  <p>Upload one gadget photo (phone, laptop, remote…)</p>
+  <h1>E-Waste Image Detector</h1>
+  <p>Upload a photo of a phone, charger, battery, cable, etc.</p>
 
-  <input type="file" id="pick" accept="image/*"><br>
-  <img id="preview" alt="Preview">
-  <div id="out">Loading model … (first load ≈ 5 MB)</div>
+  <input type="file" id="file" accept="image/*"><br>
+  <canvas id="prev"></canvas>
+  <div id="log">Loading model… first load ≈ 7 MB.</div>
 
   <script>
-    (async () => {
-      try {
-        const model = await mobilenet.load();                  // download once
-        document.getElementById('out').textContent =
-          'Model ready – choose an image.';
+  (async () => {
+    /* 1️⃣ use WASM for speed */
+    await tf.setBackend('wasm'); await tf.ready();
 
-        document.getElementById('pick').onchange = async e => {
-          const file = e.target.files[0];
-          if (!file) return;
+    /* 2️⃣ load CircularNet waste-detector from TF-Hub */
+    const modelURL =
+      'https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1';
+    const model = await tf.loadGraphModel(modelURL, { fromTFHub:true });
 
-          const img = document.getElementById('preview');
-          img.src = URL.createObjectURL(file);
-          await img.decode();
+    const classNames = [
+      'battery','beer_can','bottle_cap','cardboard','charger','cigarette',
+      'drink_carton','glass_bottle','glass_cup','metal_can','paper','paper_cup',
+      'paper_plate','phone','plastic_bag','plastic_bottle','plastic_cutlery',
+      'plastic_straw','rope','shoe','single_use_plastic','styrofoam',
+      'takeaway_container','toothbrush','wrapping_paper'
+    ];
 
-          document.getElementById('out').textContent = 'Classifying…';
-          const preds = await model.classify(img, 3);
+    document.getElementById('log').textContent =
+      'Model ready – pick an image.';
 
-          document.getElementById('out').textContent =
-            preds.map(p =>
-              `${p.className} — ${(p.probability*100).toFixed(1)} %`
-            ).join('\n');
-        };
-      } catch (err) {
-        console.error(err);
-        document.getElementById('out').textContent =
-          '⚠️  Model failed to load (check internet or ad-blocker).';
-      }
-    })();
-  </script>
-</body>
-</html>
+    /* 3️⃣ on image upload */
+    document.getElementById('file').onchange = async ev => {
+      const f = ev.target.files[0]; if (!f) return;
+      const img = new Image();
+      img.src = URL.createObjectURL(f); await img.
