@@ -2,126 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Zero-Setup E-Waste Classifier</title>
+  <title>E-Waste Classifier</title>
   <!-- UMD build of InferenceJS (Roboflow) -->
   <script src="https://cdn.jsdelivr.net/npm/inferencejs/dist/inference.umd.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    #canvas { max-width: 100%; margin-top: 1rem; }
-    #log { margin-top: 1rem; white-space: pre-wrap; font-size: 1.1rem; }
+    body { font-family: sans-serif; text-align:center; padding:2rem; }
+    #canvas { max-width:100%; margin-top:1rem; }
+    #log    { margin-top:1rem; white-space:pre-wrap; font-size:1.1rem; }
 
-    /* Simple spinner */
-    .spinner {
-      margin: 1rem auto;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #3498db;
+    /* 🔄 Spinner */
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 40px; height: 40px;
       animation: spin 1s linear infinite;
-      display: none;
+      margin: 1rem auto;
+      display: none;               /* hidden by default */
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <h1>E-Waste Classifier</h1>
-  <p>Upload a photo of old electronics—phones, chargers, batteries, and more.</p>
+  <p>Upload a photo of old electronics (phones, chargers, batteries…)</p>
+  <input type="file" id="upload" accept="image/*">
 
-  <!-- Spinner shown during loading/detecting -->
-  <div id="spinner" class="spinner"></div>
+  <!-- 🔄 Spinner element -->
+  <div id="loader" class="loader"></div>
 
-  <input type="file" id="upload" accept="image/*" disabled>
   <canvas id="canvas"></canvas>
   <div id="log">Loading model…</div>
 
   <script>
-    // ── CONFIG ──
+    /* ───────────────────────── CONFIG ───────────────────────── */
     const PUBLISHABLE_KEY = "rf_YGton8qZtVV5wJtb2BavtAJJntJ2";
     const MODEL_SLUG      = "ewaste-balanced-dataset";
     const MODEL_VERSION   = "2";
 
+    const log    = document.getElementById("log");
+    const loader = document.getElementById("loader");
+
+    /* ───────────────────── Helper functions ─────────────────── */
+    const showLoader = () => loader.style.display = "block";
+    const hideLoader = () => loader.style.display = "none";
+
+    /* ───────────────────────── Main code ────────────────────── */
     const engine = new InferenceEngine();
-    const uploadEl = document.getElementById("upload");
-    const logEl    = document.getElementById("log");
-    const spinner  = document.getElementById("spinner");
-    const canvas   = document.getElementById("canvas");
-    const ctx      = canvas.getContext("2d");
+    showLoader();                       // spinner while model downloads
 
-    async function main() {
-      try {
-        // Show spinner while loading model
-        spinner.style.display = "block";
-        logEl.innerText = "Loading model…";
+    engine.startWorker(
+      MODEL_SLUG,
+      MODEL_VERSION,
+      PUBLISHABLE_KEY,
+      { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 20 }
+    ).then(workerId => {
+      hideLoader();
+      log.textContent = "Model loaded — upload an image!";
 
-        // 1️⃣ Start the Roboflow worker
-        const workerId = await engine.startWorker(
-          MODEL_SLUG, MODEL_VERSION, PUBLISHABLE_KEY,
-          { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 20 }
-        );
+      document.getElementById("upload").onchange = async evt => {
+        const file = evt.target.files[0];
+        if (!file) return;
 
-        // Model loaded
-        spinner.style.display = "none";
-        logEl.innerText = "Model loaded—choose an image!";
-        uploadEl.disabled = false;
+        /* Draw uploaded image */
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        await img.decode();
+        const canvas = document.getElementById("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
 
-        // 2️⃣ Set up image upload handler
-        uploadEl.addEventListener("change", async (evt) => {
-          const file = evt.target.files[0];
-          if (!file) return;
+        /* Run detection */
+        log.textContent = "Detecting…";
+        showLoader();
 
-          // Draw image
-          const img = new Image();
-          img.src = URL.createObjectURL(file);
-          await img.decode();
-          canvas.width  = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
+        const preds = await engine.infer(workerId, img);
 
-          // Show spinner + log
-          spinner.style.display = "block";
-          logEl.innerText = "Detecting…";
+        hideLoader();
+        ctx.strokeStyle = "#00CC00";
+        ctx.lineWidth   = 2;
+        ctx.font        = "18px sans-serif";
+        ctx.fillStyle   = "#00CC00";
 
-          // 3️⃣ Run inference
-          const preds = await engine.infer(workerId, img);
-
-          // 4️⃣ Draw boxes & labels
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-          ctx.strokeStyle = "#00CC00";
-          ctx.lineWidth   = 2;
-          ctx.font        = "18px sans-serif";
-          ctx.fillStyle   = "#00CC00";
-
-          let output = "";
-          if (preds.length === 0) {
-            output = "No e-waste items detected.";
-          } else {
-            preds.forEach(p => {
-              const [x, y, w, h] = p.bbox;
-              ctx.beginPath();
-              ctx.rect(x, y, w, h);
-              ctx.stroke();
-              const label = `${p.class} ${(p.score * 100).toFixed(1)}%`;
-              ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
-              output += label + "\n";
-            });
-          }
-
-          // Hide spinner + update log
-          spinner.style.display = "none";
-          logEl.innerText = output;
-        });
-      } catch (err) {
-        console.error(err);
-        spinner.style.display = "none";
-        logEl.innerText = "Error loading model—see console.";
-      }
-    }
-
-    main();
+        let output = "";
+        if (preds.length === 0) {
+          output = "No e-waste items detected.";
+        } else {
+          preds.forEach(p => {
+            const [x, y, w, h] = p.bbox;
+            ctx.beginPath();
+            ctx.rect(x, y, w, h);
+            ctx.stroke();
+            const label = `${p.class} ${(p.score*100).toFixed(1)}%`;
+            ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
+            output += label + "\n";
+          });
+        }
+        log.textContent = output;
+      };
+    }).catch(err => {
+      hideLoader();
+      console.error(err);
+      log.textContent = "⚠️ Failed to load model.";
+    });
   </script>
 </body>
 </html>
