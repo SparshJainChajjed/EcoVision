@@ -1,23 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ecognize.xyz</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    html, body { margin:0; height:100%; }
-    body {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:#0d1117;
-      color:#d4d4d4;
-      font-family:"Segoe UI",Roboto,Arial,sans-serif;
+    /* ── COLORS ───────────────────────────────────────────── */
+    :root {
+      --bg: #0d1117;
+      --text: #d4d4d4;
+      --accent: #388bfd;
     }
-    h1 { font-size:4rem; }
+    /* ── RESET & LAYOUT ───────────────────────────────────── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    /* ── TYPING EFFECT ───────────────────────────────────── */
+    .typing {
+      font-size: 3rem;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid var(--text);
+      /* cursor blink */
+      animation: blink 0.7s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50%      { border-color: var(--text); }
+    }
   </style>
 </head>
 <body>
-  <h1>hi</h1>
+
+  <div id="typing" class="typing"></div>
+
+  <script>
+    const message = "Welcome to ecognize";
+    const speed   = 50;               // 50 ms per character
+    let   index   = 0;
+    const target  = document.getElementById("typing");
+
+    function type() {
+      if (index < message.length) {
+        target.textContent += message.charAt(index);
+        index++;
+        setTimeout(type, speed);
+      }
+    }
+
+    // Start typing when page loads:
+    window.addEventListener("DOMContentLoaded", type);
+  </script>
+
 </body>
 </html>
