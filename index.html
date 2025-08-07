@@ -2,75 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>YOLOv5n E-Waste Detector</title>
+  <title>E-Waste Classifier (MobileNet)</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    canvas, img { max-width: 400px; margin: 1rem auto; display: block; }
-    #result { font-size: 1.1rem; margin-top: 1rem; }
+    img { max-width: 400px; margin: 1rem auto; display: block; }
+    #result { font-size: 1.2rem; margin-top: 1rem; }
   </style>
 </head>
 <body>
-  <h1>🗑️ E-Waste Detector (YOLOv5n + ONNX)</h1>
-  <p>Upload an image; any detected “cell phone,” “laptop,” or “keyboard” will be flagged as e-waste.</p>
-  <input type="file" id="fileInput" accept="image/*">
-  <img id="preview" />
-  <canvas id="canvas" style="display:none;"></canvas>
+  <h1>🗑️ E-Waste Image Classifier</h1>
+  <p>Upload a photo—if it’s an electronic (laptop, phone, etc.), we’ll label it e-waste.</p>
+  <input type="file" id="fileInput" accept="image/*"/>
+  <img id="preview" alt="Upload preview"/>
   <div id="result">Waiting for an image…</div>
 
-  <!-- ONNX Runtime Web -->
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+  <!-- TF.js and MobileNet -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@3.1.0/dist/mobilenet.min.js"></script>
   <script>
-    const ECLASSES = new Set(['cell phone','laptop','keyboard','remote','mouse','tv']);
+    const fileInput = document.getElementById('fileInput');
+    const preview   = document.getElementById('preview');
+    const result    = document.getElementById('result');
 
-    async function letterbox(img, size) {
-      // draw into canvas with padding to square
-      const [w,h] = [img.naturalWidth, img.naturalHeight];
-      const scale = Math.min(size/w, size/h);
-      const [nw, nh] = [Math.round(w*scale), Math.round(h*scale)];
-      const canvas = document.getElementById('canvas');
-      canvas.width = size; canvas.height = size;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0,0,size,size);
-      ctx.drawImage(img, (size-nw)/2, (size-nh)/2, nw, nh);
-      return ort.Tensor.fromImageData(ctx.getImageData(0,0,size,size));
-    }
+    // Set of keywords we treat as e-waste
+    const EWASTE_KEYWORDS = [
+      'laptop', 'computer', 'notebook', 'keyboard', 'cell phone',
+      'mobile phone', 'remote control', 'monitor', 'camera', 'tv'
+    ];
 
-    async function runYOLO(file) {
-      const img = document.getElementById('preview');
-      img.src = URL.createObjectURL(file);
-      await img.decode();
-      const tensor = await letterbox(img, 640);
-      // normalize 0-1, transpose to [1,3,640,640]
-      let data = Float32Array.from(tensor.data).map(v=>v/255);
-      const [r,c] = [640,640];
-      const transposed = new Float32Array(1*3*r*c);
-      for(let y=0;y<r;y++){
-        for(let x=0;x<c;x++){
-          for(let ch=0;ch<3;ch++){
-            transposed[ch*r*c + y*c + x] = data[(y*c + x)*4 + ch];
-          }
-        }
-      }
-      const session = await ort.InferenceSession.create(
-        'https://github.com/ultralytics/yolov5/releases/download/v6.0/yolov5n.onnx'
+    // Load MobileNet once at startup
+    let modelPromise = mobilenet.load();
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      // Show preview
+      preview.src = URL.createObjectURL(file);
+      result.textContent = 'Classifying…';
+
+      // Wait for image to fully load
+      await new Promise(r => preview.onload = r);
+
+      // Load model & get predictions
+      const model = await modelPromise;
+      const predictions = await model.classify(preview);
+
+      // Check if any top prediction matches our e-waste keywords
+      const wastePred = predictions.find(p =>
+        EWASTE_KEYWORDS.some(kw =>
+          p.className.toLowerCase().includes(kw)
+        )
       );
-      const feeds = { 
-        images: new ort.Tensor('float32', transposed, [1,3,r,c]) 
-      };
-      const out = await session.run(feeds);
-      // YOLOv5n ONNX has single output named 'output'
-      const y = out.output.data;
-      const [nl, no, nc] = [8400, (640/32)**2 * 3 * (5+80), 5+80];
-      // postprocess: decode boxes & class scores (omitted here for brevity)
-      // You can use any standard YOLOv5 ONNX JS postprocessor,
-      // then filter by ECLASSES and display the results.
-      document.getElementById('result').textContent = 
-        '✅ Model ran successfully. Now add your YOLO decode step!';
-    }
 
-    document.getElementById('fileInput')
-      .addEventListener('change', e => runYOLO(e.target.files[0]));
+      if (wastePred) {
+        result.innerHTML = `
+          <strong style="color:crimson">⚠️ E-Waste Detected:</strong><br>
+          ${wastePred.className} — ${(wastePred.probability*100).toFixed(1)}%
+        `;
+      } else {
+        // Otherwise show the top 3 predictions
+        result.innerHTML = `<strong>✅ Not e-waste.</strong><br>` +
+          predictions.slice(0,3)
+            .map(p => `${p.className}: ${(p.probability*100).toFixed(1)}%`)
+            .join('<br>');
+      }
+    });
   </script>
 </body>
 </html>
