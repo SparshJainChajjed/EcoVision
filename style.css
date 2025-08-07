@@ -1,0 +1,32 @@
+/* styles.css */
+:root {
+  --bg: #0d1117;
+  --text: #d4d4d4;
+  --accent: #388bfd;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Consolas, "Courier New", monospace;
+}
+.typing {
+  font-size: 3rem;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--text);
+  animation: blink 0.7s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { border-color: transparent; }
+  50%      { border-color: var(--text); }
+}
