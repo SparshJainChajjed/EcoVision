@@ -2,46 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>E-Waste Image Classifier (CircularNet)</title>
+  <title>E-Waste Image Classifier</title>
 
   <!-- TensorFlow.js core -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <!-- Optional but faster WASM backend -->
+  <!-- Faster WASM backend -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.21.0/dist/tf-backend-wasm.min.js"></script>
-  <!-- Helper so TF-JS can pull models from TensorFlow Hub -->
+  <!-- Helper to load models from TensorFlow Hub -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tfhub@0.8.0/dist/tfjs_tfhub.min.js"></script>
 
   <style>
-    body {font-family:sans-serif;text-align:center;padding:2rem}
-    canvas,img {max-width:100%;margin-top:1rem}
-    #out {margin-top:1rem;font-size:1.1rem;white-space:pre-wrap}
-    input {margin-top:1rem}
+    body{font-family:sans-serif;text-align:center;padding:2rem}
+    canvas,img{max-width:100%;margin-top:1rem}
+    #out{margin-top:1rem;font-size:1.1rem;white-space:pre-wrap}
   </style>
 </head>
 <body>
   <h1>E-Waste Image Classifier</h1>
   <p>Upload a photo of a phone, charger, battery, cable, etc.</p>
 
-  <input type="file" id="pick" accept="image/*">
+  <input type="file" id="pick" accept="image/*"><br>
   <img id="preview" alt="preview">
-  <div id="out">Loading model … first load ≈ 5-10 s</div>
+  <div id="out">Loading model … first load ≈ 5–10 s</div>
 
   <script>
   (async () => {
-    /* 1 – choose the fastest backend available */
-    await tf.setBackend('wasm');
-    await tf.ready();
 
-    /* 2 – load Google’s CircularNet waste-detector (no keys) */
-    const MODEL_URL =
-      'https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1';
-    const model = await tf.loadGraphModel(MODEL_URL, {fromTFHub:true});
+    /* 1 – backend: WASM if possible, otherwise CPU */
+    tf.setWasmPaths(
+      "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.21.0/dist/"
+    );
+    try { await tf.setBackend('wasm'); await tf.ready(); }
+    catch(e){ console.warn('WASM failed – using CPU'); await tf.setBackend('cpu'); }
+
+    /* 2 – load Google’s CircularNet waste detector */
+    const MODEL =
+      "https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1";
+    const model = await tf.loadGraphModel(MODEL, {fromTFHub:true});
 
     document.getElementById('out').textContent =
-      'Model ready – choose an image.';
+      "Model ready – choose an image.";
 
-    /* 3 – class-ID ➜ readable label list */
-    const names = [
+    /* label list for class IDs */
+    const names=[
       'battery','beer_can','bottle_cap','cardboard','charger','cigarette',
       'drink_carton','glass_bottle','glass_cup','metal_can','paper','paper_cup',
       'paper_plate','phone','plastic_bag','plastic_bottle','plastic_cutlery',
@@ -49,44 +52,46 @@
       'takeaway_container','toothbrush','wrapping_paper'
     ];
 
-    /* 4 – run detection on each upload */
-    document.getElementById('pick').addEventListener('change', async e => {
-      const file = e.target.files[0];
-      if (!file) return;
+    /* 3 – run every time a file is picked */
+    document.getElementById('pick').addEventListener('change',async ev=>{
+      const file=ev.target.files[0]; if(!file)return;
 
-      /* show image preview */
-      const img = document.getElementById('preview');
-      img.src = URL.createObjectURL(file);
-      await img.decode();
+      const img=document.getElementById('preview');
+      img.src=URL.createObjectURL(file); await img.decode();
+      document.getElementById('out').textContent='Detecting…';
 
-      document.getElementById('out').textContent = 'Detecting…';
+      const input=tf.tidy(()=>tf.browser.fromPixels(img)
+        .resizeBilinear([640,640]).div(255).expandDims(0));
+      const [bT,sT,cT,nT]=await model.executeAsync(input);
+      tf.dispose(input);
 
-      /* prepare tensor [1,640,640,3] */
-      const input = tf.tidy(() =>
-        tf.browser.fromPixels(img)
-          .resizeBilinear([640,640])
-          .div(255).expandDims(0)
-      );
+      const boxes=bT.dataSync(),scores=sT.dataSync(),
+            classes=cT.dataSync(),n=nT.dataSync()[0];
+      tf.dispose([bT,sT,cT,nT]);
 
-      const t0 = performance.now();
-      const [boxesT,scoresT,classesT,numsT] = await model.executeAsync(input);
-      const t1 = performance.now();
-      tf.dispose([input]);
+      const cvs=document.createElement('canvas');
+      cvs.width=img.naturalWidth;cvs.height=img.naturalHeight;
+      const ctx=cvs.getContext('2d'); ctx.drawImage(img,0,0);
+      ctx.lineWidth=2;ctx.strokeStyle='#0f0';ctx.fillStyle='#0f0';ctx.font='18px Arial';
 
-      const boxes   = boxesT.dataSync();
-      const scores  = scoresT.dataSync();
-      const classes = classesT.dataSync();
-      const n       = numsT.dataSync()[0];
-      tf.dispose([boxesT,scoresT,classesT,numsT]);
+      let out='';
+      for(let i=0;i<n;i++){
+        if(scores[i]<.4)continue;
+        const cls=names[classes[i]]||'item';
+        const [y1,x1,y2,x2]=[
+          boxes[i*4]*cvs.height,boxes[i*4+1]*cvs.width,
+          boxes[i*4+2]*cvs.height,boxes[i*4+3]*cvs.width];
+        ctx.strokeRect(x1,y1,x2-x1,y2-y1);
+        ctx.fillText(`${cls} ${(scores[i]*100).toFixed(1)}%`,
+          x1,y1>20?y1-5:y1+20);
+        out+=`${cls} — ${(scores[i]*100).toFixed(1)} %\n`;
+      }
+      document.getElementById('preview').replaceWith(cvs); cvs.id='preview';
+      document.getElementById('out').textContent=
+        out||'No e-waste items detected.';
+    });
 
-      /* draw results on a canvas */
-      const cvs = document.createElement('canvas');
-      cvs.width  = img.naturalWidth;
-      cvs.height = img.naturalHeight;
-      const ctx  = cvs.getContext('2d');
-      ctx.drawImage(img,0,0);
-      ctx.lineWidth = 2; ctx.strokeStyle = '#0f0';
-      ctx.font='18px Arial'; ctx.fillStyle='#0f0';
-
-      let summary = '';
-      for (let i=0;i<n;i++){
+  })();
+  </script>
+</body>
+</html>
