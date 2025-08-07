@@ -1,73 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>No-Key E-Waste Detector (COCO-SSD)</title>
+  <meta charset="UTF-8">
+  <title>E-Waste Detector (no key)</title>
 
-  <!-- TensorFlow.js core library -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"></script>
-  <!-- Pre-trained COCO-SSD object-detection model -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2"></script>
+  <!-- TF-JS core v3 (smaller, fully compatible) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+  <!-- COCO-SSD UMD bundle → attaches window.cocoSsd -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
 
   <style>
-    body      { font-family: Arial, sans-serif; text-align: center; padding: 2rem; }
-    #canvas   { max-width: 100%; margin-top: 1rem; }
-    #status   { margin-top: 1rem; font-size: 1.1rem; white-space: pre-wrap; }
-    input     { margin-top: 0.5rem; }
+    body  { font-family:Arial, sans-serif; text-align:center; padding:2rem }
+    #can  { max-width:100%; margin-top:1rem }
+    #stat { margin-top:1rem; font-size:1.1rem; white-space:pre-wrap }
   </style>
 </head>
 <body>
-  <h1>E-Waste Detector • No API Key</h1>
-  <p>Upload a picture of electronics (phones, laptops, remotes, TVs, etc.).</p>
+  <h1>E-Waste Detector</h1>
+  <p>Upload a picture of a phone, laptop, remote, TV, etc.</p>
 
-  <input type="file" id="fileInput" accept="image/*">
-  <canvas id="canvas"></canvas>
-  <div id="status">Loading model … (first run may take ~10 s)</div>
+  <input type="file" id="pick" accept="image/*"><br>
+  <canvas id="can"></canvas>
+  <div id="stat">Loading model … (first load ≈10 s)</div>
 
-  <script type="module">
-    import * as cocoSsd from "https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2";
+  <script>
+    const CLASSES = ["cell phone","laptop","remote","keyboard","mouse","tv"];
+    const stat = document.getElementById("stat");
+    const cvs  = document.getElementById("can");
+    const ctx  = cvs.getContext("2d");
 
-    const statusEl = document.getElementById("status");
-    const canvas   = document.getElementById("canvas");
-    const ctx      = canvas.getContext("2d");
-
-    // ⚙️  classes we care about for e-waste
-    const EWASTE_CLASSES = ["cell phone", "laptop", "remote", "keyboard", "mouse", "tv"];
-
-    // 1️⃣  load the model once
-    const model = await cocoSsd.load();
-    statusEl.innerText = "Model loaded – choose an image.";
-
-    // 2️⃣  handle uploads
-    document.getElementById("fileInput").addEventListener("change", async ev => {
-      const file = ev.target.files[0];
-      if (!file) return;
-
-      statusEl.innerText = "Running detection …";
-
-      // draw image into canvas
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      await img.decode();
-
-      canvas.width  = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-
-      // 3️⃣  make predictions
-      const predictions = await model.detect(img);
-
-      // 4️⃣  filter to e-waste classes + draw boxes
-      ctx.lineWidth   = 2;
-      ctx.strokeStyle = "#00FF00";
-      ctx.fillStyle   = "#00FF00";
-      ctx.font        = "18px Arial";
-
-      let output = "";
-      const ewPreds = predictions.filter(p => EWASTE_CLASSES.includes(p.class));
-
-      if (ewPreds.length === 0) {
-        output = "No electronics detected.";
-      } else {
-        ewPreds.forEach(p => {
-          const [x, y, w, h] = p.bb
+    // 1️⃣ load once
+    cocoSsd.load().then(model=>{
+      stat.textContent = "Model ready! Choose an image.";
+      document.get
