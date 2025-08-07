@@ -4,20 +4,61 @@
   <meta charset="UTF-8">
   <title>E-Waste Detector</title>
   <style>
-    body { font-family: sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-    header { background: #282c34; color: white; width: 100%; padding: 1rem 0; text-align: center; }
-    iframe { border: none; width: 100%; max-width: 800px; height: 700px; }
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    img { max-width: 300px; margin-top: 1rem; }
+    #result p { font-size: 1.1rem; margin: 0.5rem 0; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>E-Waste Image Classifier</h1>
-    <p>Upload a photo of an electronic item to see if it’s recognized as e-waste.</p>
-  </header>
-  <!-- Embedded Hugging Face Space -->
-  <iframe 
-    src="https://huggingface.co/spaces/Monissrk/E-waste_classifider?embed=true" 
-    title="E-Waste Classifier">
-  </iframe>
+  <h1>E-Waste Image Classifier</h1>
+  <p>Upload a photo of an electronic item to see if it’s e-waste.</p>
+  <input type="file" id="fileInput" accept="image/*">
+  <div>
+    <img id="preview" src="" alt="" />
+  </div>
+  <div id="result"></div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const preview   = document.getElementById('preview');
+    const result    = document.getElementById('result');
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      // show preview
+      preview.src = URL.createObjectURL(file);
+      result.innerHTML = '<p>Classifying…</p>';
+
+      // send to HF inference API
+      const form = new FormData();
+      form.append('file', file);
+      const res = await fetch(
+        'https://api-inference.huggingface.co/models/pyesonekyaw/recycletree_others',
+        {
+          method: 'POST',
+          headers: { 
+            'Authorization': 'Bearer hf_iirbNVFjRlr fRIwCjYzhZBOSTJXNODVVCD'
+            // ← your token goes here
+          },
+          body: form
+        }
+      );
+      const data = await res.json();
+      if (data.error) {
+        result.innerHTML = `<p>Error: ${data.error}</p>`;
+        return;
+      }
+
+      // display top 3 predictions
+      result.innerHTML = '<h2>Predictions:</h2>' +
+        data
+          .sort((a,b) => b.score - a.score)
+          .slice(0, 3)
+          .map(r => `<p>${r.label}: ${(r.score * 100).toFixed(1)}%</p>`)
+          .join('');
+    });
+  </script>
 </body>
 </html>
