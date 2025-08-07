@@ -2,77 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Simple E-Waste Detector</title>
-  <!-- TensorFlow.js core (UMD) -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <!-- COCO-SSD UMD bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
+  <title>Custom E-Waste Classifier</title>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 2rem; }
-    canvas { max-width: 100%; margin-top: 1rem; }
-    #status { margin-top: 1rem; font-size: 1.1rem; white-space: pre-wrap; }
-    input { margin-top: 1rem; }
+    body { font-family: sans-serif; text-align:center; padding:2rem;}
+    #preview { max-width: 100%; margin-top:1rem; }
+    #label   { margin-top:1rem; font-size:1.5rem; }
   </style>
 </head>
 <body>
-  <h1>Simple E-Waste Detector</h1>
-  <p>Upload a photo of your gadgets (phones, laptops, remotes, TVs…)</p>
-  <input type="file" id="fileInput" accept="image/*">
-  <canvas id="canvas"></canvas>
-  <div id="status">Loading model… (first run may take ~10 s)</div>
+  <h1>E-Waste Classifier</h1>
+  <p>Upload a photo of your gadget:</p>
+  <input type="file" id="upload" accept="image/*">
+  <img id="preview" src="" alt="Preview…">
+  <div id="label">Model loading…</div>
 
-  <script>
-    // Only these COCO classes overlap with common e-waste
-    const EWASTE = ["cell phone","laptop","remote","keyboard","mouse","tv"];
-    const status = document.getElementById("status");
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+  <script type="module">
+    import * as tmImage from "https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js";
 
-    // 1️⃣ Load the model
-    cocoSsd.load().then(model => {
-      status.textContent = "Model ready! Choose an image above.";
-      
-      // 2️⃣ When an image is chosen…
-      document.getElementById("fileInput").addEventListener("change", async e => {
-        const file = e.target.files[0];
-        if (!file) return;
+    const URL = "./model/";  // the folder you unzipped
+    let model, maxPredictions;
 
-        status.textContent = "Detecting…";
+    // 1️⃣ load your custom model
+    tmImage.load(URL + "model.json", URL + "metadata.json").then(m => {
+      model = m;
+      maxPredictions = m.getTotalClasses();
+      document.getElementById("label").innerText = "Model loaded - select an image!";
+    });
 
-        // Draw image
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        await new Promise(r => img.onload = r);
-        canvas.width = img.width; canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+    // 2️⃣ when user picks a file…
+    document.getElementById("upload").addEventListener("change", async e => {
+      const file = e.target.files[0];
+      if (!file || !model) return;
 
-        // 3️⃣ Run detection (loosen threshold a bit for dim/cracked devices)
-        model.detect(img, 10, 0.25).then(preds => {
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = "#0f0";
-          ctx.fillStyle = "#0f0";
-          ctx.font = "18px Arial";
+      // show preview
+      const imgEl = document.getElementById("preview");
+      imgEl.src = URL.createObjectURL(file);
+      await imgEl.decode();
 
-          // Filter for only e-waste classes
-          const hits = preds.filter(p => EWASTE.includes(p.class));
-          let output = "";
+      // run prediction
+      const predictions = await model.predict(imgEl);
+      // find best class
+      predictions.sort((a,b)=>b.probability - a.probability);
+      const top = predictions[0];
 
-          hits.forEach(p => {
-            const [x,y,w,h] = p.bbox;
-            ctx.beginPath();
-            ctx.rect(x, y, w, h);
-            ctx.stroke();
-            const label = `${p.class} ${(p.score * 100).toFixed(1)}%`;
-            ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
-            output += label + "\n";
-          });
-
-          status.textContent = hits.length ? output : "No electronics detected.";
-        });
-      });
-    }).catch(err => {
-      console.error(err);
-      status.textContent = "⚠️ Model failed to load. Check your internet.";
+      // display result
+      document.getElementById("label").innerText =
+        `${top.className} — ${(top.probability*100).toFixed(1)}%`;
     });
   </script>
 </body>
