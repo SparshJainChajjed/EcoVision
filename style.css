@@ -1,7 +1,6 @@
-/* styles.css */
 :root {
-  --bg: #0d1117;
-  --text: #d4d4d4;
+  --bg: #f8f9fa;
+  --text: #202122;
   --accent: #388bfd;
 }
 * {
@@ -12,21 +11,38 @@
 body {
   background: var(--bg);
   color: var(--text);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  font-family: Consolas, "Courier New", monospace;
+  min-height: 100vh;
 }
-.typing {
-  font-size: 3rem;
-  color: var(--accent);
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid var(--text);
-  animation: blink 0.7s step-end infinite;
+.container {
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
 }
-@keyframes blink {
-  0%, 100% { border-color: transparent; }
-  50%      { border-color: var(--text); }
+h1 {
+  margin-bottom: 1rem;
+}
+input, button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+#preview img {
+  max-width: 100%;
+  margin-top: 1rem;
+}
+#result, #options {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+#options button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
