@@ -1,78 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Zero-Setup E-Waste Detector</title>
-
-  <!-- Pull ml5.js from a reliable CDN; make sure ad-block is off for this domain -->
-  <script src="https://cdn.jsdelivr.net/npm/ml5@0.12.2/dist/ml5.min.js"></script>
-
+  <meta charset="UTF-8">
+  <title>E-Waste Detector</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    canvas, img { max-width: 100%; margin-top: 1rem; }
-    #status { margin-top: 1rem; }
+    body { font-family: sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+    header { background: #282c34; color: white; width: 100%; padding: 1rem 0; text-align: center; }
+    iframe { border: none; width: 100%; max-width: 800px; height: 700px; }
   </style>
 </head>
 <body>
-  <h1>Zero-Setup E-Waste Detector</h1>
-  <p>Only detects phones, laptops, remotes, TVs, keyboards, mice…</p>
-  <input type="file" id="picker" accept="image/*"><br>
-  <canvas id="canvas"></canvas>
-  <div id="status">Loading model…</div>
-
-  <script>
-    let detector, canvas, ctx, statusEl;
-
-    async function init() {
-      statusEl = document.getElementById('status');
-      canvas   = document.getElementById('canvas');
-      ctx      = canvas.getContext('2d');
-
-      // load COCO-SSD via ml5.js
-      detector = await ml5.objectDetector('cocossd');
-      statusEl.textContent = 'Model ready — pick an image!';
-      document.getElementById('picker')
-              .addEventListener('change', handleFile);
-    }
-
-    async function handleFile(evt) {
-      const file = evt.target.files[0];
-      if (!file) return;
-
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      await new Promise(r => img.onload = r);
-
-      canvas.width  = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      statusEl.textContent = 'Detecting…';
-
-      detector.detect(img, (err, results) => {
-        if (err) {
-          statusEl.textContent = 'Error: ' + err.message;
-          return;
-        }
-        ctx.lineWidth   = 2;
-        ctx.strokeStyle = '#0f0';
-        ctx.fillStyle   = '#0f0';
-        ctx.font        = '16px sans-serif';
-
-        results.forEach(obj => {
-          const label = obj.label.toLowerCase();
-          if (!['cell phone','laptop','remote','keyboard','mouse','tv']
-                .includes(label)) return;
-          ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
-          ctx.fillText(
-            `${label} ${(obj.confidence*100).toFixed(1)}%`,
-            obj.x, obj.y>20?obj.y-5:obj.y+20
-          );
-        });
-        statusEl.textContent = 'Done.';
-      });
-    }
-
-    init();
-  </script>
+  <header>
+    <h1>E-Waste Image Classifier</h1>
+    <p>Upload a photo of an electronic item to see if it’s recognized as e-waste.</p>
+  </header>
+  <!-- Embedded Hugging Face Space -->
+  <iframe 
+    src="https://huggingface.co/spaces/Monissrk/E-waste_classifider?embed=true" 
+    title="E-Waste Classifier">
+  </iframe>
 </body>
 </html>
