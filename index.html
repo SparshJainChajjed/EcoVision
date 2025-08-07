@@ -2,53 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-Waste Classifier</title>
-  <!-- InferenceJS: runs Roboflow Universe models in the browser -->
-  <script src="https://cdn.jsdelivr.net/npm/inferencejs"></script>
+  <title>Zero-Setup E-Waste Classifier</title>
+  <!-- UMD build of InferenceJS (Roboflow) -->
+  <script src="https://cdn.jsdelivr.net/npm/inferencejs/dist/inference.umd.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 2rem; }
-    #canvas { max-width: 100%; margin-top: 1rem; }
-    #log { margin-top: 1rem; white-space: pre-wrap; font-size: 1.1rem; }
+    body { font-family: sans-serif; text-align:center; padding:2rem; }
+    #canvas { max-width:100%; margin-top:1rem; }
+    #log { margin-top:1rem; white-space:pre-wrap; font-size:1.1rem; }
   </style>
 </head>
 <body>
-  <h1>E-Waste Detector</h1>
-  <p>Upload a photo of gadgets (phones, chargers, batteries, etc.)</p>
+  <h1>E-Waste Classifier</h1>
+  <p>Upload a photo of old electronics—phones, chargers, batteries, and more.</p>
   <input type="file" id="upload" accept="image/*">
   <canvas id="canvas"></canvas>
   <div id="log">Loading model…</div>
 
-  <script type="module">
-    import { InferenceEngine } from "inferencejs";
+  <script>
+    // ── CONFIG ──
+    const PUBLISHABLE_KEY = "rf_YGton8qZtVV5wJtb2BavtAJJntJ2"; // your Roboflow key
+    const MODEL_SLUG      = "ewaste-balanced-dataset";        // Balanced E-Waste v2
+    const MODEL_VERSION   = "2";
 
-    // ── CONFIGURE ──
-    const PUBLISHABLE_KEY = "rf_YGton8qZtVV5wJtb2BavtAJJntJ2";
-    const MODEL_SLUG     = "ewaste-balanced-dataset";
-    const MODEL_VERSION  = "2";
-
-    async function main() {
-      // 1️⃣ Start the Roboflow worker
-      const engine   = new InferenceEngine();
-      const workerId = await engine.startWorker(
-        MODEL_SLUG,
-        MODEL_VERSION,
-        PUBLISHABLE_KEY,
-        { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 20 }
-      );
-
-      document.getElementById("log").innerText =
-        "Model loaded—choose an image above.";
-
-      // 2️⃣ When an image is uploaded, run detection
-      document.getElementById("upload").addEventListener("change", async (evt) => {
+    // 1️⃣ Create the engine and start the worker
+    const engine = new InferenceEngine();
+    engine.startWorker(
+      MODEL_SLUG,
+      MODEL_VERSION,
+      PUBLISHABLE_KEY,
+      { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 20 }
+    ).then(workerId => {
+      document.getElementById("log").innerText = "Model loaded—upload an image!";
+      
+      // 2️⃣ Handle file input
+      document.getElementById("upload").onchange = async evt => {
         const file = evt.target.files[0];
         if (!file) return;
 
-        // Load image into <canvas>
+        // Draw image
         const img = new Image();
         img.src = URL.createObjectURL(file);
         await img.decode();
-
         const canvas = document.getElementById("canvas");
         canvas.width  = img.width;
         canvas.height = img.height;
@@ -57,35 +51,35 @@
 
         document.getElementById("log").innerText = "Detecting…";
 
-        // 3️⃣ Perform inference
-        const predictions = await engine.infer(workerId, img);
+        // 3️⃣ Run inference
+        const preds = await engine.infer(workerId, img);
 
-        // 4️⃣ Draw boxes & labels
-        ctx.strokeStyle = "#00FF00";
+        // 4️⃣ Draw results
+        ctx.strokeStyle = "#00CC00";
         ctx.lineWidth   = 2;
-        ctx.font        = "18px Arial";
-        ctx.fillStyle   = "#00FF00";
+        ctx.font        = "18px sans-serif";
+        ctx.fillStyle   = "#00CC00";
 
         let output = "";
-        if (predictions.length === 0) {
+        if (preds.length === 0) {
           output = "No e-waste items detected.";
         } else {
-          predictions.forEach(p => {
+          preds.forEach(p => {
             const [x, y, w, h] = p.bbox;
             ctx.beginPath();
             ctx.rect(x, y, w, h);
             ctx.stroke();
-            const label = `${p.class} ${(p.score * 100).toFixed(1)}%`;
-            ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
+            const label = `${p.class} ${(p.score*100).toFixed(1)}%`;
+            ctx.fillText(label, x, y > 20 ? y-5 : y+20);
             output += label + "\n";
           });
         }
-
         document.getElementById("log").innerText = output;
-      });
-    }
-
-    main();
+      };
+    }).catch(err => {
+      console.error(err);
+      document.getElementById("log").innerText = "⚠️ Failed to load model.";
+    });
   </script>
 </body>
 </html>
