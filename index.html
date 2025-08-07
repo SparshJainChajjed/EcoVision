@@ -1,20 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>E-Waste Detection & Recycling</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8">
+  <title>E-Waste Detector</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    #canvas { max-width: 100%; margin-top: 20px; }
+    #results { margin-top: 20px; font-size: 1.1rem; white-space: pre-wrap; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>E-Waste Detection & Recycling</h1>
-    <input type="file" id="imageInput" accept="image/*"/>
-    <button id="uploadBtn">Analyze Item</button>
-    <div id="preview"></div>
-    <div id="result"></div>
-    <div id="options"></div>
-  </div>
-  <script src="script.js"></script>
+  <h1>E-Waste Detector</h1>
+  <input type="file" id="upload" accept="image/*">
+  <canvas id="canvas"></canvas>
+  <div id="results">Loading model…</div>
+
+  <script>
+    let model;
+    cocoSsd.load().then(m => {
+      model = m;
+      document.getElementById('results').innerText = 
+        'Model Loaded. Choose an image to detect electronics.';
+    });
+
+    document.getElementById('upload').addEventListener('change', async event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      await img.decode();
+
+      const canvas = document.getElementById('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+
+      document.getElementById('results').innerText = 'Detecting…';
+      const predictions = await model.detect(img);
+
+      const electronics = predictions.filter(p =>
+        ['cell phone','laptop','tv','remote'].includes(p.class)
+      );
+
+      ctx.strokeStyle = '#00FFFF';
+      ctx.lineWidth = 2;
+      ctx.font = '18px Arial';
+      ctx.fillStyle = '#00FFFF';
+
+      let output = '';
+      if (electronics.length === 0) {
+        output = 'No electronics detected.';
+      } else {
+        electronics.forEach(p => {
+          const [x, y, width, height] = p.bbox;
+          ctx.beginPath();
+          ctx.rect(x, y, width, height);
+          ctx.stroke();
+          ctx.fillText(
+            `${p.class} ${(p.score * 100).toFixed(1)}%`,
+            x, y > 20 ? y - 5 : y + 20
+          );
+          output += `${p.class} — ${(p.score * 100).toFixed(1)}% confidence\n`;
+        });
+      }
+      document.getElementById('results').innerText = output;
+    });
+  </script>
 </body>
 </html>
