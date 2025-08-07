@@ -39,15 +39,22 @@
         {
           method: 'POST',
           headers: { 
-            'Authorization': 'Bearer hf_iirbNVFjRlr fRIwCjYzhZBOSTJXNODVVCD'
-            // ← your token goes here
+            'Authorization': 'Bearer hf_dSVfZWEtxBcGbILLmSwbivFXfNGMMinqg0'
           },
           body: form
         }
       );
+
+      // handle auth errors
+      if (res.status === 401) {
+        const txt = await res.text();
+        result.innerHTML = `<p>❌ Unauthorized (401): Check your token</p>`;
+        return;
+      }
+
       const data = await res.json();
       if (data.error) {
-        result.innerHTML = `<p>Error: ${data.error}</p>`;
+        result.innerHTML = `<p>❌ API error: ${data.error}</p>`;
         return;
       }
 
