@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Zero-Setup E-Waste Detector</title>
-  <!-- ml5.js bundles TensorFlow.js + COCO-SSD for you -->
-  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+  <!-- locally-hosted ml5.js -->
+  <script src="ml5.min.js"></script>
   <style>
-    body { font-family: sans-serif; text-align:center; padding:2rem }
-    canvas, img { max-width:100%; margin-top:1rem }
-    #status { margin-top:1rem }
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    canvas, img { max-width: 100%; margin-top: 1rem; }
+    #status { margin-top: 1rem; }
   </style>
 </head>
 <body>
@@ -19,43 +19,60 @@
   <div id="status">Loading model…</div>
 
   <script>
-    let detector, imgEl, ctx, canvas, status;
+    let detector, canvas, ctx, statusEl;
+
     async function init() {
-      status = document.getElementById('status');
-      canvas = document.getElementById('canvas');
-      ctx = canvas.getContext('2d');
+      statusEl = document.getElementById('status');
+      canvas   = document.getElementById('canvas');
+      ctx      = canvas.getContext('2d');
+
+      // 1) load COCO-SSD
       detector = await ml5.objectDetector('cocossd');
-      status.textContent = 'Model ready—pick an image!';
+      statusEl.textContent = 'Model ready — pick an image!';
       document.getElementById('picker').addEventListener('change', handleFile);
     }
 
-    async function handleFile(e) {
-      const file = e.target.files[0];
+    async function handleFile(evt) {
+      const file = evt.target.files[0];
       if (!file) return;
-      status.textContent = 'Detecting…';
-      imgEl = new Image();
-      imgEl.src = URL.createObjectURL(file);
-      await new Promise(r => imgEl.onload = r);
 
-      canvas.width = imgEl.width;
-      canvas.height = imgEl.height;
-      ctx.drawImage(imgEl, 0, 0);
+      // show the image on the canvas
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      await new Promise(r => img.onload = r);
 
-      detector.detect(imgEl, (err, results) => {
+      canvas.width  = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      statusEl.textContent = 'Detecting…';
+
+      // 2) run detection
+      detector.detect(img, (err, results) => {
         if (err) {
-          status.textContent = 'Error: ' + err.message;
+          statusEl.textContent = 'Error: ' + err.message;
           return;
         }
-        ctx.lineWidth = 2;
+
+        ctx.lineWidth   = 2;
         ctx.strokeStyle = '#0f0';
-        ctx.font = '16px sans-serif';
-        results.forEach(r => {
-          if (!['cell phone','laptop','remote','keyboard','mouse','tv'].includes(r.label)) return;
-          const [x,y,w,h] = r.x, r.y, r.width, r.height;
-          ctx.strokeRect(r.x, r.y, r.width, r.height);
-          ctx.fillText(`${r.label} ${(r.confidence*100).toFixed(1)}%`, r.x, r.y>20?r.y-5:r.y+20);
+        ctx.fillStyle   = '#0f0';
+        ctx.font        = '16px sans-serif';
+
+        // 3) draw only our gadget classes
+        results.forEach(obj => {
+          const label = obj.label.toLowerCase();
+          if (!['cell phone','laptop','remote','keyboard','mouse','tv'].includes(label)) {
+            return;
+          }
+          const x = obj.x, y = obj.y, w = obj.width, h = obj.height;
+          ctx.strokeRect(x, y, w, h);
+          ctx.fillText(
+            `${label} ${(obj.confidence * 100).toFixed(1)}%`,
+            x, y > 20 ? y - 5 : y + 20
+          );
         });
-        status.textContent = 'Done.';
+
+        statusEl.textContent = 'Done.';
       });
     }
 
