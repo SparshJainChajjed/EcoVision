@@ -2,111 +2,101 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-Waste Classifier</title>
-  <!-- UMD build of InferenceJS (Roboflow) -->
-  <script src="https://cdn.jsdelivr.net/npm/inferencejs/dist/inference.umd.js"></script>
-  <style>
-    body { font-family: sans-serif; text-align:center; padding:2rem; }
-    #canvas { max-width:100%; margin-top:1rem; }
-    #log    { margin-top:1rem; white-space:pre-wrap; font-size:1.1rem; }
+  <title>E-Waste Detector – v43 model</title>
 
-    /* 🔄 Spinner */
+  <!-- Roboflow's browser SDK (UMD build) -->
+  <script src="https://cdn.jsdelivr.net/npm/inferencejs/dist/inference.umd.js"></script>
+
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    #canvas { max-width: 100%; margin-top: 1rem; }
+    #log    { margin-top: 1rem; white-space: pre-wrap; font-size: 1.1rem; }
+
+    /* 🔄 simple spinner */
     .loader {
       border: 6px solid #f3f3f3;
       border-top: 6px solid #3498db;
       border-radius: 50%;
       width: 40px; height: 40px;
       animation: spin 1s linear infinite;
-      margin: 1rem auto;
-      display: none;               /* hidden by default */
+      margin: 1rem auto; display: none;
     }
     @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <h1>E-Waste Classifier</h1>
-  <p>Upload a photo of old electronics (phones, chargers, batteries…)</p>
-  <input type="file" id="upload" accept="image/*">
+  <h1>E-Waste Detector (Roboflow v43)</h1>
+  <p>Upload a photo of electronics — phones, chargers, batteries …</p>
 
-  <!-- 🔄 Spinner element -->
-  <div id="loader" class="loader"></div>
-
+  <input type="file" id="upload"   accept="image/*">
+  <div   id="loader" class="loader"></div>
   <canvas id="canvas"></canvas>
-  <div id="log">Loading model…</div>
+  <div   id="log">Loading model …</div>
 
   <script>
-    /* ───────────────────────── CONFIG ───────────────────────── */
-    const PUBLISHABLE_KEY = "rf_YGton8qZtVV5wJtb2BavtAJJntJ2";
-    const MODEL_SLUG      = "ewaste-balanced-dataset";
-    const MODEL_VERSION   = "2";
+    /* ─── CONFIG ─── */
+    const PUBLISHABLE_KEY = "rf_YGton8qZtVV5wJtb2BavtAJJntJ2";   // ← use your own if needed
+    const MODEL_SLUG      = "e-waste-dataset-r0ojc";             // 30-class dataset
+    const MODEL_VERSION   = "43";
 
-    const log    = document.getElementById("log");
+    const log    = txt => document.getElementById("log").textContent = txt;
     const loader = document.getElementById("loader");
+    const show   = () => loader.style.display = "block";
+    const hide   = () => loader.style.display = "none";
 
-    /* ───────────────────── Helper functions ─────────────────── */
-    const showLoader = () => loader.style.display = "block";
-    const hideLoader = () => loader.style.display = "none";
-
-    /* ───────────────────────── Main code ────────────────────── */
     const engine = new InferenceEngine();
-    showLoader();                       // spinner while model downloads
+    let workerId = null;
 
-    engine.startWorker(
-      MODEL_SLUG,
-      MODEL_VERSION,
-      PUBLISHABLE_KEY,
-      { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 20 }
-    ).then(workerId => {
-      hideLoader();
-      log.textContent = "Model loaded — upload an image!";
+    /* Load model once */
+    (async () => {
+      try {
+        show(); log("Downloading model files …");
+        workerId = await engine.startWorker(
+          MODEL_SLUG,
+          MODEL_VERSION,
+          PUBLISHABLE_KEY,
+          { scoreThreshold: 0.5, iouThreshold: 0.3, maxNumBoxes: 25 }
+        );
+        hide(); log("Model loaded — upload an image!");
+      } catch (err) {
+        hide(); console.error(err); log("⚠️  Model load failed.");
+      }
+    })();
 
-      document.getElementById("upload").onchange = async evt => {
-        const file = evt.target.files[0];
-        if (!file) return;
+    /* Handle image upload */
+    document.getElementById("upload").onchange = async evt => {
+      const file = evt.target.files[0];
+      if (!file || !workerId) return;
 
-        /* Draw uploaded image */
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        await img.decode();
-        const canvas = document.getElementById("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      await img.decode();
 
-        /* Run detection */
-        log.textContent = "Detecting…";
-        showLoader();
+      const canvas = document.getElementById("canvas");
+      canvas.width  = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
 
-        const preds = await engine.infer(workerId, img);
+      show(); log("Detecting …");
+      const preds = await engine.infer(workerId, img);
+      hide();
 
-        hideLoader();
-        ctx.strokeStyle = "#00CC00";
-        ctx.lineWidth   = 2;
-        ctx.font        = "18px sans-serif";
-        ctx.fillStyle   = "#00CC00";
+      ctx.strokeStyle = "#00CC00";
+      ctx.lineWidth   = 2;
+      ctx.font        = "18px sans-serif";
+      ctx.fillStyle   = "#00CC00";
 
-        let output = "";
-        if (preds.length === 0) {
-          output = "No e-waste items detected.";
-        } else {
-          preds.forEach(p => {
-            const [x, y, w, h] = p.bbox;
-            ctx.beginPath();
-            ctx.rect(x, y, w, h);
-            ctx.stroke();
-            const label = `${p.class} ${(p.score*100).toFixed(1)}%`;
-            ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
-            output += label + "\n";
-          });
-        }
-        log.textContent = output;
-      };
-    }).catch(err => {
-      hideLoader();
-      console.error(err);
-      log.textContent = "⚠️ Failed to load model.";
-    });
+      let output = "";
+      preds.forEach(p => {
+        const [x, y, w, h] = p.bbox;
+        ctx.beginPath(); ctx.rect(x, y, w, h); ctx.stroke();
+        const label = `${p.class} ${(p.score*100).toFixed(1)}%`;
+        ctx.fillText(label, x, y > 20 ? y - 5 : y + 20);
+        output += label + "\n";
+      });
+      log(output || "No e-waste items detected.");
+    };
   </script>
 </body>
 </html>
