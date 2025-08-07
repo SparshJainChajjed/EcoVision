@@ -2,34 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>E-Waste Detector (no key)</title>
-
-  <!-- TF-JS core v3 (smaller, fully compatible) -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <!-- COCO-SSD UMD bundle → attaches window.cocoSsd -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
-
+  <title>Instant E-Waste Detector</title>
   <style>
-    body  { font-family:Arial, sans-serif; text-align:center; padding:2rem }
-    #can  { max-width:100%; margin-top:1rem }
-    #stat { margin-top:1rem; font-size:1.1rem; white-space:pre-wrap }
+    body{font-family:sans-serif;text-align:center;margin:0;padding:0}
+    h1{margin:20px 0}
+    iframe{width:100%;height:650px;border:none}
   </style>
 </head>
 <body>
-  <h1>E-Waste Detector</h1>
-  <p>Upload a picture of a phone, laptop, remote, TV, etc.</p>
+  <h1>E-Waste Detector Demo</h1>
 
-  <input type="file" id="pick" accept="image/*"><br>
-  <canvas id="can"></canvas>
-  <div id="stat">Loading model … (first load ≈10 s)</div>
+  <!-- Public Hugging Face Space – no keys, no setup -->
+  <iframe
+    src="https://huggingface.co/spaces/FathomNet/trash-detector?embed=true">
+  </iframe>
 
-  <script>
-    const CLASSES = ["cell phone","laptop","remote","keyboard","mouse","tv"];
-    const stat = document.getElementById("stat");
-    const cvs  = document.getElementById("can");
-    const ctx  = cvs.getContext("2d");
-
-    // 1️⃣ load once
-    cocoSsd.load().then(model=>{
-      stat.textContent = "Model ready! Choose an image.";
-      document.get
+  <!-- If you prefer the faster YOLO-v9 demo, swap the src URL:
+       https://huggingface.co/spaces/Xenova/yolov9-web?embed=true -->
+</body>
+</html>
