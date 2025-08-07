@@ -1,113 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>E-Waste Image Classifier</title>
-
-  <!-- TensorFlow.js core (CPU backend) -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <!-- Helper so TF-JS can pull models from TF-Hub / GCS -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tfhub@0.8.0/dist/tfjs_tfhub.min.js"></script>
-
+  <meta charset="UTF-8"/>
+  <title>Zero-Setup E-Waste Detector</title>
+  <!-- ml5.js bundles TensorFlow.js + COCO-SSD for you -->
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    canvas, img { max-width: 100%; margin-top: 1rem; }
-    #out { margin-top: 1rem; font-size: 1.1rem; white-space: pre-wrap; }
+    body { font-family: sans-serif; text-align:center; padding:2rem }
+    canvas, img { max-width:100%; margin-top:1rem }
+    #status { margin-top:1rem }
   </style>
 </head>
 <body>
-  <h1>E-Waste Image Classifier</h1>
-  <p>Upload a photo of a phone, charger, battery, cable, etc.</p>
-
-  <input type="file" id="pick" accept="image/*"><br>
-  <img id="preview" alt="preview">
-  <div id="out">Loading model … first load ≈ 5-10 s</div>
+  <h1>Zero-Setup E-Waste Detector</h1>
+  <p>Only detects phones, laptops, remotes, TVs, keyboards, mice…</p>
+  <input type="file" id="picker" accept="image/*"><br>
+  <canvas id="canvas"></canvas>
+  <div id="status">Loading model…</div>
 
   <script>
-  (async () => {
-    /* 1️⃣  always-available CPU backend */
-    await tf.setBackend('cpu');
-    await tf.ready();
+    let detector, imgEl, ctx, canvas, status;
+    async function init() {
+      status = document.getElementById('status');
+      canvas = document.getElementById('canvas');
+      ctx = canvas.getContext('2d');
+      detector = await ml5.objectDetector('cocossd');
+      status.textContent = 'Model ready—pick an image!';
+      document.getElementById('picker').addEventListener('change', handleFile);
+    }
 
-    /* 2️⃣  load CircularNet from Google Cloud Storage (CORS-safe) */
-    const MODEL =
-      'https://storage.googleapis.com/tfjs-models/savedmodel/circularnet/waste/detector/1/model.json';
-    const model = await tf.loadGraphModel(MODEL, {fromTFHub: true});
-
-    document.getElementById('out').textContent =
-      'Model ready – choose an image.';
-
-    /* 3️⃣  class ID ➜ readable label list */
-    const names = [
-      'battery','beer_can','bottle_cap','cardboard','charger','cigarette',
-      'drink_carton','glass_bottle','glass_cup','metal_can','paper','paper_cup',
-      'paper_plate','phone','plastic_bag','plastic_bottle','plastic_cutlery',
-      'plastic_straw','rope','shoe','single_use_plastic','styrofoam',
-      'takeaway_container','toothbrush','wrapping_paper'
-    ];
-
-    /* 4️⃣  run detection when a file is chosen */
-    document.getElementById('pick').addEventListener('change', async ev => {
-      const file = ev.target.files[0];
+    async function handleFile(e) {
+      const file = e.target.files[0];
       if (!file) return;
+      status.textContent = 'Detecting…';
+      imgEl = new Image();
+      imgEl.src = URL.createObjectURL(file);
+      await new Promise(r => imgEl.onload = r);
 
-      const img = document.getElementById('preview');
-      img.src = URL.createObjectURL(file);
-      await img.decode();
+      canvas.width = imgEl.width;
+      canvas.height = imgEl.height;
+      ctx.drawImage(imgEl, 0, 0);
 
-      document.getElementById('out').textContent = 'Detecting…';
+      detector.detect(imgEl, (err, results) => {
+        if (err) {
+          status.textContent = 'Error: ' + err.message;
+          return;
+        }
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#0f0';
+        ctx.font = '16px sans-serif';
+        results.forEach(r => {
+          if (!['cell phone','laptop','remote','keyboard','mouse','tv'].includes(r.label)) return;
+          const [x,y,w,h] = r.x, r.y, r.width, r.height;
+          ctx.strokeRect(r.x, r.y, r.width, r.height);
+          ctx.fillText(`${r.label} ${(r.confidence*100).toFixed(1)}%`, r.x, r.y>20?r.y-5:r.y+20);
+        });
+        status.textContent = 'Done.';
+      });
+    }
 
-      /* prepare tensor [1,640,640,3] in 0-1 range */
-      const input = tf.tidy(() =>
-        tf.browser.fromPixels(img)
-          .resizeBilinear([640, 640])
-          .div(255)
-          .expandDims(0)
-      );
-
-      const [bT, sT, cT, nT] = await model.executeAsync(input);
-      tf.dispose(input);
-
-      const boxes   = bT.dataSync();
-      const scores  = sT.dataSync();
-      const classes = cT.dataSync();
-      const n       = nT.dataSync()[0];
-      tf.dispose([bT, sT, cT, nT]);
-
-      /* draw results on a canvas */
-      const cvs = document.createElement('canvas');
-      cvs.width  = img.naturalWidth;
-      cvs.height = img.naturalHeight;
-      const ctx  = cvs.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#00FF00';
-      ctx.fillStyle   = '#00FF00';
-      ctx.font        = '18px Arial';
-
-      let summary = '';
-      for (let i = 0; i < n; i++) {
-        if (scores[i] < 0.40) continue;              // skip weak detections
-        const label = names[classes[i]] || 'item';
-        const [y1, x1, y2, x2] = [
-          boxes[i * 4 + 0] * cvs.height,
-          boxes[i * 4 + 1] * cvs.width,
-          boxes[i * 4 + 2] * cvs.height,
-          boxes[i * 4 + 3] * cvs.width
-        ];
-        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
-        ctx.fillText(`${label} ${(scores[i] * 100).toFixed(1)}%`,
-                     x1, y1 > 20 ? y1 - 5 : y1 + 20);
-        summary += `${label} — ${(scores[i] * 100).toFixed(1)} %\n`;
-      }
-
-      document.getElementById('preview').replaceWith(cvs);
-      cvs.id = 'preview';
-      document.getElementById('out').textContent =
-        summary || 'No e-waste items detected.';
-    });
-  })();
+    init();
   </script>
 </body>
 </html>
