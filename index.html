@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <title>E-Waste Image Classifier</title>
 
-  <!-- TensorFlow.js core -->
+  <!-- TensorFlow.js core (CPU backend only) -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <!-- Faster WASM backend -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.21.0/dist/tf-backend-wasm.min.js"></script>
-  <!-- Helper to load models from TensorFlow Hub -->
+
+  <!-- Helper so TF-JS can pull models from TensorFlow Hub -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tfhub@0.8.0/dist/tfjs_tfhub.min.js"></script>
 
   <style>
@@ -23,25 +22,21 @@
 
   <input type="file" id="pick" accept="image/*"><br>
   <img id="preview" alt="preview">
-  <div id="out">Loading model … first load ≈ 5–10 s</div>
+  <div id="out">Loading model … first load ≈ 5-10 s</div>
 
   <script>
   (async () => {
-
-    /* 1 – backend: WASM if possible, otherwise CPU */
-    tf.setWasmPaths(
-      "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.21.0/dist/"
-    );
-    try { await tf.setBackend('wasm'); await tf.ready(); }
-    catch(e){ console.warn('WASM failed – using CPU'); await tf.setBackend('cpu'); }
+    /* 1 – use the always-available CPU backend */
+    await tf.setBackend('cpu');
+    await tf.ready();
 
     /* 2 – load Google’s CircularNet waste detector */
     const MODEL =
-      "https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1";
+      'https://tfhub.dev/google/tfjs-model/circularnet/waste/detector/1/default/1';
     const model = await tf.loadGraphModel(MODEL, {fromTFHub:true});
 
     document.getElementById('out').textContent =
-      "Model ready – choose an image.";
+      'Model ready – choose an image.';
 
     /* label list for class IDs */
     const names=[
@@ -52,7 +47,7 @@
       'takeaway_container','toothbrush','wrapping_paper'
     ];
 
-    /* 3 – run every time a file is picked */
+    /* 3 – run detection on each upload */
     document.getElementById('pick').addEventListener('change',async ev=>{
       const file=ev.target.files[0]; if(!file)return;
 
@@ -76,21 +71,20 @@
 
       let out='';
       for(let i=0;i<n;i++){
-        if(scores[i]<.4)continue;
+        if(scores[i]<.40)continue;
         const cls=names[classes[i]]||'item';
         const [y1,x1,y2,x2]=[
           boxes[i*4]*cvs.height,boxes[i*4+1]*cvs.width,
           boxes[i*4+2]*cvs.height,boxes[i*4+3]*cvs.width];
         ctx.strokeRect(x1,y1,x2-x1,y2-y1);
         ctx.fillText(`${cls} ${(scores[i]*100).toFixed(1)}%`,
-          x1,y1>20?y1-5:y1+20);
+                     x1,y1>20?y1-5:y1+20);
         out+=`${cls} — ${(scores[i]*100).toFixed(1)} %\n`;
       }
       document.getElementById('preview').replaceWith(cvs); cvs.id='preview';
-      document.getElementById('out').textContent=
-        out||'No e-waste items detected.';
+      document.getElementById('out').textContent =
+        out || 'No e-waste items detected.';
     });
-
   })();
   </script>
 </body>
