@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Zero-Setup E-Waste Detector</title>
-  <!-- locally-hosted ml5.js -->
-  <script src="ml5.min.js"></script>
+
+  <!-- Pull ml5.js from a reliable CDN; make sure ad-block is off for this domain -->
+  <script src="https://cdn.jsdelivr.net/npm/ml5@0.12.2/dist/ml5.min.js"></script>
+
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2rem; }
     canvas, img { max-width: 100%; margin-top: 1rem; }
@@ -26,17 +28,17 @@
       canvas   = document.getElementById('canvas');
       ctx      = canvas.getContext('2d');
 
-      // 1) load COCO-SSD
+      // load COCO-SSD via ml5.js
       detector = await ml5.objectDetector('cocossd');
       statusEl.textContent = 'Model ready — pick an image!';
-      document.getElementById('picker').addEventListener('change', handleFile);
+      document.getElementById('picker')
+              .addEventListener('change', handleFile);
     }
 
     async function handleFile(evt) {
       const file = evt.target.files[0];
       if (!file) return;
 
-      // show the image on the canvas
       const img = new Image();
       img.src = URL.createObjectURL(file);
       await new Promise(r => img.onload = r);
@@ -46,32 +48,26 @@
       ctx.drawImage(img, 0, 0);
       statusEl.textContent = 'Detecting…';
 
-      // 2) run detection
       detector.detect(img, (err, results) => {
         if (err) {
           statusEl.textContent = 'Error: ' + err.message;
           return;
         }
-
         ctx.lineWidth   = 2;
         ctx.strokeStyle = '#0f0';
         ctx.fillStyle   = '#0f0';
         ctx.font        = '16px sans-serif';
 
-        // 3) draw only our gadget classes
         results.forEach(obj => {
           const label = obj.label.toLowerCase();
-          if (!['cell phone','laptop','remote','keyboard','mouse','tv'].includes(label)) {
-            return;
-          }
-          const x = obj.x, y = obj.y, w = obj.width, h = obj.height;
-          ctx.strokeRect(x, y, w, h);
+          if (!['cell phone','laptop','remote','keyboard','mouse','tv']
+                .includes(label)) return;
+          ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
           ctx.fillText(
-            `${label} ${(obj.confidence * 100).toFixed(1)}%`,
-            x, y > 20 ? y - 5 : y + 20
+            `${label} ${(obj.confidence*100).toFixed(1)}%`,
+            obj.x, obj.y>20?obj.y-5:obj.y+20
           );
         });
-
         statusEl.textContent = 'Done.';
       });
     }
