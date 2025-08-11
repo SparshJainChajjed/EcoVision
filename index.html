@@ -179,6 +179,7 @@
             cursor: pointer;
             transition: all 0.3s;
             margin-bottom: 1.5rem;
+            position: relative; /* For loading spinner positioning */
         }
 
         .upload-area:hover {
@@ -209,6 +210,7 @@
             max-width: 200px;
             margin: 0 auto 1rem;
             display: block;
+            border-radius: 5px;
         }
 
         .value-info {
@@ -438,24 +440,62 @@
             border: 1px solid var(--success);
         }
 
+        .error-message {
+            background-color: #ffebee;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .cv-results {
+            background: #e3f2fd;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+        }
+
+        .cv-results h4 {
+            margin-top: 0;
+            color: var(--secondary);
+        }
+
         @media (max-width: 768px) {
             .hero {
                 height: 50vh;
             }
-            
+
             .hero h1 {
                 font-size: 2rem;
             }
-            
+
             .app-container {
                 padding: 1.5rem;
             }
-            
+
             .options, .delivery-options {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .option-card, .delivery-option {
                 width: 100%;
             }
@@ -479,7 +519,7 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Recycle Your E-Waste Responsibly</h1>
-                <p>Upload a photo of your old device and we'll help you recycle it easily and responsibly.</p>
+                <p>Upload a photo of your old device and we'll help you recycle it easily and responsibly using AI.</p>
             </div>
         </div>
     </section>
@@ -491,7 +531,7 @@
                 <h2>E-Waste Recycling Process</h2>
                 <p>Follow these simple steps to recycle your old electronics</p>
             </div>
-            
+
             <div class="app-container">
                 <!-- Progress Bar -->
                 <div class="progress-bar">
@@ -522,35 +562,39 @@
                 <div class="step active" id="step1">
                     <h3>Upload Your Device Photo</h3>
                     <p>Take a clear photo of your old electronic device and upload it below.</p>
-                    
+
                     <div class="upload-area" id="uploadArea">
                         <i>📷</i>
                         <p>Click to upload or drag & drop your image here</p>
                         <p class="small">(JPG, PNG, or GIF)</p>
                         <input type="file" id="fileInput" accept="image/*" class="hidden">
                     </div>
-                    
+
                     <div id="uploadMessage" class="result-message hidden"></div>
-                    
+
                     <div style="text-align: center; margin-top: 1rem;">
-                        <button class="btn" id="nextToIdentify" disabled>Next: Identify Device</button>
+                        <button class="btn" id="nextToIdentify" disabled>Analyze with AI</button>
                     </div>
                 </div>
 
                 <!-- Step 2: Identify -->
                 <div class="step" id="step2">
                     <h3>Device Identification</h3>
-                    <p>Our system has analyzed your image.</p>
-                    
+                    <p>Our AI system is analyzing your image...</p>
+
                     <div class="device-info">
                         <img src="" alt="Device" class="device-image" id="deviceImage">
-                        <h3 id="deviceName">Identifying device...</h3>
-                        <p id="deviceDescription">Analyzing image...</p>
+                        <h3 id="deviceName">Analyzing image...</h3>
+                        <p id="deviceDescription">Please wait while we process your image.</p>
+                        <div id="cvResults" class="cv-results hidden">
+                            <h4>AI Detection Results:</h4>
+                            <pre id="cvResultsText">Processing...</pre>
+                        </div>
                     </div>
-                    
+
                     <div style="text-align: center; margin-top: 1rem;">
                         <button class="btn" id="backToUpload">Back</button>
-                        <button class="btn btn-secondary" id="nextToValue">Next: Check Value</button>
+                        <button class="btn btn-secondary" id="nextToValue" disabled>Next: Check Value</button>
                     </div>
                 </div>
 
@@ -558,7 +602,7 @@
                 <div class="step" id="step3">
                     <h3>Value Estimation</h3>
                     <p>Here's the value information for your device:</p>
-                    
+
                     <div class="value-info">
                         <div class="value-box">
                             <h4>Original Value</h4>
@@ -573,7 +617,7 @@
                             <p id="recyclingValue">₹ --</p>
                         </div>
                     </div>
-                    
+
                     <div style="text-align: center; margin-top: 1rem;">
                         <button class="btn" id="backToIdentify">Back</button>
                         <button class="btn btn-secondary" id="nextToOptions">Next: Recycling Options</button>
@@ -584,7 +628,7 @@
                 <div class="step" id="step4">
                     <h3>Recycling Options</h3>
                     <p>Choose how you'd like to recycle your device:</p>
-                    
+
                     <div class="options">
                         <div class="option-card" id="optionDonate">
                             <i>🎁</i>
@@ -599,7 +643,7 @@
                             <p><strong>Partner: Zolopik Recycling</strong></p>
                         </div>
                     </div>
-                    
+
                     <div style="text-align: center; margin-top: 1rem;">
                         <button class="btn" id="backToValue">Back</button>
                         <button class="btn btn-secondary" id="nextToRecycle" disabled>Next: Proceed to Recycle</button>
@@ -610,11 +654,11 @@
                 <div class="step" id="step5">
                     <h3>Complete Your Recycling</h3>
                     <p id="selectedOptionTitle">You have selected to recycle your device.</p>
-                    
+
                     <div class="service-info">
                         <h3 id="serviceName">Service Provider</h3>
                         <p id="serviceDetails">Details about the service will appear here.</p>
-                        
+
                         <h4 style="margin-top: 1.5rem;">Choose Delivery Method:</h4>
                         <div class="delivery-options">
                             <div class="delivery-option" id="pickupOption">
@@ -629,7 +673,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div id="recyclingGuide" class="hidden">
                         <h3>Recycling Guide</h3>
                         <p>Follow these steps to complete the process:</p>
@@ -640,7 +684,7 @@
                             <li id="step4Guide">Receive confirmation and payment (if applicable)</li>
                         </ol>
                     </div>
-                    
+
                     <div style="text-align: center; margin-top: 1rem;">
                         <button class="btn" id="backToOptions">Back</button>
                         <button class="btn btn-secondary" id="completeProcess" disabled>Complete Process</button>
@@ -658,7 +702,7 @@
     </footer>
 
     <script>
-        // Simulated database of devices
+        // Simulated database of devices for fallback
         const deviceDatabase = [
             {
                 name: "Samsung Galaxy S8",
@@ -701,28 +745,30 @@
         const steps = document.querySelectorAll('.step');
         const progressFill = document.getElementById('progressFill');
         const progressSteps = document.querySelectorAll('.progress-step');
-        
+
         // Upload elements
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const nextToIdentify = document.getElementById('nextToIdentify');
         const uploadMessage = document.getElementById('uploadMessage');
-        
+
         // Identify elements
         const deviceImage = document.getElementById('deviceImage');
         const deviceName = document.getElementById('deviceName');
         const deviceDescription = document.getElementById('deviceDescription');
-        
+        const cvResults = document.getElementById('cvResults');
+        const cvResultsText = document.getElementById('cvResultsText');
+
         // Value elements
         const originalValue = document.getElementById('originalValue');
         const currentValue = document.getElementById('currentValue');
         const recyclingValue = document.getElementById('recyclingValue');
-        
+
         // Options elements
         const optionDonate = document.getElementById('optionDonate');
         const optionRecycle = document.getElementById('optionRecycle');
         const nextToRecycle = document.getElementById('nextToRecycle');
-        
+
         // Recycle elements
         const selectedOptionTitle = document.getElementById('selectedOptionTitle');
         const serviceName = document.getElementById('serviceName');
@@ -731,7 +777,7 @@
         const deliveryOption = document.getElementById('deliveryOption');
         const recyclingGuide = document.getElementById('recyclingGuide');
         const completeProcess = document.getElementById('completeProcess');
-        
+
         // Navigation buttons
         const backToUpload = document.getElementById('backToUpload');
         const nextToValue = document.getElementById('nextToValue');
@@ -739,17 +785,22 @@
         const nextToOptions = document.getElementById('nextToOptions');
         const backToValue = document.getElementById('backToValue');
         const backToOptions = document.getElementById('backToOptions');
-        
+
         // State
         let currentStep = 1;
         let selectedDevice = null;
         let selectedOption = null;
         let selectedDelivery = null;
-        
+        let uploadedImage = null;
+
+        // Hugging Face API Configuration - YOUR KEY IS INTEGRATED HERE
+        const HF_API_URL = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50";
+        const HF_API_TOKEN = "hf_eqpwbezpYLVZD1wwIZSTaxIULNEDJLvaUA"; // YOUR API KEY FROM SCREENSHOT
+
         // Event Listeners
         uploadArea.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileUpload);
-        nextToIdentify.addEventListener('click', () => goToStep(2));
+        nextToIdentify.addEventListener('click', analyzeWithAI);
         backToUpload.addEventListener('click', () => goToStep(1));
         nextToValue.addEventListener('click', () => goToStep(3));
         backToIdentify.addEventListener('click', () => goToStep(2));
@@ -758,13 +809,13 @@
         nextToRecycle.addEventListener('click', () => goToStep(5));
         backToOptions.addEventListener('click', () => goToStep(4));
         completeProcess.addEventListener('click', finishProcess);
-        
+
         optionDonate.addEventListener('click', () => selectOption('donate'));
         optionRecycle.addEventListener('click', () => selectOption('recycle'));
-        
+
         pickupOption.addEventListener('click', () => selectDelivery('pickup'));
         deliveryOption.addEventListener('click', () => selectDelivery('delivery'));
-        
+
         // Functions
         function handleFileUpload(e) {
             const file = e.target.files[0];
@@ -773,73 +824,178 @@
                 uploadMessage.textContent = `Uploaded: ${file.name}`;
                 uploadMessage.className = 'result-message success-message';
                 uploadMessage.classList.remove('hidden');
-                
+
+                // Store the uploaded image for later use
+                uploadedImage = file;
+
                 // Enable next button
                 nextToIdentify.disabled = false;
-                
-                // Simulate computer vision identification after a delay
-                setTimeout(() => {
-                    // Randomly select a device from our database
-                    selectedDevice = deviceDatabase[Math.floor(Math.random() * deviceDatabase.length)];
-                    
-                    // Update UI with identified device
-                    if (currentStep === 2) {
-                        updateDeviceDisplay();
+            }
+        }
+
+        async function analyzeWithAI() {
+            if (!uploadedImage) {
+                alert("Please upload an image first.");
+                return;
+            }
+
+            goToStep(2); // Move to identification step
+
+            try {
+                // Show loading state
+                deviceName.innerHTML = '<span class="loading"></span> Analyzing with AI...';
+                deviceDescription.textContent = "This may take a few seconds. Please wait.";
+                cvResults.classList.add('hidden');
+
+                // Convert image to base64 for sending to API
+                const base64Image = await fileToBase64(uploadedImage);
+
+                // Call Hugging Face API
+                const response = await fetch(HF_API_URL, {
+                    headers: {
+                        "Authorization": `Bearer ${HF_API_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ inputs: base64Image.split(',')[1] }) // Remove image prefix
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Display raw results for debugging (hidden by default)
+                cvResultsText.textContent = JSON.stringify(result, null, 2);
+                // cvResults.classList.remove('hidden'); // Uncomment to show raw results
+
+                // Process results to find the most likely electronic device
+                // This is a simplified interpretation - a real model would be trained specifically for e-waste
+                let bestMatch = null;
+                let highestScore = 0;
+
+                if (Array.isArray(result)) {
+                    for (const detection of result) {
+                        // Filter for common electronic device categories
+                        if (detection.label &&
+                            (detection.label.includes('cell phone') ||
+                             detection.label.includes('laptop') ||
+                             detection.label.includes('computer') ||
+                             detection.label.includes('tv') ||
+                             detection.label.includes('monitor') ||
+                             detection.label.includes('keyboard') ||
+                             detection.label.includes('mouse'))) {
+
+                            if (detection.score > highestScore) {
+                                highestScore = detection.score;
+                                bestMatch = detection.label;
+                            }
+                        }
                     }
+                }
+
+                if (bestMatch && highestScore > 0.3) { // Confidence threshold
+                    // Find a matching device in our database
+                    const matchedDevice = deviceDatabase.find(device =>
+                        device.name.toLowerCase().includes(bestMatch.split(' ')[0]) || // Match first word
+                        device.description.toLowerCase().includes(bestMatch)
+                    );
+
+                    if (matchedDevice) {
+                        selectedDevice = matchedDevice;
+                    } else {
+                        // Fallback to a random device if no match found, but use AI detection info
+                        selectedDevice = deviceDatabase[Math.floor(Math.random() * deviceDatabase.length)];
+                        selectedDevice.name = `Detected: ${bestMatch}`;
+                        selectedDevice.description = `AI Confidence: ${(highestScore * 100).toFixed(1)}%`;
+                    }
+                } else {
+                    // Fallback if AI doesn't find a confident match
+                    selectedDevice = deviceDatabase[Math.floor(Math.random() * deviceDatabase.length)];
+                    selectedDevice.name = "General Electronic Device";
+                    selectedDevice.description = "AI could not identify a specific device type. Showing general estimation.";
+                }
+
+                // Update UI with identified device
+                updateDeviceDisplay();
+
+                // Enable next button
+                nextToValue.disabled = false;
+
+            } catch (error) {
+                console.error("AI Analysis Error:", error);
+                deviceName.textContent = "Analysis Failed";
+                deviceDescription.textContent = `Error: ${error.message}. Using simulation.`;
+
+                // Fallback to simulation on error after a delay
+                setTimeout(() => {
+                    selectedDevice = deviceDatabase[Math.floor(Math.random() * deviceDatabase.length)];
+                    updateDeviceDisplay();
+                    nextToValue.disabled = false;
                 }, 1500);
             }
         }
-        
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         function updateDeviceDisplay() {
             if (selectedDevice) {
                 deviceImage.src = selectedDevice.image;
                 deviceName.textContent = selectedDevice.name;
                 deviceDescription.textContent = selectedDevice.description;
-                
+
                 // Update values
                 originalValue.textContent = `₹${selectedDevice.originalValue.toLocaleString()}`;
                 currentValue.textContent = `₹${selectedDevice.currentValue.toLocaleString()}`;
                 recyclingValue.textContent = `₹${Math.floor(selectedDevice.currentValue * 0.7).toLocaleString()}`;
             }
         }
-        
+
         function selectOption(option) {
             selectedOption = option;
-            
+
             // Update UI to show selection
             optionDonate.classList.remove('selected');
             optionRecycle.classList.remove('selected');
-            
+
             if (option === 'donate') {
                 optionDonate.classList.add('selected');
             } else if (option === 'recycle') {
                 optionRecycle.classList.add('selected');
             }
-            
+
             // Enable next button
             nextToRecycle.disabled = false;
         }
-        
+
         function selectDelivery(delivery) {
             selectedDelivery = delivery;
-            
+
             // Update UI to show selection
             pickupOption.classList.remove('selected');
             deliveryOption.classList.remove('selected');
-            
+
             if (delivery === 'pickup') {
                 pickupOption.classList.add('selected');
             } else if (delivery === 'delivery') {
                 deliveryOption.classList.add('selected');
             }
-            
+
             // Show recycling guide
             recyclingGuide.classList.remove('hidden');
-            
+
             // Enable complete button
             completeProcess.disabled = false;
         }
-        
+
         function updateRecycleStep() {
             if (selectedOption === 'donate') {
                 selectedOptionTitle.textContent = "You have selected to donate your device for free.";
@@ -859,33 +1015,33 @@
                 document.getElementById('step4Guide').textContent = "Receive payment via UPI or bank transfer";
             }
         }
-        
+
         function goToStep(step) {
             // Hide all steps
             steps.forEach(s => s.classList.remove('active'));
-            
+
             // Show current step
             document.getElementById(`step${step}`).classList.add('active');
-            
+
             // Update progress bar
             progressSteps.forEach((ps, index) => {
                 const stepNum = index + 1;
                 ps.classList.remove('active', 'completed');
-                
+
                 if (stepNum < step) {
                     ps.classList.add('completed');
                 } else if (stepNum === step) {
                     ps.classList.add('active');
                 }
             });
-            
+
             // Update progress fill width
             const progressPercentage = ((step - 1) / 4) * 100;
             progressFill.style.width = `${progressPercentage}%`;
-            
+
             // Update state
             currentStep = step;
-            
+
             // Special actions for certain steps
             if (step === 2 && selectedDevice) {
                 updateDeviceDisplay();
@@ -893,24 +1049,26 @@
                 updateRecycleStep();
             }
         }
-        
+
         function finishProcess() {
             alert(`Thank you for recycling your ${selectedDevice.name}!\n\nYour request has been submitted. A representative will contact you soon to finalize the details.`);
             // Reset the process
             resetProcess();
         }
-        
+
         function resetProcess() {
             // Reset state
             currentStep = 1;
             selectedDevice = null;
             selectedOption = null;
             selectedDelivery = null;
-            
+            uploadedImage = null;
+
             // Reset UI
             fileInput.value = '';
             uploadMessage.classList.add('hidden');
             nextToIdentify.disabled = true;
+            nextToValue.disabled = true;
             optionDonate.classList.remove('selected');
             optionRecycle.classList.remove('selected');
             nextToRecycle.disabled = true;
@@ -918,11 +1076,12 @@
             deliveryOption.classList.remove('selected');
             recyclingGuide.classList.add('hidden');
             completeProcess.disabled = true;
-            
+            cvResults.classList.add('hidden');
+
             // Go to first step
             goToStep(1);
         }
-        
+
         // Initialize the app
         resetProcess();
     </script>
