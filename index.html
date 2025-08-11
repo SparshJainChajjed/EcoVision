@@ -1,280 +1,599 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>E-Waste Detection Model</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.1.0/dist/coco-ssd.min.js"></script>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body {
-      background: linear-gradient(135deg,#1a2a6c,#2c3e50);
-      color:#fff; min-height:100vh; padding:20px;
-    }
-    .container { max-width:1200px; margin:0 auto; }
-    header { text-align:center; padding:30px 0; margin-bottom:30px; }
-    h1 {
-      font-size:2.8rem; margin-bottom:10px;
-      background:linear-gradient(to right,#00c9ff,#92fe9d);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      text-shadow:0 2px 4px rgba(0,0,0,0.1);
-    }
-    .subtitle { font-size:1.2rem; opacity:.9; max-width:600px; margin:0 auto; }
-    .main-content {
-      display:flex; flex-wrap:wrap; gap:30px; margin-bottom:40px;
-    }
-    .upload-section, .results-section, .info-section {
-      flex:1; min-width:300px;
-      background:rgba(255,255,255,0.08);
-      border-radius:15px; padding:25px;
-      box-shadow:0 8px 32px rgba(0,0,0,0.3);
-      backdrop-filter:blur(10px);
-      border:1px solid rgba(255,255,255,0.1);
-    }
-    .section-title {
-      font-size:1.5rem; margin-bottom:20px; color:#00c9ff;
-      display:flex; align-items:center; gap:10px;
-    }
-    .upload-area {
-      border:2px dashed rgba(255,255,255,0.3);
-      border-radius:10px; padding:40px 20px;
-      text-align:center; cursor:pointer;
-      transition:all .3s ease; margin-bottom:20px;
-    }
-    .upload-area:hover {
-      border-color:#00c9ff; background:rgba(0,201,255,0.1);
-    }
-    .upload-icon { font-size:3rem; margin-bottom:15px; color:#00c9ff; }
-    .btn {
-      background:linear-gradient(to right,#00c9ff,#92fe9d);
-      color:#1a2a6c; border:none; padding:12px 25px;
-      border-radius:30px; font-weight:bold; cursor:pointer;
-      transition:all .3s ease; display:inline-block; margin:5px;
-    }
-    .btn:hover {
-      transform:translateY(-3px);
-      box-shadow:0 5px 15px rgba(0,201,255,0.4);
-    }
-    .btn:disabled { background:#555; cursor:not-allowed; }
-    #imagePreview {
-      max-width:100%; max-height:300px;
-      display:none; margin:20px auto;
-      border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.3);
-    }
-    .results-container { min-height:300px; }
-    .detection-result {
-      background:rgba(255,255,255,0.1); border-radius:10px;
-      padding:15px; margin-bottom:15px;
-      display:flex; justify-content:space-between; align-items:center;
-    }
-    .result-info h3 { color:#92fe9d; margin-bottom:5px; }
-    .confidence {
-      background:rgba(0,201,255,0.2); padding:5px 10px;
-      border-radius:20px; font-size:.9rem;
-    }
-    .loading { text-align:center; padding:20px; display:none; }
-    .spinner {
-      border:4px solid rgba(255,255,255,0.3);
-      border-radius:50%; border-top:4px solid #00c9ff;
-      width:40px; height:40px; animation:spin 1s linear infinite;
-      margin:0 auto 15px;
-    }
-    @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
-    .ewaste-types {
-      display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:20px; margin-top:20px;
-    }
-    .ewaste-card {
-      background:rgba(255,255,255,0.1); border-radius:10px;
-      padding:20px; transition:transform .3s ease;
-    }
-    .ewaste-card:hover {
-      transform:translateY(-5px); background:rgba(0,201,255,0.2);
-    }
-    .ewaste-card h3 { color:#00c9ff; margin-bottom:10px; }
-    footer { text-align:center; padding:30px 0; margin-top:40px;
-      border-top:1px solid rgba(255,255,255,0.1);
-    }
-    @media(max-width:768px){
-      .main-content { flex-direction:column; }
-      h1 { font-size:2.2rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoRecycle - E-Waste Detection & Recycling</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #2196F3;
+            --light: #f5f5f5;
+            --dark: #333;
+            --gray: #757575;
+            --danger: #f44336;
+            --success: #4CAF50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1580983218784-0c6593f304b9?ixlib=rb-4.0.3') no-repeat center center/cover;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #0b7dda;
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            background-color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .how-it-works {
+            background-color: #f0f7ff;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 0 1rem;
+            position: relative;
+        }
+        
+        .step:not(:last-child):after {
+            content: "→";
+            position: absolute;
+            right: -10px;
+            top: 30px;
+            font-size: 2rem;
+            color: var(--gray);
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .app-preview {
+            background-color: white;
+            text-align: center;
+        }
+        
+        .phone-mockup {
+            max-width: 300px;
+            margin: 2rem auto;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 15px solid #222;
+        }
+        
+        .phone-mockup img {
+            width: 100%;
+            display: block;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .step:not(:last-child):after {
+                display: none;
+            }
+            
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .step {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
+    <!-- Header -->
     <header>
-      <h1>E-Waste Detection System</h1>
-      <p class="subtitle">Upload an image to detect electronic waste items using AI-powered computer vision</p>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i>♻️</i> EcoRecycle
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#app">App</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <div class="main-content">
-      <div class="upload-section">
-        <h2 class="section-title">Upload Image</h2>
-        <div class="upload-area" id="dropArea">
-          <div class="upload-icon">📁</div>
-          <p>Drag &amp; drop or click to browse</p>
-          <p>(JPG, PNG, JPEG)</p>
-        </div>
-        <input type="file" id="imageUpload" accept="image/*" style="display:none">
-        <img id="imagePreview" alt="Preview"/>
-        <button id="detectBtn" class="btn" disabled>Detect E-Waste</button>
-        <button id="resetBtn" class="btn">Reset</button>
-      </div>
-
-      <div class="results-section">
-        <h2 class="section-title">Detection Results</h2>
-        <div class="loading" id="loading">
-          <div class="spinner"></div>
-          <p>Analyzing image for e-waste items...</p>
-        </div>
-        <div class="results-container" id="resultsContainer">
-          <p>Upload an image and click “Detect E-Waste” to see results</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-section">
-      <h2 class="section-title">About E-Waste Detection</h2>
-      <p>This AI-powered system can identify various types of electronic waste items in images. Proper e-waste disposal is crucial for environmental protection and resource recovery.</p>
-      <div class="ewaste-types">
-        <div class="ewaste-card"><h3>📱 Smartphones</h3><p>Detects mobile phones, tablets, and other handheld devices</p></div>
-        <div class="ewaste-card"><h3>💻 Computers</h3><p>Identifies desktops, laptops, and computer components</p></div>
-        <div class="ewaste-card"><h3>📺 Televisions</h3><p>Recognizes CRT, LCD, and LED display units</p></div>
-        <div class="ewaste-card"><h3>🔋 Batteries</h3><p>Detects various battery types requiring special disposal</p></div>
-      </div>
-    </div>
-
-    <footer>
-      <p>E-Waste Detection System | Powered by TensorFlow.js</p>
-    </footer>
-  </div>
-
-  <script>
-    const dropArea = document.getElementById('dropArea');
-    const imageUpload = document.getElementById('imageUpload');
-    const imagePreview = document.getElementById('imagePreview');
-    const detectBtn = document.getElementById('detectBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const resultsContainer = document.getElementById('resultsContainer');
-    const loading = document.getElementById('loading');
-
-    let model, uploadedImage = null;
-
-    async function init() {
-      setupEventListeners();
-      showLoading('Loading AI model...');
-      try {
-        model = await cocoSsd.load();
-        hideLoading();
-      } catch (e) {
-        hideLoading();
-        resultsContainer.innerHTML = `<p>Error loading model: ${e.message}</p>`;
-      }
-    }
-
-    function setupEventListeners() {
-      dropArea.addEventListener('click', () => imageUpload.click());
-      imageUpload.addEventListener('change', handleImageUpload);
-
-      ['dragover','dragleave','drop'].forEach(evt => {
-        dropArea.addEventListener(evt, e => {
-          e.preventDefault();
-          if (evt === 'dragover') {
-            dropArea.style.borderColor = '#00c9ff';
-            dropArea.style.backgroundColor = 'rgba(0,201,255,0.2)';
-          } else {
-            dropArea.style.borderColor = 'rgba(255,255,255,0.3)';
-            dropArea.style.backgroundColor = '';
-            if (evt === 'drop' && e.dataTransfer.files.length) {
-              imageUpload.files = e.dataTransfer.files;
-              handleImageUpload();
-            }
-          }
-        });
-      });
-
-      detectBtn.addEventListener('click', detectEwaste);
-      resetBtn.addEventListener('click', resetApp);
-    }
-
-    function handleImageUpload() {
-      const file = imageUpload.files[0];
-      if (!file || !file.type.match('image.*')) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        imagePreview.src = e.target.result;
-        imagePreview.style.display = 'block';
-        uploadedImage = e.target.result;
-        detectBtn.disabled = false;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    async function detectEwaste() {
-      if (!uploadedImage || !model) return;
-      showLoading('Analyzing image for e-waste items...');
-      const img = new Image();
-      img.src = uploadedImage;
-      img.onload = async () => {
-        const predictions = await model.detect(img);
-        const ewasteClasses = [
-          'cell phone','laptop','computer','tv','monitor',
-          'keyboard','mouse','remote','microwave','oven'
-        ];
-        const items = predictions.filter(p =>
-          ewasteClasses.includes(p.class.toLowerCase()) && p.score > 0.5
-        );
-        displayResults(items);
-        hideLoading();
-      };
-    }
-
-    function displayResults(items) {
-      if (!items.length) {
-        resultsContainer.innerHTML = `
-          <p>No e-waste items detected.</p>
-          <p>Try uploading a photo with phones, computers, or TVs.</p>
-        `;
-        return;
-      }
-      let html = `<h3>Detected E-Waste Items (${items.length})</h3>`;
-      items.forEach(item => {
-        const conf = (item.score * 100).toFixed(1);
-        html += `
-          <div class="detection-result">
-            <div class="result-info">
-              <h3>${item.class}</h3>
-              <p>Position: (${Math.round(item.bbox[0])}, ${Math.round(item.bbox[1])})</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Recycle Your E-Waste Responsibly</h1>
+                <p>Our app makes it easy to identify, value, and recycle your old electronics with just a photo. Join the movement to reduce e-waste in India.</p>
+                <a href="#app" class="btn btn-secondary">Get the App</a>
+                <a href="#how-it-works" class="btn">Learn More</a>
             </div>
-            <div class="confidence">Confidence: ${conf}%</div>
-          </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>How Our App Helps</h2>
+                <p>EcoRecycle simplifies e-waste recycling with cutting-edge technology and local partnerships</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Device Identification</h3>
+                    <p>Simply take a photo of your old device and our AI instantly identifies it, even if you don't know the model.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Value Estimation</h3>
+                    <p>Get instant information about your device's original value and current recycling worth.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Recycling Options</h3>
+                    <p>Choose between free donation to NGOs or paid recycling through certified partners.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3>Local Services</h3>
+                    <p>Find recycling centers and pickup services in your area (starting with Bangalore).</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Pickup or Drop-off</h3>
+                    <p>Schedule a pickup or visit a center - we connect you with the service that works for you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Recycling Guide</h3>
+                    <p>Learn how the recycling process works and what happens to your device after recycling.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Recycling your old electronics has never been easier</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Photo</h3>
+                    <p>Take a picture of your old device</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Identification</h3>
+                    <p>Our AI identifies the device and shows its value</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Choose Option</h3>
+                    <p>Select free donation or paid recycling</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Connect & Recycle</h3>
+                    <p>We connect you with local recycling services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Preview Section -->
+    <section id="app" class="app-preview">
+        <div class="container">
+            <div class="section-title">
+                <h2>EcoRecycle App</h2>
+                <p>Available soon for Android and iOS</p>
+            </div>
+            <div class="phone-mockup">
+                <img src="https://placehold.co/300x600/4CAF50/FFFFFF?text=EcoRecycle+App" alt="EcoRecycle App Preview">
+            </div>
+            <p>Download our app to start recycling your e-waste responsibly today</p>
+            <div style="margin-top: 2rem;">
+                <a href="#" class="btn" style="margin: 0 10px;">📱 Download for Android</a>
+                <a href="#" class="btn btn-secondary" style="margin: 0 10px;">🍎 Download for iOS</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Join the E-Waste Solution</h2>
+            <p>Together we can reduce electronic waste and create a more sustainable future for India</p>
+            <a href="#app" class="btn">Get Started Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>EcoRecycle</h3>
+                    <p>Making e-waste recycling simple, accessible, and rewarding for everyone in India.</p>
+                    <div class="social-links">
+                        <a href="#">📱</a>
+                        <a href="#">📘</a>
+                        <a href="#">🐦</a>
+                        <a href="#">📷</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#app">Download App</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Recycling Centers</h3>
+                    <ul>
+                        <li><a href="#">Bangalore</a></li>
+                        <li><a href="#">Coming to your city soon</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li>📧 info@ecorecycle.in</li>
+                        <li>📞 +91 98765 43210</li>
+                        <li>🏢 Bangalore, India</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 EcoRecycle. All rights reserved. | Designed with ❤️ for a greener India</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple animation on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .step').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add animation classes for features
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .feature-card, .step {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            
+            .feature-card.animated, .step.animated {
+                opacity: 1;
+                transform: translateY(0);
+            }
         `;
-      });
-      resultsContainer.innerHTML = html;
-    }
-
-    function resetApp() {
-      imageUpload.value = '';
-      imagePreview.style.display = 'none';
-      detectBtn.disabled = true;
-      resultsContainer.innerHTML = '<p>Upload an image and click “Detect E-Waste” to see results</p>';
-      uploadedImage = null;
-    }
-
-    function showLoading(msg) {
-      loading.querySelector('p').textContent = msg;
-      loading.style.display = 'block';
-      resultsContainer.style.display = 'none';
-    }
-
-    function hideLoading() {
-      loading.style.display = 'none';
-      resultsContainer.style.display = 'block';
-    }
-
-    window.addEventListener('DOMContentLoaded', init);
-  </script>
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
