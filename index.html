@@ -3,36 +3,52 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>E-Waste CV Check</title>
+<title>E-Waste Device Identifier</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0b0f14;--card:#121821;--muted:#8aa0b6;--text:#e8f1ff;--accent:#58d68d;--accent2:#20b2aa}
 body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b0f14,#0c1117 40%,#0b0f14);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 header{padding:18px 16px;background:rgba(9,13,19,.6);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
-main{width:min(980px,92%);margin:24px auto 42px;display:grid;gap:18px}
-.card{background:#121821;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 h1{font-size:20px}
+main{width:min(1040px,92%);margin:24px auto 42px;display:grid;gap:18px}
+.card{background:#121821;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 h2{font-size:22px;margin-bottom:8px}
 .note{color:var(--muted);font-size:14px;margin-top:8px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=file],input[type=text],select{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0e141b;color:var(--text)}
 .button{display:inline-block;padding:12px 16px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#0b0f14;font-weight:700;border:none;cursor:pointer;text-decoration:none}
 .button.ghost{background:transparent;border:1px solid rgba(255,255,255,.14);color:var(--text)}
-input[type=file],select{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0e141b;color:var(--text)}
+.hero{padding:24px;border:1px solid rgba(255,255,255,.06);background:
+  radial-gradient(800px 320px at 10% -10%,rgba(88,214,141,.12),transparent),
+  radial-gradient(700px 280px at 100% 0%,rgba(32,178,170,.12),transparent),
+  #121821;border-radius:18px}
 .preview{display:flex;gap:18px;align-items:flex-start;margin-top:12px}
 #img{max-width:320px;max-height:240px;border-radius:12px;border:1px solid rgba(255,255,255,.08);display:none}
 #preds{flex:1;display:none}
 #preds table{width:100%;border-collapse:collapse;margin-top:6px}
 #preds th,#preds td{border-bottom:1px solid rgba(255,255,255,.07);padding:8px;text-align:left}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.result,.recycle,.options,.guide,.details{display:none}
 .value{font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.directory{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dir-card{border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px;background:#0e141b}
+.dir-card h4{margin-bottom:6px}
+.dir-card a{color:var(--text);text-decoration:underline;word-break:break-all}
 footer{margin-top:auto;padding:16px;color:var(--muted);text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}.directory{grid-template-columns:1fr}#img{max-width:100%;max-height:260px}}
 </style>
+<!-- Pinned versions that work well together -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
 </head>
 <body>
 <header><h1>E-Waste Device Identifier</h1></header>
 <main>
+  <section class="hero card">
+    <h2>Turn Old Gadgets Into Good</h2>
+    <p class="note">Upload a photo → detect category (Smartphone/Laptop/Tablet/Desktop) → provide brand/model or year → see value → recycle options.</p>
+  </section>
+
   <section class="card">
     <h2>Upload & Identify</h2>
     <div class="row">
@@ -56,23 +72,94 @@ footer{margin-top:auto;padding:16px;color:var(--muted);text-align:center;border-
         <option value="Tablet">Tablet</option>
         <option value="Desktop PC">Desktop PC</option>
       </select>
-      <button id="apply" class="button ghost">Apply</button>
+      <button id="applyManual" class="button ghost">Apply</button>
     </div>
   </section>
 
-  <section class="card" id="result" style="display:none">
-    <h2>Device & Value</h2>
+  <section id="details" class="card details">
+    <h2>Tell us about the device</h2>
+    <p class="note">Provide <b>brand & model</b> <i>or</i> at least the <b>purchase year</b>. Either one unlocks the estimate.</p>
     <div class="grid2">
-      <div>Device: <span id="device" class="value">—</span></div>
-      <div>Original value: <span id="orig" class="value">—</span></div>
-      <div>Current value: <span id="curr" class="value">—</span></div>
+      <div>
+        <label class="note" for="brand">Brand</label>
+        <input id="brand" type="text" placeholder="e.g., Samsung, Lenovo, Apple"/>
+      </div>
+      <div>
+        <label class="note" for="model">Model</label>
+        <input id="model" type="text" placeholder="e.g., Galaxy S10, ThinkPad T480"/>
+      </div>
+      <div>
+        <label class="note" for="year">Purchase year</label>
+        <select id="year"><option value="">—</option></select>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button id="continueDetails" class="button" disabled>Continue</button>
+      </div>
     </div>
+    <div id="detailsHint" class="note">Waiting for brand+model or year…</div>
+  </section>
+
+  <section class="card result" id="result">
+    <h2>Device & Estimated Value</h2>
+    <div class="grid2">
+      <div>Detected category: <span id="category" class="value">—</span></div>
+      <div>Brand/Model: <span id="brandModel" class="value">—</span></div>
+      <div>Purchase year: <span id="pYear" class="value">—</span></div>
+      <div>Original value (approx.): <span id="orig" class="value">—</span></div>
+      <div>Estimated current value: <span id="curr" class="value">—</span></div>
+    </div>
+  </section>
+
+  <section class="card recycle" id="recycle">
+    <h2>Recycle it?</h2>
+    <div class="row">
+      <button id="goRecycle" class="button">Yes, recycle</button>
+      <a href="#" id="skip" class="button ghost">No, maybe later</a>
+    </div>
+    <p id="locStatus" class="note"></p>
+    <div id="manualCityWrap" class="row" style="display:none">
+      <label for="city" class="note">Enter city</label>
+      <input id="city" placeholder="City name"/>
+      <button id="showByCity" class="button ghost">Show options</button>
+    </div>
+  </section>
+
+  <section class="card options" id="options">
+    <h2>Choose an option</h2>
+    <div class="grid2" style="margin-bottom:10px">
+      <a href="#" id="openDonation" class="button ghost">Donate to NGO (free)</a>
+      <a href="#" id="openRecycler" class="button ghost">Recycle with company (for cash)</a>
+    </div>
+    <div id="directory" class="directory"></div>
+  </section>
+
+  <section class="card guide" id="guideDonation">
+    <h2>Donate to NGO</h2>
+    <ol>
+      <li>Backup and erase personal data.</li>
+      <li>Contact a local NGO that accepts e-waste.</li>
+      <li>Schedule a pickup or drop-off.</li>
+      <li>Keep a receipt or confirmation.</li>
+    </ol>
+    <a class="button" href="#" id="backFromDonation">← Back</a>
+  </section>
+
+  <section class="card guide" id="guideRecycler">
+    <h2>Recycle for Money</h2>
+    <ol>
+      <li>Remove SIM/memory cards and reset the device if possible.</li>
+      <li>Contact an authorized recycler and request a pickup.</li>
+      <li>Share device details and get an estimate.</li>
+      <li>Handover the device and receive payment or receipt.</li>
+    </ol>
+    <a class="button" href="#" id="backFromRecycler">← Back</a>
   </section>
 </main>
 <footer>© 2025 E-Waste App</footer>
 
 <script>
-let net=null, dataUrl=null;
+let net=null, dataUrl=null, selectedCategory=null;
+
 const file=document.getElementById("file");
 const img=document.getElementById("img");
 const identify=document.getElementById("identify");
@@ -80,17 +167,257 @@ const statusEl=document.getElementById("status");
 const predsWrap=document.getElementById("preds");
 const tbody=document.getElementById("tbody");
 const manual=document.getElementById("manual");
-const apply=document.getElementById("apply");
-const res=document.getElementById("result");
-const deviceEl=document.getElementById("device");
+const applyManual=document.getElementById("applyManual");
+
+const details=document.getElementById("details");
+const brandEl=document.getElementById("brand");
+const modelEl=document.getElementById("model");
+const yearEl=document.getElementById("year");
+const continueBtn=document.getElementById("continueDetails");
+const detailsHint=document.getElementById("detailsHint");
+
+const result=document.getElementById("result");
+const categoryEl=document.getElementById("category");
+const brandModelEl=document.getElementById("brandModel");
+const pYearEl=document.getElementById("pYear");
 const origEl=document.getElementById("orig");
 const currEl=document.getElementById("curr");
-const values={Smartphone:["₹50,000","₹5,000"],Laptop:["₹70,000","₹15,000"],Tablet:["₹30,000","₹7,000"],"Desktop PC":["₹40,000","₹8,000"]};
-function mapLabelToDevice(s){const l=s.toLowerCase();if(l.includes("laptop")||l.includes("notebook"))return"Laptop";if(l.includes("smartphone")||l.includes("cellular")||l.includes("mobile")||l.includes("telephone")||l.includes("ipod"))return"Smartphone";if(l.includes("tablet")||l.includes("ipad"))return"Tablet";if(l.includes("monitor")||l.includes("screen")||l.includes("desktop"))return"Desktop PC";return null}
-function setDevice(name){const v=values[name]||values["Smartphone"];deviceEl.textContent=name;origEl.textContent=v[0];currEl.textContent=v[1];res.style.display="block"}
-file.addEventListener("change",()=>{const f=file.files[0];if(!f){img.style.display="none";dataUrl=null;return}const r=new FileReader();r.onload=e=>{dataUrl=e.target.result;img.src=dataUrl;img.style.display="block"};r.readAsDataURL(f)})
-identify.addEventListener("click",async()=>{if(!dataUrl){statusEl.textContent="Choose an image first.";return}try{statusEl.textContent="Loading model…";if(!net){await tf.ready();try{await tf.setBackend("webgl")}catch(e){}net=await mobilenet.load()}statusEl.textContent="Identifying…";await new Promise(r=>setTimeout(r,10));const preds=await net.classify(img);tbody.innerHTML="";predsWrap.style.display="block";preds.slice(0,3).forEach(p=>{const tr=document.createElement("tr");const td1=document.createElement("td");td1.textContent=p.className;const td2=document.createElement("td");td2.textContent=(p.probability*100).toFixed(1)+"%";tr.appendChild(td1);tr.appendChild(td2);tbody.appendChild(tr)});const top=preds[0]?.className||"";const mapped=mapLabelToDevice(top)||"Smartphone";setDevice(mapped);statusEl.textContent="Done."}catch(err){statusEl.textContent="Model failed. Use manual picker."}})
-apply.addEventListener("click",()=>{if(!manual.value)return;setDevice(manual.value)})
+
+const recycle=document.getElementById("recycle");
+const goRecycle=document.getElementById("goRecycle");
+const skip=document.getElementById("skip");
+const locStatus=document.getElementById("locStatus");
+const manualCityWrap=document.getElementById("manualCityWrap");
+const cityEl=document.getElementById("city");
+const showByCity=document.getElementById("showByCity");
+
+const options=document.getElementById("options");
+const directoryEl=document.getElementById("directory");
+const openDonation=document.getElementById("openDonation");
+const openRecycler=document.getElementById("openRecycler");
+const guideDonation=document.getElementById("guideDonation");
+const guideRecycler=document.getElementById("guideRecycler");
+const backFromDonation=document.getElementById("backFromDonation");
+const backFromRecycler=document.getElementById("backFromRecycler");
+
+const nowYear=new Date().getFullYear();
+for(let y=nowYear;y>=2005;y--){const o=document.createElement("option");o.value=String(y);o.textContent=String(y);yearEl.appendChild(o)}
+
+// INR formatter
+const fmtINR=new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0});
+
+// base “original” price by category
+const baseOriginal={ "Smartphone":50000, "Laptop":70000, "Tablet":30000, "Desktop PC":40000 };
+
+// simple depreciation per category: first year drop, subsequent year drop, floor
+const deprec={ 
+  "Smartphone":{d1:0.35, ds:0.25, floor:0.10},
+  "Laptop":{d1:0.30, ds:0.20, floor:0.20},
+  "Tablet":{d1:0.30, ds:0.22, floor:0.12},
+  "Desktop PC":{d1:0.25, ds:0.15, floor:0.25}
+};
+
+function roundNearest500(n){return Math.max(0, Math.round(n/500)*500)}
+
+// map Mobilenet label to our 4 buckets
+function mapLabelToCategory(s){
+  const l=s.toLowerCase();
+  if(l.includes("laptop")||l.includes("notebook")) return "Laptop";
+  if(l.includes("smartphone")||l.includes("cellular")||l.includes("mobile")||l.includes("telephone")||l.includes("ipod")) return "Smartphone";
+  if(l.includes("tablet")||l.includes("ipad")) return "Tablet";
+  if(l.includes("monitor")||l.includes("screen")||l.includes("desktop")) return "Desktop PC";
+  return null;
+}
+
+file.addEventListener("change",()=>{
+  const f=file.files[0];
+  if(!f){img.style.display="none";dataUrl=null;return}
+  const r=new FileReader();
+  r.onload=e=>{dataUrl=e.target.result;img.src=dataUrl;img.style.display="block"};
+  r.readAsDataURL(f);
+});
+
+identify.addEventListener("click",async()=>{
+  if(!dataUrl && !manual.value){statusEl.textContent="Choose an image or pick a category.";return}
+  // if user already picked manually, skip model
+  if(manual.value){
+    selectedCategory = manual.value;
+    predsWrap.style.display="none";
+    showDetailsStep();
+    return;
+  }
+  try{
+    statusEl.textContent="Loading model…";
+    if(!net){await tf.ready();try{await tf.setBackend("webgl")}catch(e){} net=await mobilenet.load()}
+    statusEl.textContent="Identifying…";
+    const preds=await net.classify(img);
+    tbody.innerHTML=""; predsWrap.style.display="block";
+    preds.slice(0,3).forEach(p=>{
+      const tr=document.createElement("tr");
+      const td1=document.createElement("td"); td1.textContent=p.className;
+      const td2=document.createElement("td"); td2.textContent=(p.probability*100).toFixed(1)+"%";
+      tr.appendChild(td1); tr.appendChild(td2); tbody.appendChild(tr);
+    });
+    const top=preds[0]?.className||"";
+    selectedCategory = mapLabelToCategory(top) || "Smartphone";
+    showDetailsStep();
+    statusEl.textContent="Detected: "+selectedCategory;
+  }catch(err){
+    statusEl.textContent="Model failed. Pick a category manually.";
+  }
+});
+
+applyManual.addEventListener("click",()=>{
+  if(!manual.value){statusEl.textContent="Pick a category.";return}
+  selectedCategory = manual.value;
+  predsWrap.style.display="none";
+  showDetailsStep();
+  statusEl.textContent="Selected: "+selectedCategory;
+});
+
+function showDetailsStep(){
+  details.style.display="block";
+  validateDetails();
+}
+
+function validateDetails(){
+  const hasBrandModel = brandEl.value.trim() && modelEl.value.trim();
+  const hasYear = !!yearEl.value;
+  continueBtn.disabled = !(hasBrandModel || hasYear);
+  detailsHint.textContent = continueBtn.disabled 
+    ? "Enter brand & model, or choose a year."
+    : "Looks good — click Continue.";
+}
+
+brandEl.addEventListener("input",validateDetails);
+modelEl.addEventListener("input",validateDetails);
+yearEl.addEventListener("change",validateDetails);
+
+continueBtn.addEventListener("click",()=>{
+  if(!selectedCategory) return;
+  const brand=brandEl.value.trim();
+  const model=modelEl.value.trim();
+  const year=yearEl.value ? parseInt(yearEl.value,10) : null;
+
+  const origBase = baseOriginal[selectedCategory] || 40000;
+  let currEstimate = origBase * 0.8; // default for <1 year
+  if(year){
+    const age = Math.max(0, nowYear - year);
+    const p = deprec[selectedCategory] || {d1:0.30, ds:0.20, floor:0.15};
+    let factor;
+    if(age===0){ factor=0.80; }
+    else {
+      factor = (1 - p.d1) * Math.pow((1 - p.ds), Math.max(0, age-1));
+      factor = Math.max(p.floor, factor);
+    }
+    currEstimate = origBase * factor;
+  }
+  currEstimate = roundNearest500(currEstimate);
+
+  categoryEl.textContent = selectedCategory;
+  brandModelEl.textContent = (brand || model) ? [brand, model].filter(Boolean).join(" ") : "—";
+  pYearEl.textContent = year ? year : "—";
+  origEl.textContent = fmtINR.format(origBase);
+  currEl.textContent = fmtINR.format(currEstimate);
+
+  result.style.display="block";
+  recycle.style.display="block";
+  window.scrollTo({top:result.offsetTop-12, behavior:"smooth"});
+});
+
+skip.addEventListener("click",e=>{
+  e.preventDefault();
+  [result,recycle,options,guideDonation,guideRecycler].forEach(el=>el.style.display="none");
+  directoryEl.innerHTML="";
+  locStatus.textContent="";
+  manualCityWrap.style.display="none";
+  statusEl.textContent="Ready.";
+});
+
+openDonation.addEventListener("click",e=>{
+  e.preventDefault();
+  guideRecycler.style.display="none";
+  guideDonation.style.display="block";
+  window.scrollTo({top:guideDonation.offsetTop-12, behavior:"smooth"});
+});
+openRecycler.addEventListener("click",e=>{
+  e.preventDefault();
+  guideDonation.style.display="none";
+  guideRecycler.style.display="block";
+  window.scrollTo({top:guideRecycler.offsetTop-12, behavior:"smooth"});
+});
+backFromDonation.addEventListener("click",e=>{e.preventDefault();guideDonation.style.display="none"});
+backFromRecycler.addEventListener("click",e=>{e.preventDefault();guideRecycler.style.display="none"});
+
+// Directory + geolocation
+const directoryData={
+  bengaluru:{
+    ngos:[
+      {name:"Saahas Zero Waste",site:"https://saahaszerowaste.com/",phone:"+91-80-4168-9889"},
+      {name:"Share At Door Step (pickup)",site:"https://shareatdoorstep.com/donate/computer-e-waste/",phone:""},
+      {name:"BBMP E-Waste Collection (info)",site:"https://bbmp.gov.in/",phone:""}
+    ],
+    recyclers:[
+      {name:"Zolopik Recycling",site:"https://zolopik.com/",phone:"+91-8884449985"},
+      {name:"E-Parisaraa Pvt. Ltd.",site:"https://www.eparisaraa.com/",phone:"+91-80-2836-7770"},
+      {name:"Namo E-Waste (serviceable)",site:"https://www.namoe-waste.com/",phone:"1800-123-445555"}
+    ]
+  },
+  default:{
+    ngos:[
+      {name:"Share At Door Step (pickup)",site:"https://shareatdoorstep.com/donate/computer-e-waste/",phone:""},
+      {name:"Local Municipal E-Waste Info",site:"https://www.india.gov.in/topics/environment-forests/e-waste",phone:""},
+      {name:"Karo Sambhav Collection Finder",site:"https://www.karosambhav.com/",phone:""}
+    ],
+    recyclers:[
+      {name:"Zolopik Recycling",site:"https://zolopik.com/",phone:"+91-8884449985"},
+      {name:"Recycler Directory (CPCB)",site:"https://cpcb.nic.in/e-waste/",phone:""},
+      {name:"Producer Responsibility Orgs",site:"https://moefcc.gov.in/",phone:""}
+    ]
+  }
+};
+
+function inBengaluru(lat,lon){return lat>=12.80&&lat<=13.20&&lon>=77.40&&lon<=77.80}
+function keyFromCity(text){const s=(text||"").toLowerCase();return (s.includes("bengaluru")||s.includes("bangalore"))?"bengaluru":"default"}
+
+function renderDirectory(key){
+  const data = directoryData[key] || directoryData.default;
+  const cards=[];
+  data.ngos.forEach(x=>{
+    cards.push(`<div class="dir-card"><h4>NGO</h4><p>${x.name}</p><a href="${x.site}" target="_blank">${x.site}</a>${x.phone?`<p>${x.phone}</p>`:""}</div>`);
+  });
+  data.recyclers.forEach(x=>{
+    cards.push(`<div class="dir-card"><h4>Recycler</h4><p>${x.name}</p><a href="${x.site}" target="_blank">${x.site}</a>${x.phone?`<p>${x.phone}</p>`:""}</div>`);
+  });
+  directoryEl.innerHTML = cards.join("");
+  options.style.display="block";
+  window.scrollTo({top:options.offsetTop-12, behavior:"smooth"});
+}
+
+goRecycle.addEventListener("click",()=>{
+  if("geolocation" in navigator){
+    locStatus.textContent="Detecting your location…";
+    navigator.geolocation.getCurrentPosition(
+      pos=>{
+        const {latitude,longitude}=pos.coords;
+        locStatus.textContent=`Location detected (${latitude.toFixed(2)}, ${longitude.toFixed(2)}).`;
+        const key = inBengaluru(latitude,longitude) ? "bengaluru" : "default";
+        renderDirectory(key);
+      },
+      err=>{
+        locStatus.textContent="Unable to get location. Enter city below.";
+        manualCityWrap.style.display="flex";
+      }
+    );
+  }else{
+    locStatus.textContent="Geolocation not supported. Enter city below.";
+    manualCityWrap.style.display="flex";
+  }
+});
+
+showByCity.addEventListener("click",()=>{
+  renderDirectory(keyFromCity(cityEl.value));
+});
 </script>
 </body>
 </html>
