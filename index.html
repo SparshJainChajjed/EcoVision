@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Waste Detection and Recycling App</title>
+    <title>EcoGnize - E-Waste Detection and Recycling App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -64,7 +64,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4"><i class="fas fa-recycle header-icon me-2"></i>E-Waste Detection and Recycling App</h1>
+        <h1 class="text-center mb-4"><i class="fas fa-recycle header-icon me-2"></i>EcoGnize - E-Waste Detection and Recycling App</h1>
         <p class="text-center mb-4 lead">Simplify e-waste recycling with AI-powered detection and location-based services.</p>
         
         <div class="card" id="upload-section">
@@ -80,8 +80,27 @@
         
         <div class="card" id="result-section" style="display: none;">
             <div class="card-body">
-                <h2 class="section-title"><i class="fas fa-info-circle me-2"></i>Analysis Results</h2>
+                <h2 class="section-title"><i class="fas fa-info-circle me-2"></i>Detected Item</h2>
                 <p id="item-name" class="fw-bold"></p>
+                <div class="mb-3">
+                    <label for="brand" class="form-label">Brand</label>
+                    <input type="text" class="form-control" id="brand" placeholder="e.g., Portronics">
+                </div>
+                <div class="mb-3">
+                    <label for="model" class="form-label">Model</label>
+                    <input type="text" class="form-control" id="model" placeholder="e.g., Hydra 10">
+                </div>
+                <div class="mb-3">
+                    <label for="purchase-year" class="form-label">Year Purchased</label>
+                    <input type="number" class="form-control" id="purchase-year" min="1900" max="2025" placeholder="e.g., 2020">
+                </div>
+                <button class="btn btn-primary w-100" id="estimate-btn"><i class="fas fa-calculator me-2"></i>Estimate Value</button>
+            </div>
+        </div>
+        
+        <div class="card" id="value-section" style="display: none;">
+            <div class="card-body">
+                <h2 class="section-title"><i class="fas fa-rupee-sign me-2"></i>Value Estimation</h2>
                 <p id="original-value"></p>
                 <p id="current-worth"></p>
                 <button class="btn btn-success me-2" id="recycle-yes"><i class="fas fa-check me-2"></i>Proceed to Recycle</button>
@@ -125,21 +144,32 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
     <script>
         let model;
-        const electronicItems = {
-            'tv': { name: 'Television', original: 40000, current: 5000 },
-            'laptop': { name: 'Laptop', original: 50000, current: 10000 },
-            'mouse': { name: 'Computer Mouse', original: 500, current: 100 },
-            'remote': { name: 'Remote Control', original: 300, current: 50 },
-            'keyboard': { name: 'Keyboard', original: 1000, current: 200 },
-            'cell phone': { name: 'Mobile Phone', original: 20000, current: 5000 },
-            'microwave': { name: 'Microwave Oven', original: 10000, current: 2000 },
-            'oven': { name: 'Oven', original: 15000, current: 3000 },
-            'toaster': { name: 'Toaster', original: 2000, current: 400 },
-            'refrigerator': { name: 'Refrigerator', original: 30000, current: 6000 },
-            'hair drier': { name: 'Hair Dryer', original: 1500, current: 300 },
-            'tablet': { name: 'Tablet', original: 25000, current: 5000 },
-            'monitor': { name: 'Computer Monitor', original: 10000, current: 2000 },
-            // Values in INR for India context
+        const currentYear = 2025;
+        const itemPrices = {
+            'keyboard': {
+                'portronics': {
+                    'hydra 10': 2599
+                },
+                // Add more brands/models as needed
+                'default': 2000 // Default original price if not found
+            },
+            'cell phone': {
+                'default': 20000
+            },
+            'laptop': {
+                'default': 50000
+            },
+            // Add defaults for other categories
+            'tv': { 'default': 40000 },
+            'mouse': { 'default': 500 },
+            'remote': { 'default': 300 },
+            'microwave': { 'default': 10000 },
+            'oven': { 'default': 15000 },
+            'toaster': { 'default': 2000 },
+            'refrigerator': { 'default': 30000 },
+            'hair drier': { 'default': 1500 },
+            'tablet': { 'default': 25000 },
+            'monitor': { 'default': 10000 },
         };
 
         async function loadModel() {
@@ -154,6 +184,11 @@
         const loadingDiv = document.getElementById('loading');
         const resultSection = document.getElementById('result-section');
         const itemNameP = document.getElementById('item-name');
+        const brandInput = document.getElementById('brand');
+        const modelInput = document.getElementById('model');
+        const purchaseYearInput = document.getElementById('purchase-year');
+        const estimateBtn = document.getElementById('estimate-btn');
+        const valueSection = document.getElementById('value-section');
         const originalValueP = document.getElementById('original-value');
         const currentWorthP = document.getElementById('current-worth');
         const recycleYes = document.getElementById('recycle-yes');
@@ -191,17 +226,41 @@
 
             const topPrediction = predictions.reduce((prev, current) => (prev.score > current.score) ? prev : current);
             const className = topPrediction.class.toLowerCase();
-            const item = electronicItems[className] || { name: className.charAt(0).toUpperCase() + className.slice(1), original: 'Unknown', current: 'Unknown' };
-
-            itemNameP.textContent = `Identified Item: ${item.name}`;
-            originalValueP.textContent = `Original Value (approx.): ₹${item.original}`;
-            currentWorthP.textContent = `Current Estimated Value: ₹${item.current}`;
+            itemNameP.textContent = `Identified Item: ${className.charAt(0).toUpperCase() + className.slice(1)}`;
 
             resultSection.style.display = 'block';
         });
 
-        recycleYes.addEventListener('click', () => {
+        estimateBtn.addEventListener('click', () => {
+            const brand = brandInput.value.trim().toLowerCase();
+            const model = modelInput.value.trim().toLowerCase();
+            const purchaseYear = parseInt(purchaseYearInput.value);
+            const itemType = itemNameP.textContent.split(': ')[1].toLowerCase();
+
+            if (!brand || !model || isNaN(purchaseYear) || purchaseYear > currentYear || purchaseYear < 1900) {
+                alert('Please fill in all fields correctly.');
+                return;
+            }
+
+            let original = itemPrices[itemType]?.default || 10000; // Fallback default
+            if (itemPrices[itemType]?.[brand]?.[model]) {
+                original = itemPrices[itemType][brand][model];
+            }
+
+            const age = currentYear - purchaseYear;
+            let depreciationFactor = Math.pow(0.6, age); // 40% depreciation per year
+            let estimatedCurrent = original * depreciationFactor;
+            let lowball = Math.max(200, Math.round(estimatedCurrent * 0.1)); // Lowball to at least 200 or 10%
+
+            originalValueP.textContent = `Original Value (approx.): ₹${original}`;
+            currentWorthP.textContent = `Approximate Current Worth: ₹${lowball}`;
+
             resultSection.style.display = 'none';
+            valueSection.style.display = 'block';
+        });
+
+        recycleYes.addEventListener('click', () => {
+            valueSection.style.display = 'none';
             recycleSection.style.display = 'block';
         });
 
@@ -241,11 +300,15 @@
 
         function resetApp() {
             resultSection.style.display = 'none';
+            valueSection.style.display = 'none';
             recycleSection.style.display = 'none';
             guideSection.style.display = 'none';
             previewImg.src = '';
             previewImg.style.display = 'none';
             uploadInput.value = '';
+            brandInput.value = '';
+            modelInput.value = '';
+            purchaseYearInput.value = '';
         }
     </script>
 </body>
