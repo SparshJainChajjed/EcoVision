@@ -70,6 +70,11 @@
         <div class="card" id="upload-section">
             <div class="card-body">
                 <h2 class="section-title"><i class="fas fa-upload me-2"></i>Upload Your Electronic Item Image</h2>
+                <div class="mb-3">
+                    <label for="clarifai-pat" class="form-label">Clarifai Personal Access Token (PAT)</label>
+                    <input type="text" class="form-control" id="clarifai-pat" placeholder="Enter your Clarifai PAT (sign up at clarifai.com for free tier)">
+                    <small class="form-text text-muted">Free tier available with 1000 operations/month.</small>
+                </div>
                 <input type="file" class="form-control mb-3" id="image-upload" accept="image/*">
                 <img id="preview" src="" alt="Image preview" class="img-fluid" style="display: none;">
                 <button class="btn btn-primary w-100" id="analyze-btn"><i class="fas fa-search me-2"></i>Analyze Image</button>
@@ -140,18 +145,14 @@
         <p><i class="fas fa-leaf me-2"></i>Committed to Sustainable E-Waste Management</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
     <script>
-        let model;
         const currentYear = 2025;
         const itemPrices = {
             'keyboard': {
                 'portronics': {
                     'hydra 10': 2599
                 },
-                // Add more brands/models as needed
-                'default': 2000 // Default original price if not found
+                'default': 2000
             },
             'cell phone': {
                 'default': 20000
@@ -159,7 +160,6 @@
             'laptop': {
                 'default': 50000
             },
-            // Add defaults for other categories
             'tv': { 'default': 40000 },
             'mouse': { 'default': 500 },
             'remote': { 'default': 300 },
@@ -171,12 +171,6 @@
             'tablet': { 'default': 25000 },
             'monitor': { 'default': 10000 },
         };
-
-        async function loadModel() {
-            if (!model) {
-                model = await cocoSsd.load();
-            }
-        }
 
         const uploadInput = document.getElementById('image-upload');
         const previewImg = document.getElementById('preview');
@@ -199,6 +193,7 @@
         const companyBtn = document.getElementById('company-btn');
         const guideSection = document.getElementById('guide-section');
         const guideText = document.getElementById('guide-text');
+        const patInput = document.getElementById('clarifai-pat');
 
         uploadInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -209,26 +204,63 @@
             }
         });
 
-        analyzeBtn.addEventListener('click', async () => {
-            if (!previewImg.src) {
-                alert('Please upload an image first.');
+        analyzeBtn.addEventListener('click', () => {
+            const file = uploadInput.files[0];
+            const pat = patInput.value.trim();
+            if (!file || !pat) {
+                alert('Please upload an image and enter your Clarifai PAT.');
                 return;
             }
             loadingDiv.style.display = 'block';
-            await loadModel();
-            const predictions = await model.detect(previewImg);
-            loadingDiv.style.display = 'none';
 
-            if (predictions.length === 0) {
-                alert('No objects detected. Please try another image.');
-                return;
-            }
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const base64 = event.target.result.split(',')[1]; // Remove data:url prefix
 
-            const topPrediction = predictions.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            const className = topPrediction.class.toLowerCase();
-            itemNameP.textContent = `Identified Item: ${className.charAt(0).toUpperCase() + className.slice(1)}`;
+                const raw = JSON.stringify({
+                    "inputs": [
+                        {
+                            "data": {
+                                "image": {
+                                    "base64": base64
+                                }
+                            }
+                        }
+                    ]
+                });
 
-            resultSection.style.display = 'block';
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Key ' + pat
+                    },
+                    body: raw
+                };
+
+                fetch('https://api.clarifai.com/v2/models/general-image-detection/outputs', requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        loadingDiv.style.display = 'none';
+                        if (result.status.code !== 10000) {
+                            alert('Error: ' + result.status.description);
+                            return;
+                        }
+                        const regions = result.outputs[0].data.regions;
+                        if (regions && regions.length > 0) {
+                            const topConcept = regions[0].data.concepts[0].name;
+                            itemNameP.textContent = `Identified Item: ${topConcept.charAt(0).toUpperCase() + topConcept.slice(1)}`;
+                            resultSection.style.display = 'block';
+                        } else {
+                            alert('No objects detected. Please try another image.');
+                        }
+                    })
+                    .catch(error => {
+                        loadingDiv.style.display = 'none';
+                        alert('Error analyzing image: ' + error);
+                    });
+            };
+            reader.readAsDataURL(file);
         });
 
         estimateBtn.addEventListener('click', () => {
@@ -242,15 +274,15 @@
                 return;
             }
 
-            let original = itemPrices[itemType]?.default || 10000; // Fallback default
+            let original = itemPrices[itemType]?.default || 10000;
             if (itemPrices[itemType]?.[brand]?.[model]) {
                 original = itemPrices[itemType][brand][model];
             }
 
             const age = currentYear - purchaseYear;
-            let depreciationFactor = Math.pow(0.6, age); // 40% depreciation per year
+            let depreciationFactor = Math.pow(0.6, age);
             let estimatedCurrent = original * depreciationFactor;
-            let lowball = Math.max(200, Math.round(estimatedCurrent * 0.1)); // Lowball to at least 200 or 10%
+            let lowball = Math.max(200, Math.round(estimatedCurrent * 0.1));
 
             originalValueP.textContent = `Original Value (approx.): ₹${original}`;
             currentWorthP.textContent = `Approximate Current Worth: ₹${lowball}`;
