@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGnize - E-Waste Detection and Recycling App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css  " rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css  ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
     <style>
         body {
             background-color: #f4f7f9;
@@ -70,18 +73,15 @@
         <div class="card" id="upload-section">
             <div class="card-body">
                 <h2 class="section-title"><i class="fas fa-upload me-2"></i>Upload Your Electronic Item Image</h2>
-                <div class="mb-3">
-                    <label for="clarifai-pat" class="form-label">Clarifai Personal Access Token (PAT)</label>
-                    <input type="text" class="form-control" id="clarifai-pat" placeholder="Enter your Clarifai PAT (sign up at clarifai.com for free tier)">
-                    <small class="form-text text-muted">Free tier available with 1000 operations/month.</small>
-                </div>
                 <input type="file" class="form-control mb-3" id="image-upload" accept="image/*">
-                <img id="preview" src="" alt="Image preview" class="img-fluid" style="display: none;">
+                <img id="preview" src="" alt="Image preview" style="display: none;">
                 <button class="btn btn-primary w-100" id="analyze-btn"><i class="fas fa-search me-2"></i>Analyze Image</button>
             </div>
         </div>
         
-        <div id="loading" class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>Processing... Please wait.</div>
+        <div id="loading" class="alert alert-info">
+            <i class="fas fa-spinner fa-spin me-2"></i>Processing... Please wait.
+        </div>
         
         <div class="card" id="result-section" style="display: none;">
             <div class="card-body">
@@ -99,7 +99,9 @@
                     <label for="purchase-year" class="form-label">Year Purchased</label>
                     <input type="number" class="form-control" id="purchase-year" min="1900" max="2025" placeholder="e.g., 2020">
                 </div>
-                <button class="btn btn-primary w-100" id="estimate-btn"><i class="fas fa-calculator me-2"></i>Estimate Value</button>
+                <button class="btn btn-primary w-100" id="estimate-btn">
+                    <i class="fas fa-calculator me-2"></i>Estimate Value
+                </button>
             </div>
         </div>
         
@@ -108,8 +110,12 @@
                 <h2 class="section-title"><i class="fas fa-rupee-sign me-2"></i>Value Estimation</h2>
                 <p id="original-value"></p>
                 <p id="current-worth"></p>
-                <button class="btn btn-success me-2" id="recycle-yes"><i class="fas fa-check me-2"></i>Proceed to Recycle</button>
-                <button class="btn btn-secondary" id="recycle-no"><i class="fas fa-times me-2"></i>Cancel</button>
+                <button class="btn btn-success me-2" id="recycle-yes">
+                    <i class="fas fa-check me-2"></i>Proceed to Recycle
+                </button>
+                <button class="btn btn-secondary" id="recycle-no">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
             </div>
         </div>
         
@@ -121,12 +127,16 @@
                     <input type="text" class="form-control" id="location" value="Bangalore">
                 </div>
                 <div class="mb-3">
-                    <h3 class="section-title"><i class="fas fa-hand-holding-heart me-2"></i>Free Donation via NGO</h3>
+                    <h3 class="section-title">
+                        <i class="fas fa-hand-holding-heart me-2"></i>Free Donation via NGO
+                    </h3>
                     <p>Donate your item to NGOs for responsible recycling.</p>
                     <button class="btn btn-primary w-100" id="ngo-btn">Select Donation</button>
                 </div>
                 <div>
-                    <h3 class="section-title"><i class="fas fa-money-bill-wave me-2"></i>Paid Recycling via Companies</h3>
+                    <h3 class="section-title">
+                        <i class="fas fa-money-bill-wave me-2"></i>Paid Recycling via Companies
+                    </h3>
                     <p>Sell your item to recycling companies for compensation.</p>
                     <button class="btn btn-primary w-100" id="company-btn">Select Paid Recycling</button>
                 </div>
@@ -148,30 +158,21 @@
     <script>
         const currentYear = 2025;
         const itemPrices = {
-            'keyboard': {
-                'portronics': {
-                    'hydra 10': 2599
-                },
-                'default': 2000
-            },
-            'cell phone': {
-                'default': 20000
-            },
-            'laptop': {
-                'default': 50000
-            },
+            'keyboard': { 'default': 2000 },
+            'cell phone': { 'default': 20000 },
+            'laptop': { 'default': 50000 },
             'tv': { 'default': 40000 },
             'mouse': { 'default': 500 },
             'remote': { 'default': 300 },
             'microwave': { 'default': 10000 },
-            'oven': { 'default': 15000 },
-            'toaster': { 'default': 2000 },
-            'refrigerator': { 'default': 30000 },
-            'hair drier': { 'default': 1500 },
-            'tablet': { 'default': 25000 },
-            'monitor': { 'default': 10000 },
+            'computer monitor': { 'default': 10000 },
+            'computer keyboard': { 'default': 2000 },
+            'computer mouse': { 'default': 500 },
+            'mobile phone': { 'default': 20000 },
+            'tablet computer': { 'default': 25000 },
         };
 
+        // Elements
         const uploadInput = document.getElementById('image-upload');
         const previewImg = document.getElementById('preview');
         const analyzeBtn = document.getElementById('analyze-btn');
@@ -193,8 +194,15 @@
         const companyBtn = document.getElementById('company-btn');
         const guideSection = document.getElementById('guide-section');
         const guideText = document.getElementById('guide-text');
-        const patInput = document.getElementById('clarifai-pat');
 
+        // Load TensorFlow Model
+        let model = null;
+        mobilenet.load().then(loadedModel => {
+            model = loadedModel;
+            analyzeBtn.disabled = false;
+        });
+
+        // Preview image
         uploadInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -204,68 +212,46 @@
             }
         });
 
-        analyzeBtn.addEventListener('click', () => {
-            const file = uploadInput.files[0];
-            const pat = patInput.value.trim();
-            if (!file || !pat) {
-                alert('Please upload an image and enter your Clarifai PAT.');
+        // Analyze image
+        analyzeBtn.addEventListener('click', async () => {
+            if (!model) {
+                alert('Please wait for the AI model to load...');
                 return;
             }
+
+            if (!previewImg.src) {
+                alert('Please upload an image first.');
+                return;
+            }
+
             loadingDiv.style.display = 'block';
+            try {
+                const predictions = await model.classify(previewImg);
+                loadingDiv.style.display = 'none';
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const base64 = event.target.result.split(',')[1]; // Remove data:url prefix
+                // Filter for electronic items
+                const electronicItem = predictions.find(p => 
+                    Object.keys(itemPrices).some(item => 
+                        p.className.toLowerCase().includes(item)
+                    )
+                );
 
-                const raw = JSON.stringify({
-                    "inputs": [
-                        {
-                            "data": {
-                                "image": {
-                                    "base64": base64
-                                }
-                            }
-                        }
-                    ]
-                });
-
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Key ' + pat
-                    },
-                    body: raw
-                };
-
-                fetch('https://api.clarifai.com/v2/models/general-image-detection/outputs  ', requestOptions)
-                    .then(response => response.json())
-                    .then(result => {
-                        loadingDiv.style.display = 'none';
-                        if (result.status.code !== 10000) {
-                            alert('Error: ' + result.status.description);
-                            return;
-                        }
-                        const regions = result.outputs[0].data.regions;
-                        if (regions && regions.length > 0) {
-                            const topConcept = regions[0].data.concepts[0].name;
-                            itemNameP.textContent = `Identified Item: ${topConcept.charAt(0).toUpperCase() + topConcept.slice(1)}`;
-                            resultSection.style.display = 'block';
-                        } else {
-                            alert('No objects detected. Please try another image.');
-                        }
-                    })
-                    .catch(error => {
-                        loadingDiv.style.display = 'none';
-                        alert('Error analyzing image: ' + error);
-                    });
-            };
-            reader.readAsDataURL(file);
+                if (electronicItem) {
+                    itemNameP.textContent = `Identified Item: ${electronicItem.className}`;
+                    resultSection.style.display = 'block';
+                } else {
+                    alert('No electronic item detected. Please try another image.');
+                }
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                alert('Error analyzing image: ' + error.message);
+            }
         });
 
+        // Estimate value
         estimateBtn.addEventListener('click', () => {
-            const brand = brandInput.value.trim().toLowerCase();
-            const model = modelInput.value.trim().toLowerCase();
+            const brand = brandInput.value.trim();
+            const model = modelInput.value.trim();
             const purchaseYear = parseInt(purchaseYearInput.value);
             const itemType = itemNameP.textContent.split(': ')[1].toLowerCase();
 
@@ -274,9 +260,13 @@
                 return;
             }
 
-            let original = itemPrices[itemType]?.default || 10000;
-            if (itemPrices[itemType]?.[brand]?.[model]) {
-                original = itemPrices[itemType][brand][model];
+            // Find matching item price
+            let original = 1000; // Default value
+            for (const [key, value] of Object.entries(itemPrices)) {
+                if (itemType.includes(key)) {
+                    original = value.default;
+                    break;
+                }
             }
 
             const age = currentYear - purchaseYear;
@@ -291,6 +281,7 @@
             valueSection.style.display = 'block';
         });
 
+        // Navigation
         recycleYes.addEventListener('click', () => {
             valueSection.style.display = 'none';
             recycleSection.style.display = 'block';
@@ -306,9 +297,9 @@
             guideText.innerHTML = `
                 <p>For NGO donation in ${city}:</p>
                 <ul>
-                    <li><strong>Saahas NGO</strong>: Contact for collection (minimum 10kg). Phone: <a href="tel:080-41689889">080-41689889</a>, Email: <a href="mailto:info@saahas.org">info@saahas.org</a>. Visit <a href="https://saahas.org/  " target="_blank">saahas.org</a> for details and drop-off locations.</li>
-                    <li><strong>Bal Utsav</strong>: Schedule free pickup online. Website: <a href="https://balutsav.org/epr-e-waste-collection-in-bengaluru/  " target="_blank">balutsav.org</a>. Receive a recycling certificate.</li>
-                    <li>Explore additional local NGOs for more options.</li>
+                    <li><strong>Saahas NGO</strong>: Contact for collection. Phone: <a href="tel:080-41689889">080-41689889</a></li>
+                    <li><strong>Bal Utsav</strong>: Schedule free pickup online at <a href="https://balutsav.org" target="_blank">balutsav.org</a></li>
+                    <li>Receive a recycling certificate after donation</li>
                 </ul>
             `;
             recycleSection.style.display = 'none';
@@ -320,10 +311,9 @@
             guideText.innerHTML = `
                 <p>For paid recycling in ${city}:</p>
                 <ul>
-                    <li><strong>Zolopik Recycling</strong>: Schedule pickup and get a quote online. Website: <a href="https://zolopik.com/bangalore/  " target="_blank">zolopik.com/bangalore</a>.</li>
-                    <li><strong>E-Scrappy Recyclers</strong>: Call for service: <a href="tel:18005729298">1800 572 9298</a>. Website: <a href="https://escrappyrecyclers.com/  " target="_blank">escrappyrecyclers.com</a>.</li>
-                    <li><strong>RecycleKaro</strong>: Contact for bulk recycling. Website: <a href="https://www.recyclekaro.com/  " target="_blank">recyclekaro.com</a>.</li>
-                    <li>Connect directly with the service providers for arrangements.</li>
+                    <li><strong>Zolopik Recycling</strong>: Schedule pickup online at <a href="https://zolopik.com" target="_blank">zolopik.com</a></li>
+                    <li><strong>E-Scrappy Recyclers</strong>: Call <a href="tel:18005729298">1800 572 9298</a></li>
+                    <li><strong>RecycleKaro</strong>: Visit <a href="https://recyclekaro.com" target="_blank">recyclekaro.com</a></li>
                 </ul>
             `;
             recycleSection.style.display = 'none';
