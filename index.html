@@ -4,18 +4,19 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision — Intro</title>
-<meta name="description" content="EcoVision logo splash → automatic demo playback (no taps, no audio)." />
+<meta name="description" content="EcoVision splash with unified leaf logo, then autoplay demo (no audio, no taps)." />
 <style>
   :root{
     --bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;
     --accent:#1f8cff;--accent2:#22c55e;--warn:#ffdf7f;--line:rgba(255,255,255,.08);
     --shadow:0 22px 54px rgba(0,0,0,.38);
+    --leaf1:#22c55e; --leaf2:#86efac; --halo:#14A34A;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
 
-  /* ===== Splash (purposeful logo, no audio) ===== */
+  /* ===== Splash (unified logo, longer view, no audio) ===== */
   .intro{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
     background:
       radial-gradient(900px 300px at 50% -80px, rgba(34,197,94,.18), transparent 60%),
@@ -23,42 +24,42 @@
       #0a0b0f;
     transition:opacity .38s ease, visibility .38s ease}
   .intro.hide{opacity:0;visibility:hidden}
-  .introInner{display:grid;place-items:center;gap:12px}
+  .introInner{display:grid;place-items:center;gap:14px}
   .introWord{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
 
   .ecoLogo{
-    width:140px;height:140px;border-radius:28px;display:grid;place-items:center;position:relative;
-    background:linear-gradient(180deg, rgba(22,163,74,.18), rgba(34,197,94,.10));
+    width:156px;height:156px;border-radius:32px;display:grid;place-items:center;position:relative;
+    background:linear-gradient(180deg, rgba(22,163,74,.20), rgba(34,197,94,.12));
     box-shadow:0 18px 40px rgba(34,197,94,.30), inset 0 0 30px rgba(255,255,255,.05);
-    animation:logo-pop .4s cubic-bezier(.2,.7,.2,1.1) both;
+    animation:logo-pop .45s cubic-bezier(.2,.7,.2,1.1) both;
   }
-  .ecoSvg{width:118px;height:118px;overflow:visible}
-  @keyframes logo-pop{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+  .ecoSvg{width:132px;height:132px;overflow:visible}
+  @keyframes logo-pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 
-  /* Logo parts */
-  .triPath{stroke:#16a34a;stroke-width:6;fill:none;stroke-linecap:round;
-    stroke-dasharray:420 420;stroke-dashoffset:420;animation:tri-draw 1.1s ease-out .1s forwards}
-  @keyframes tri-draw{to{stroke-dashoffset:0}}
+  /* Logo animations */
+  .halo{opacity:.55}
+  .ring{fill:none;stroke:var(--leaf1);stroke-width:5.5;stroke-linecap:round;
+        stroke-dasharray:365 365;stroke-dashoffset:365;animation:ring-draw 1.3s ease-out .1s forwards}
+  @keyframes ring-draw{to{stroke-dashoffset:0}}
 
-  .arrow{fill:#22c55e;opacity:0;transform-origin:center;filter: drop-shadow(0 2px 6px rgba(0,0,0,.25))}
-  .a1{animation:arrow-in .32s cubic-bezier(.2,.9,.2,1) .55s forwards}
-  .a2{animation:arrow-in .32s cubic-bezier(.2,.9,.2,1) .72s forwards}
-  .a3{animation:arrow-in .32s cubic-bezier(.2,.9,.2,1) .89s forwards}
-  @keyframes arrow-in{from{opacity:0;transform:scale(.7) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-
-  .stem{stroke:#86efac;stroke-width:4;fill:none;stroke-linecap:round;
-    stroke-dasharray:80 80;stroke-dashoffset:80;animation:stem-draw .7s ease-out .85s forwards}
+  .stem{fill:none;stroke:#bbf7d0;stroke-width:4;stroke-linecap:round;
+        stroke-dasharray:90 90;stroke-dashoffset:90;animation:stem-draw 1s ease-out .9s forwards}
   @keyframes stem-draw{to{stroke-dashoffset:0}}
 
-  .leaf{fill:url(#leafGrad);opacity:0;transform-origin:100px 96px;animation:leaf-pop .5s cubic-bezier(.2,1,.2,1) 1.05s forwards}
-  @keyframes leaf-pop{0%{opacity:0;transform:scale(.85) rotate(-6deg)}60%{opacity:1;transform:scale(1.06) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+  .leaf{fill:url(#leafGrad);opacity:0;transform-origin:100px 92px;
+        animation:leaf-pop .6s cubic-bezier(.2,1,.2,1) 1.25s forwards}
+  @keyframes leaf-pop{
+    0%{opacity:0;transform:scale(.85) rotate(-6deg)}
+    60%{opacity:1;transform:scale(1.06) rotate(2deg)}
+    100%{opacity:1;transform:scale(1) rotate(0)}
+  }
 
   /* ===== Header & layout ===== */
   header.app{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
     padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-    background:conic-gradient(from 180deg at 50% 50%, #16a34a, #22c55e, #16a34a);color:#0a0b0f;font-weight:900;font-size:20px}
+  .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(180deg, rgba(22,163,74,.25), rgba(34,197,94,.12));}
+  .logo svg{width:28px;height:28px;display:block}
   h1{margin:0;font-size:18px;font-weight:900}
   .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
   .btn{padding:11px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
@@ -83,8 +84,8 @@
   .drawer .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:6px 0}
   .appicon{display:grid;place-items:center;height:72px;border-radius:16px;background:linear-gradient(180deg,#0f141c,#0e1218);border:1px solid var(--line);position:relative;overflow:hidden}
   .appicon span{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#cfe7ff}
-  .appicon .glyph{font-size:22px}
-  .appicon.eco{background:linear-gradient(135deg,#133,#0a3);border-color:rgba(98,255,158,.35)}
+  .appicon .glyph{display:grid;place-items:center;width:28px;height:28px}
+  .appicon.eco{background:linear-gradient(135deg,#0f1d15,#0b2b1a);border-color:rgba(98,255,158,.35)}
   .dock{display:flex;justify-content:space-around;padding:8px;background:#0d1117;border:1px solid var(--line);border-radius:18px}
   .dock .dockicon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#0f141c;border:1px solid var(--line)}
   .pager{display:flex;justify-content:center;gap:6px}
@@ -137,7 +138,33 @@
 </head>
 <body>
 
-<!-- ===== PURPOSEFUL LOGO SPLASH ===== -->
+<!-- ===== SVG SYMBOL (unified EcoVision mark) ===== -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--leaf2)"/><stop offset="100%" stop-color="var(--leaf1)"/>
+    </linearGradient>
+    <!-- Reusable mark centered at 100,100 (for splash, header, and app icon) -->
+    <g id="EcoVisionMark">
+      <!-- halo circle -->
+      <circle cx="100" cy="100" r="70" fill="url(#leafGrad)" opacity="0.10"/>
+      <!-- ring -->
+      <circle class="ring" cx="100" cy="100" r="60"/>
+      <!-- stem -->
+      <path class="stem" d="M100 118 C100 118, 101 102, 100 86"/>
+      <!-- leaf shape -->
+      <path class="leaf" d="
+        M120 90
+        C112 78, 94 76, 88 86
+        C82 95, 90 110, 104 112
+        C114 111, 123 103, 120 90 Z"/>
+      <!-- vein (static for clarity) -->
+      <path d="M104 112 C110 104, 114 98, 118 90" fill="none" stroke="#c0f2ce" stroke-width="2" opacity=".9"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ===== SPLASH (shows the same mark, larger) ===== -->
 <div id="intro" class="intro" role="dialog" aria-label="EcoVision intro" aria-modal="true">
   <div class="introInner">
     <div class="ecoLogo" id="logoSequencer" aria-hidden="true">
@@ -146,36 +173,12 @@
           <radialGradient id="halo" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stop-color="#7CFFB2" stop-opacity="0.85"/>
             <stop offset="60%" stop-color="#22C55E" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#14A34A" stop-opacity="0"/>
+            <stop offset="100%" stop-color="var(--halo)" stop-opacity="0"/>
           </radialGradient>
-          <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#22c55e"/>
-          </linearGradient>
         </defs>
-
-        <!-- soft halo -->
-        <circle cx="100" cy="100" r="70" fill="url(#halo)" opacity="0.55"/>
-
-        <!-- recycle triangle (draws on) -->
-        <path class="triPath" d="M100 40 L160 140 L40 140 Z"/>
-
-        <!-- corner arrows (purposeful placement) -->
-        <g class="arrow a1" transform="translate(100,40)">
-          <polygon points="0,-10 12,12 -12,12"/>
-        </g>
-        <g class="arrow a2" transform="translate(160,140) rotate(120)">
-          <polygon points="0,-10 12,12 -12,12"/>
-        </g>
-        <g class="arrow a3" transform="translate(40,140) rotate(240)">
-          <polygon points="0,-10 12,12 -12,12"/>
-        </g>
-
-        <!-- stem + leaf (center) -->
-        <path class="stem" d="M100 120 C100 120, 101 102, 100 88"/>
-        <path class="leaf" d="M118 96
-            C112 84, 96 82, 90 90
-            C86 96, 94 108, 104 109
-            C112 108, 120 102, 118 96 Z"/>
+        <circle class="halo" cx="100" cy="100" r="72" fill="url(#halo)"/>
+        <!-- reuse the exact same mark -->
+        <use href="#EcoVisionMark"></use>
       </svg>
     </div>
     <div class="introWord">EcoVision</div>
@@ -184,7 +187,10 @@
 
 <header class="app">
   <div class="brand">
-    <div class="logo">🌿</div>
+    <div class="logo">
+      <!-- same mark, small -->
+      <svg viewBox="0 0 200 200"><use href="#EcoVisionMark"></use></svg>
+    </div>
     <div><h1>EcoVision</h1><div class="tag">Intro • How the app works</div></div>
   </div>
   <div class="actions-right">
@@ -214,7 +220,13 @@
                   <div class="appicon"><div class="glyph">✉️</div><span>Mail</span></div>
                   <div class="appicon"><div class="glyph">🗺️</div><span>Maps</span></div>
                   <div class="appicon"><div class="glyph">🎵</div><span>Music</span></div>
-                  <div class="appicon eco" id="ecoApp"><div class="glyph">🌿</div><span>EcoVision</span></div>
+                  <div class="appicon eco" id="ecoApp">
+                    <div class="glyph">
+                      <!-- same mark in the grid icon -->
+                      <svg viewBox="0 0 200 200"><use href="#EcoVisionMark"></use></svg>
+                    </div>
+                    <span>EcoVision</span>
+                  </div>
                   <div class="appicon"><div class="glyph">🛒</div><span>Store</span></div>
                   <div class="appicon"><div class="glyph">🛠️</div><span>Tools</span></div>
                   <div class="appicon"><div class="glyph">💬</div><span>Chat</span></div>
@@ -310,7 +322,7 @@
 <nav class="tabbar"><span class="tab active">Intro</span></nav>
 
 <script>
-/* ===== Theme ===== */
+/* ===== Theme (optional) ===== */
 const themeBtn=document.getElementById('themeBtn');
 const savedTheme=localStorage.getItem('ecovision_theme');
 if(savedTheme==='green'){ document.documentElement.setAttribute('data-theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
@@ -320,27 +332,21 @@ themeBtn?.addEventListener('click', ()=>{
   else { document.documentElement.setAttribute('data-theme','green'); localStorage.setItem('ecovision_theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
 });
 
-/* ===== Splash timing: wait for logo animation, then +0.5s ===== */
+/* ===== Splash timing =====
+   Longer logo view so it’s readable:
+   - Logo anim ~2.2s
+   - Hold still: 1.2s
+   - Then required +0.5s delay before demo
+*/
+const LOGO_ANIM_MS = 2200;
+const HOLD_MS       = 1200;
+const EXTRA_DELAY   = 500;
+
 const intro=document.getElementById('intro');
-const sequencer=document.getElementById('logoSequencer');
-const EXTRA_DELAY=500;                    // 0.5s after logo stops
-const LOGO_TOTAL_MS=1500;                 // total duration of logo sequence (~tri 1.1s + leaf .5s overlap)
-let fired=false;
-
 function endIntro(){ intro.classList.add('hide'); setTimeout(()=>{ intro.style.display='none'; autoStartDemo(); }, 380); }
-
-function scheduleAfterLogo(){
-  if(fired) return; fired=true;
-  setTimeout(endIntro, EXTRA_DELAY);
-}
-
 window.addEventListener('load', ()=>{
-  // Fallback timer in case animationend doesn't fire on some browsers
-  setTimeout(()=>{ if(!fired){ scheduleAfterLogo(); } }, LOGO_TOTAL_MS);
+  setTimeout(endIntro, LOGO_ANIM_MS + HOLD_MS + EXTRA_DELAY);
 });
-
-// If any of the key logo pieces finish last, we still add the delay
-sequencer.addEventListener('animationend', scheduleAfterLogo, { once:true });
 
 /* ===== Drawer → App transition (auto) ===== */
 const eco=document.getElementById('ecoApp');
@@ -350,7 +356,6 @@ let opened=false;
 
 function openAppAuto(){
   if(opened) return; opened=true;
-  // ensure layout is ready
   requestAnimationFrame(()=>{
     const rect=eco.getBoundingClientRect();
     const screen=document.querySelector('.screen'); const sRect=screen.getBoundingClientRect();
@@ -381,8 +386,7 @@ function openAppAuto(){
     }, 340);
   });
 }
-eco.addEventListener('click', openAppAuto); // still works on click
-function autoStartDemo(){ setTimeout(openAppAuto, 80); }
+function autoStartDemo(){ setTimeout(openAppAuto, 80); } // slight settle
 
 /* ===== Inner demo player (autoplays & loops) ===== */
 const vStages=[...document.querySelectorAll('.viewport .stage')];
