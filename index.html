@@ -4,24 +4,22 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision — Intro</title>
-<meta name="description" content="EcoVision intro with logo splash + animation: tap app, open splash, upload → AI damage → details → internals form → value → recycle options → partners or give away → suggested ask." />
+<meta name="description" content="EcoVision intro with green logo splash and realistic app drawer → in-app demo: upload → damage assess → details → internals form → value → recycle options → partners or give away → suggested ask.">
 <style>
-  /* ========== THEME TOKENS (Dark by default) ========== */
+  /* ===== THEME TOKENS (Dark by default) ===== */
   :root{
     --bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;
     --accent:#1f8cff;--accent2:#22c55e;--warn:#ffdf7f;--line:rgba(255,255,255,.08);
-    --ok:#27d17e;--bad:#ff5d5d;
-    --logo-grad: conic-gradient(from 180deg at 50% 50%, #1f8cff, #22c55e, #1f8cff);
+    --ok:#27d17e;--bad:#ff5d5d; --shadow:0 22px 54px rgba(0,0,0,.38);
+    --logo-grad: conic-gradient(from 180deg at 50% 50%, #16a34a, #22c55e, #16a34a);
     --tabbar-fg:#fff; --tabbar-fg-dim:#a7b3c6;
-
     --ecoGreen1:#16a34a; --ecoGreen2:#22c55e; --ecoGreen3:#86efac;
   }
-  /* ========== GREEN & WHITE THEME ========== */
   :root[data-theme="green"]{
     --bg:#ffffff;--card:#ffffff;--text:#0a0b0f;--muted:#334155;
     --accent:#16a34a;--accent2:#22c55e;--warn:#a16207;--line:rgba(0,0,0,.08);
     --logo-grad: conic-gradient(from 180deg at 50% 50%, #16a34a, #22c55e, #16a34a);
-    --tabbar-fg:#0a0b0f; --tabbar-fg-dim:#334155;
+    --tabbar-fg:#0a0b0f; --tabbar-fg-dim:#334155; --shadow:none;
   }
 
   *{box-sizing:border-box}
@@ -29,128 +27,117 @@
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
   a{color:inherit;text-decoration:none}
 
-  /* ====== Intro Splash (always green) ====== */
-  .intro{
-    position:fixed; inset:0; z-index:9999; display:grid; place-items:center;
-    background:
-      radial-gradient(900px 300px at 50% -80px, rgba(34,197,94,.18), transparent 60%),
-      radial-gradient(700px 200px at 20% -60px, rgba(22,163,74,.16), transparent 60%),
-      #0a0b0f;
-    transition:opacity .38s ease, visibility .38s ease;
-  }
-  .intro.hide{opacity:0; visibility:hidden}
-  .introInner{display:grid; place-items:center; gap:10px}
-  .introLogo{
-    width:96px; height:96px; border-radius:24px;
-    display:grid; place-items:center;
-    background:conic-gradient(from 180deg at 50% 50%, var(--ecoGreen1), var(--ecoGreen2), var(--ecoGreen1));
+  /* ===== Intro Splash (green logo) ===== */
+  .intro{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
+    background: radial-gradient(900px 300px at 50% -80px, rgba(34,197,94,.18), transparent 60%),
+               radial-gradient(700px 200px at 20% -60px, rgba(22,163,74,.16), transparent 60%),
+               #0a0b0f;
+    transition:opacity .38s ease, visibility .38s ease}
+  .intro.hide{opacity:0;visibility:hidden}
+  .introInner{display:grid;place-items:center;gap:10px}
+  .introLogo{width:96px;height:96px;border-radius:24px;display:grid;place-items:center;
+    background:var(--logo-grad);
     box-shadow:0 12px 30px rgba(34,197,94,.35), inset 0 0 30px rgba(255,255,255,.05);
-    animation:pop-in .5s cubic-bezier(.2,.7,.2,1.1) both, spin 6s linear infinite 1s;
-  }
-  .introLeaf{
-    width:46px; height:46px; display:block;
-    filter: drop-shadow(0 2px 6px rgba(34,197,94,.45));
-  }
-  .introWord{font-weight:900; font-size:18px; color:#e8ffe9; letter-spacing:.3px}
-  .ring, .ring2{
-    position:absolute; width:140px; height:140px; border-radius:999px;
-    border:2px solid rgba(134,239,172,.22); pointer-events:none;
-    animation:ring 1.4s ease-out 0.2s both;
-  }
-  .ring2{ width:190px; height:190px; animation-delay:.4s; border-color:rgba(134,239,172,.14) }
-
-  @keyframes pop-in{from{transform:scale(.8);opacity:.0}to{transform:scale(1);opacity:1}}
+    animation:pop-in .5s cubic-bezier(.2,.7,.2,1.1) both, spin 12s linear infinite 1.2s}
+  .introLeaf{width:46px;height:46px;display:block;filter: drop-shadow(0 2px 6px rgba(34,197,94,.45))}
+  .introWord{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
+  .ring,.ring2{position:absolute;border-radius:999px;border:2px solid rgba(134,239,172,.22);pointer-events:none;
+    animation:ring 1.4s ease-out .2s both}
+  .ring{width:140px;height:140px}
+  .ring2{width:190px;height:190px;animation-delay:.4s;border-color:rgba(134,239,172,.14)}
+  @keyframes pop-in{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-  @keyframes ring{from{transform:scale(.6); opacity:.7}to{transform:scale(1.3); opacity:0}}
-
-  @media (prefers-reduced-motion: reduce){
-    .introLogo{animation:none}
-    .ring,.ring2{display:none}
-  }
+  @keyframes ring{from{transform:scale(.6);opacity:.7}to{transform:scale(1.3);opacity:0}}
+  @media (prefers-reduced-motion: reduce){.introLogo{animation:none}.ring,.ring2{display:none}}
 
   /* ===== Header ===== */
-  header.app{
-    position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line)
-  }
+  header.app{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   :root[data-theme="green"] header.app{background:rgba(255,255,255,.85)}
   .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
-    background:var(--logo-grad);color:#0a0b0f;font-weight:900;font-size:20px;animation:spin 6s linear infinite}
+  .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--logo-grad);color:#0a0b0f;font-weight:900;font-size:20px}
   h1{margin:0;font-size:18px;font-weight:900}
   .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
   :root[data-theme="green"] .tag{color:#475569}
   .actions-right{display:flex;gap:8px}
+  .btn{padding:11px 14px;border-radius:12px;font-weight:800;border:1px solid var(--accent);background:transparent;color:var(--text);cursor:pointer}
+  .btn.ghost{border:1px solid var(--line)}
 
+  /* ===== Page layout ===== */
   .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.2)}
   :root[data-theme="green"] .card{box-shadow:none}
   h2{font-size:22px;margin:0 0 8px}
   p{color:var(--muted);line-height:1.55;margin:0 0 10px}
-
   .grid{display:grid;gap:12px}
   @media (min-width:760px){ .grid{grid-template-columns:1.1fr 1fr;align-items:center} }
 
-  /* Phone frame */
-  .phone{
-    position:relative;margin:0 auto;width:312px;max-width:100%;
-    aspect-ratio:9/19;border-radius:26px;padding:10px;
-    background:linear-gradient(180deg,#0e121a,#0b0e15);
-    border:1px solid var(--line);box-shadow:0 22px 54px rgba(0,0,0,.38)
-  }
-  .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);
-    width:110px;height:12px;background:#07090d;border-radius:0 0 10px 10px;border:1px solid var(--line)}
-  .screen{position:absolute;inset:10px;border-radius:20px;overflow:hidden;background:#0a0f16;display:grid;place-items:center}
+  /* ===== Phone frame (rectangular) ===== */
+  .phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:12px;padding:6px;
+    background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .screen{position:absolute;inset:6px;border-radius:10px;overflow:hidden;background:#0a0f16;display:grid;grid-template-rows:auto 1fr auto}
+  /* app drawer look lives in the viewport for stage 0 */
 
-  /* Slides */
+  /* ===== In-app rectangular frame ===== */
+  .appframe{position:absolute;inset:0;display:grid;grid-template-rows:auto auto 1fr auto;background:#0b1017}
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line);font-size:10px;color:#cfe7ff}
+  .status-icons{display:flex;gap:8px;align-items:center}
+  .appbar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800}
+  .viewport{position:relative;padding:12px}
+  .navbar{display:flex;justify-content:space-around;border-top:1px solid var(--line);padding:8px 0;font-size:12px;color:#cfe7ff}
+
+  /* ===== Slides inside viewport ===== */
   .stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);
     transition:opacity .42s ease, transform .42s ease}
   .stage.active{opacity:1;transform:translateY(0) scale(1)}
 
-  /* Reusable UI blocks in phone */
-  .ui{background:#0d1117;border:1px solid var(--line);border-radius:14px;padding:12px;color:#cfe7ff;width:86%}
+  /* ===== App drawer (more realistic) ===== */
+  .drawer{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;gap:8px;padding:10px 12px;background:#0b1017}
+  .drawer .search{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#9fb3c8;font-size:12px}
+  .drawer .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:6px 0}
+  .appicon{display:grid;place-items:center;height:72px;border-radius:16px;background:linear-gradient(180deg,#0f141c,#0e1218);border:1px solid var(--line);position:relative;overflow:hidden}
+  .appicon span{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#cfe7ff}
+  .appicon .glyph{font-size:22px}
+  .appicon.eco{background:linear-gradient(135deg,#133,#0a3);border-color:rgba(98,255,158,.35)}
+  .dock{display:flex;justify-content:space-around;padding:8px;background:#0d1117;border:1px solid var(--line);border-radius:18px}
+  .dock .dockicon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#0f141c;border:1px solid var(--line)}
+  .pager{display:flex;justify-content:center;gap:6px}
+  .dot{width:6px;height:6px;border-radius:999px;background:#3a475a}
+  .dot.active{background:var(--accent2)}
+
+  /* Ripple + zoom transition */
+  .ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;background:radial-gradient(circle, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);width:12px;height:12px;opacity:.7;animation:rip .5s ease-out forwards}
+  @keyframes rip{to{opacity:0;transform:translate(-50%,-50%) scale(14)}}
+  .zoomGhost{position:absolute;border-radius:16px;inset:auto;box-shadow:0 8px 24px rgba(0,0,0,.35);background:inherit;border:inherit;transform-origin:center;transition:transform .42s cubic-bezier(.2,.8,.2,1), opacity .42s ease}
+
+  /* ===== Reusable UI blocks in app ===== */
+  .ui{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:12px;color:#cfe7ff;width:100%}
   .row{display:flex;gap:8px;flex-wrap:wrap}
-  .col{flex:1}
   .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0f141c;font-size:12px;white-space:nowrap}
   .k{font-size:11px;color:#8ea1b8;margin-bottom:4px}
   .v{font-weight:900}
-
-  /* Upload previews as REAL <img> (drawn by Canvas to PNG) */
   .preview{display:flex;gap:10px;justify-content:center}
-  .ph{width:96px;height:140px;border-radius:12px;border:1px solid var(--line);background:#06101a;display:grid;place-items:center;overflow:hidden}
+  .ph{width:96px;height:140px;border-radius:8px;border:1px solid var(--line);background:#06101a;display:grid;place-items:center;overflow:hidden}
   .ph img{display:block;max-width:100%;max-height:100%}
-
-  /* Damage heatmap (crisp circles) */
-  .photoWrap{position:relative;width:86%;height:60%;border-radius:16px;border:1px solid var(--line);background:#061018}
+  .photoWrap{position:relative;width:100%;height:62%;border-radius:8px;border:1px solid var(--line);background:#061018}
   .hot{position:absolute;border-radius:50%;opacity:.9;mix-blend-mode:screen}
   .hot.red{background:radial-gradient(circle at 50% 50%, rgba(255,0,72,.9), rgba(255,0,72,.28) 60%, transparent 70%)}
   .hot.orange{background:radial-gradient(circle at 50% 50%, rgba(255,165,0,.95), rgba(255,165,0,.28) 60%, transparent 70%)}
-
-  /* Google-Form style */
-  .form{width:86%}
-  .q{background:#0d1117;border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+  .form{width:100%}
+  .q{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:12px;margin:8px 0}
   .q legend{font-size:13px;color:#cfe7ff;margin-bottom:8px}
   .opt{display:flex;align-items:center;gap:8px;margin:6px 0}
   .opt input{accent-color:var(--accent2)}
-
-  /* Gauge */
-  .gauge{width:68%;max-width:210px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;
-    background:conic-gradient(var(--accent2) var(--pct,40%), #243042 0)}
+  .gauge{width:68%;max-width:210px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--accent2) var(--pct,40%), #243042 0)}
   .gauge::after{content:"";position:absolute;inset:12%;background:#0b0f16;border-radius:50%}
   .price{position:absolute;font-weight:900;font-size:22px}
-
-  /* Partner chips */
   .badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
   .badge{padding:8px 12px;border-radius:999px;background:#0d1117;border:1px solid var(--line);font-weight:700;color:#cfe7ff}
-
-  /* Progress + controls */
   .progress{height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin:10px 0 6px}
   .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
   .label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:8px}
   .controls{display:flex;gap:10px;justify-content:center;margin-top:10px}
-  .btn{padding:11px 14px;border-radius:12px;font-weight:800;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
-  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .btn.fill{background:var(--accent);border-color:var(--accent);color:#fff}
 
   .hero{position:relative;background:
     radial-gradient(1200px 300px at 50% -100px, rgba(98,255,158,.12), transparent),
@@ -158,34 +145,19 @@
     var(--card)}
   :root[data-theme="green"] .hero{background:var(--card)}
 
-  /* Bottom tab */
+  /* Bottom tab (page UI) */
   .tabbar{position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);display:flex}
   :root[data-theme="green"] .tabbar{background:#ffffff}
   .tab{flex:1;display:grid;place-items:center;padding:12px 0;color:var(--tabbar-fg-dim);font-weight:800}
   .tab.active{color:var(--tabbar-fg);border-top:2px solid var(--accent)}
-
-  /* ------- Home screen + Thumb tap ------- */
-  .homescreen{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px;padding:16px}
-  .appicon{display:grid;place-items:center;border-radius:16px;background:#0d1117;border:1px solid var(--line)}
-  .appicon.eco{background:linear-gradient(135deg,#133,#0a3);border-color:rgba(98,255,158,.35)}
-  .appicon span{font-size:12px;color:#cfe7ff;margin-top:4px}
-  .thumb{
-    position:absolute;width:68px;height:68px;border-radius:50%;
-    background:radial-gradient(circle at 40% 40%, rgba(255,255,255,.85), rgba(255,255,255,.4) 40%, rgba(200,200,200,.2) 70%, transparent 75%);
-    box-shadow:0 8px 18px rgba(0,0,0,.45);
-    pointer-events:none;opacity:0;transform:scale(1);transition:transform .18s ease, opacity .18s ease, left .5s ease, top .5s ease;
-  }
-  .thumb.show{opacity:1}
-  .thumb.tap{transform:scale(.85)}
 </style>
 </head>
 <body>
 
-<!-- INTRO SPLASH (logo in green) -->
+<!-- GREEN LOGO SPLASH (with pleasant audio) -->
 <div id="intro" class="intro" role="dialog" aria-label="EcoVision intro" aria-modal="true">
   <div class="introInner">
     <div class="introLogo" aria-hidden="true">
-      <!-- simple green leaf SVG -->
       <svg class="introLeaf" viewBox="0 0 64 64">
         <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="var(--ecoGreen2)"/><stop offset="1" stop-color="var(--ecoGreen1)"/></linearGradient></defs>
         <path d="M14 42c18 6 27-5 30-12 7-15-6-21-20-12-8 5-12 16-10 24z" fill="url(#g)"/>
@@ -193,21 +165,16 @@
       </svg>
     </div>
     <div class="introWord">EcoVision</div>
-    <div class="ring"></div>
-    <div class="ring2"></div>
+    <div class="ring"></div><div class="ring2"></div>
   </div>
 </div>
 
 <header class="app">
   <div class="brand">
     <div class="logo">🌿</div>
-    <div>
-      <h1>EcoVision</h1>
-      <div class="tag">Intro • How the app works</div>
-    </div>
+    <div><h1>EcoVision</h1><div class="tag">Intro • How the app works</div></div>
   </div>
   <div class="actions-right">
-    <button id="soundBtn" class="btn ghost" aria-pressed="true" title="Toggle sound">🔊 Sound: On</button>
     <button id="themeBtn" class="btn ghost" aria-pressed="false" title="Switch theme">🎨 Theme: Dark</button>
   </div>
 </header>
@@ -215,7 +182,7 @@
 <main class="wrap">
   <section class="hero card">
     <h2>Know your phone’s worth — then recycle or resell, the honest way</h2>
-    <p>Flow: <b>Tap EcoVision</b> → <b>App opening</b> → <b>Upload</b> → <b>Damage assess</b> → <b>Model</b> → <b>Purchase date</b> → <b>Internals (Google-Form style)</b> → <b>Value</b> → <b>Recycle?</b> → <b>Location</b> → <b>Want money?</b> → <b>Partners or Give away</b> → <b>Suggested ask + honesty warning</b>.</p>
+    <p>Flow: <b>Open app (real drawer)</b> → <b>App frame</b> → <b>Upload</b> → <b>Damage assess</b> → <b>Model</b> → <b>Purchase date</b> → <b>Internals</b> → <b>Value</b> → <b>Recycle?</b> → <b>Location</b> → <b>Money or Give away</b> → <b>Suggested ask + honesty</b>.</p>
   </section>
 
   <section class="card">
@@ -223,427 +190,329 @@
       <div>
         <!-- Phone Player -->
         <div class="phone" aria-label="EcoVision walkthrough">
-          <div class="notch"></div>
           <div class="screen">
-
-            <!-- 0 HOME: app grid + thumb tap -->
-            <div class="stage active" id="s0" aria-label="Phone home screen">
-              <div class="homescreen">
-                <div class="appicon"><div>📷</div><span>Camera</span></div>
-                <div class="appicon"><div>✉️</div><span>Mail</span></div>
-                <div class="appicon"><div>🗺️</div><span>Maps</span></div>
-                <div class="appicon"><div>🎵</div><span>Music</span></div>
-                <div class="appicon eco" id="ecoApp"><div>🌿</div><span>EcoVision</span></div>
-                <div class="appicon"><div>🛒</div><span>Store</span></div>
-                <div class="appicon"><div>🛠️</div><span>Tools</span></div>
-                <div class="appicon"><div>💬</div><span>Chat</span></div>
-                <div class="appicon"><div>📁</div><span>Files</span></div>
-              </div>
-              <div class="thumb" id="thumb"></div>
-            </div>
-
-            <!-- 1 SPLASH / OPENING -->
-            <div class="stage" id="s1" aria-label="App opening">
-              <div class="splash" style="display:grid;gap:10px;place-items:center">
-                <div class="logo" style="animation:spin 1.6s linear infinite">🌿</div>
-                <div style="font-weight:900">EcoVision</div>
-                <div style="width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--accent2);animation:spin 1s linear infinite"></div>
-              </div>
-            </div>
-
-            <!-- 2 Upload -->
-            <div class="stage" id="s2">
-              <div class="ui">
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                  <b>Upload phone photos</b>
-                  <span class="pill">Front & Back</span>
+            <!-- STAGE 0: Realistic APP DRAWER -->
+            <div class="stage active" id="s0">
+              <div class="drawer">
+                <div class="search">🔎 Search apps</div>
+                <div class="grid">
+                  <div class="appicon"><div class="glyph">📷</div><span>Camera</span></div>
+                  <div class="appicon"><div class="glyph">✉️</div><span>Mail</span></div>
+                  <div class="appicon"><div class="glyph">🗺️</div><span>Maps</span></div>
+                  <div class="appicon"><div class="glyph">🎵</div><span>Music</span></div>
+                  <div class="appicon eco" id="ecoApp"><div class="glyph">🌿</div><span>EcoVision</span></div>
+                  <div class="appicon"><div class="glyph">🛒</div><span>Store</span></div>
+                  <div class="appicon"><div class="glyph">🛠️</div><span>Tools</span></div>
+                  <div class="appicon"><div class="glyph">💬</div><span>Chat</span></div>
+                  <div class="appicon"><div class="glyph">📁</div><span>Files</span></div>
+                  <div class="appicon"><div class="glyph">📅</div><span>Calendar</span></div>
+                  <div class="appicon"><div class="glyph">🌐</div><span>Browser</span></div>
+                  <div class="appicon"><div class="glyph">🖼️</div><span>Gallery</span></div>
                 </div>
-                <div class="preview" style="margin-top:10px">
-                  <div class="ph"><img id="frontImg" alt="Front phone photo" /></div>
-                  <div class="ph"><img id="backImg"  alt="Back phone photo"  /></div>
+                <div class="pager"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="dock">
+                  <div class="dockicon">📞</div>
+                  <div class="dockicon">💬</div>
+                  <div class="dockicon">🌐</div>
+                  <div class="dockicon">📷</div>
                 </div>
               </div>
             </div>
 
-            <!-- 3 Damage assess -->
-            <div class="stage" id="s3">
-              <div class="photoWrap">
-                <div class="hot red"    style="width:88px;height:68px;left:18%;top:22%"></div>
-                <div class="hot orange" style="width:70px;height:60px;left:60%;top:52%"></div>
-              </div>
-            </div>
-
-            <!-- 4 Model -->
-            <div class="stage" id="s4">
-              <div class="ui">
-                <div class="k">Model</div>
-                <div class="v">Generic Phone 12</div>
-              </div>
-            </div>
-
-            <!-- 5 Purchase date -->
-            <div class="stage" id="s5">
-              <div class="ui">
-                <div class="k">Purchased</div>
-                <div class="v">Oct 2021</div>
-              </div>
-            </div>
-
-            <!-- 6 Internals (Google Form style) -->
-            <div class="stage" id="s6">
-              <form class="form">
-                <fieldset class="q">
-                  <legend>Does the phone turn on?</legend>
-                  <label class="opt"><input type="radio" name="power" checked> Yes</label>
-                  <label class="opt"><input type="radio" name="power"> No</label>
-                </fieldset>
-                <fieldset class="q">
-                  <legend>Do both cameras work?</legend>
-                  <label class="opt"><input type="radio" name="cams" checked> Yes</label>
-                  <label class="opt"><input type="radio" name="cams"> No</label>
-                </fieldset>
-                <fieldset class="q">
-                  <legend>Does it charge properly?</legend>
-                  <label class="opt"><input type="radio" name="charge" checked> Yes</label>
-                  <label class="opt"><input type="radio" name="charge"> No</label>
-                </fieldset>
-                <fieldset class="q">
-                  <legend>Are the speakers fine?</legend>
-                  <label class="opt"><input type="radio" name="spk" checked> Yes</label>
-                  <label class="opt"><input type="radio" name="spk"> No</label>
-                </fieldset>
-                <fieldset class="q">
-                  <legend>Any motherboard issues (bootloop/overheating)?</legend>
-                  <label class="opt"><input type="radio" name="mb"> Yes</label>
-                  <label class="opt"><input type="radio" name="mb" checked> No</label>
-                </fieldset>
-              </form>
-            </div>
-
-            <!-- 7 Value -->
-            <div class="stage" id="s7">
-              <div class="gauge" id="gauge" style="--pct:66%">
-                <div class="price" id="price">₹12,800</div>
-              </div>
-            </div>
-
-            <!-- 8 Recycle? -->
-            <div class="stage" id="s8">
-              <div class="ui" style="text-align:center">
-                <div style="font-weight:900">Recycle this item?</div>
-                <div style="margin-top:8px" class="row">
-                  <span class="pill" style="border-color:var(--accent)">No</span>
-                  <span class="pill" style="border-color:var(--accent2)">Yes</span>
+            <!-- STAGE 1+: Actual rectangular app -->
+            <div class="stage" id="s1">
+              <div class="appframe">
+                <div class="statusbar">
+                  <div>09:41</div>
+                  <div class="status-icons"><span>📶</span><span>📡</span><span>🔋 87%</span></div>
                 </div>
-              </div>
-            </div>
-
-            <!-- 9 Location -->
-            <div class="stage" id="s9">
-              <div class="ui" style="text-align:center">
-                <div style="font-weight:900">Share your location?</div>
-                <div style="margin-top:8px" class="row">
-                  <span class="pill">Allow Once</span>
-                  <span class="pill">Allow While Using App</span>
+                <div class="appbar"><div style="font-weight:900">EcoVision</div></div>
+                <div class="viewport">
+                  <!-- 1 SPLASH -->
+                  <div class="stage active" id="v1" style="display:grid;place-items:center">
+                    <div class="ui" style="text-align:center">
+                      <div style="font-size:18px;font-weight:900;margin-bottom:6px">EcoVision</div>
+                      <div style="width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--accent2);margin:8px auto;animation:spin 1s linear infinite"></div>
+                      <div style="font-size:12px;color:#8ea1b8">Starting…</div>
+                    </div>
+                  </div>
+                  <!-- 2 Upload -->
+                  <div class="stage" id="v2">
+                    <div class="ui">
+                      <div style="display:flex;justify-content:space-between;align-items:center">
+                        <b>Upload phone photos</b><span class="pill">Front & Back</span>
+                      </div>
+                      <div class="preview" style="margin-top:10px">
+                        <div class="ph"><img id="frontImg" alt="Front phone photo" /></div>
+                        <div class="ph"><img id="backImg"  alt="Back phone photo"  /></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 3 Damage -->
+                  <div class="stage" id="v3">
+                    <div class="photoWrap">
+                      <div class="hot red"    style="width:88px;height:68px;left:18%;top:22%"></div>
+                      <div class="hot orange" style="width:70px;height:60px;left:60%;top:52%"></div>
+                    </div>
+                  </div>
+                  <!-- 4 Model -->
+                  <div class="stage" id="v4"><div class="ui"><div class="k">Model</div><div class="v">Generic Phone 12</div></div></div>
+                  <!-- 5 Purchase date -->
+                  <div class="stage" id="v5"><div class="ui"><div class="k">Purchased</div><div class="v">Oct 2021</div></div></div>
+                  <!-- 6 Internals -->
+                  <div class="stage" id="v6">
+                    <form class="form">
+                      <fieldset class="q"><legend>Does the phone turn on?</legend>
+                        <label class="opt"><input type="radio" name="power" checked> Yes</label>
+                        <label class="opt"><input type="radio" name="power"> No</label></fieldset>
+                      <fieldset class="q"><legend>Do both cameras work?</legend>
+                        <label class="opt"><input type="radio" name="cams" checked> Yes</label>
+                        <label class="opt"><input type="radio" name="cams"> No</label></fieldset>
+                      <fieldset class="q"><legend>Does it charge properly?</legend>
+                        <label class="opt"><input type="radio" name="charge" checked> Yes</label>
+                        <label class="opt"><input type="radio" name="charge"> No</label></fieldset>
+                      <fieldset class="q"><legend>Are the speakers fine?</legend>
+                        <label class="opt"><input type="radio" name="spk" checked> Yes</label>
+                        <label class="opt"><input type="radio" name="spk"> No</label></fieldset>
+                      <fieldset class="q"><legend>Any motherboard issues (bootloop/overheating)?</legend>
+                        <label class="opt"><input type="radio" name="mb"> Yes</label>
+                        <label class="opt"><input type="radio" name="mb" checked> No</label></fieldset>
+                    </form>
+                  </div>
+                  <!-- 7 Value -->
+                  <div class="stage" id="v7"><div class="gauge" id="gauge" style="--pct:66%"><div class="price" id="price">₹12,800</div></div></div>
+                  <!-- 8 Recycle? -->
+                  <div class="stage" id="v8"><div class="ui" style="text-align:center"><div style="font-weight:900">Recycle this item?</div><div class="row" style="margin-top:8px"><span class="pill">No</span><span class="pill">Yes</span></div></div></div>
+                  <!-- 9 Location -->
+                  <div class="stage" id="v9"><div class="ui" style="text-align:center"><div style="font-weight:900">Share your location?</div><div class="row" style="margin-top:8px"><span class="pill">Allow Once</span><span class="pill">Allow While Using App</span></div></div></div>
+                  <!-- 10 Want money? -->
+                  <div class="stage" id="v10"><div class="ui" style="text-align:center"><div style="font-weight:900">Do you want money from this?</div><div class="row" style="margin-top:8px"><span class="pill">Yes</span><span class="pill">No</span></div></div></div>
+                  <!-- 11 Partners -->
+                  <div class="stage" id="v11"><div class="ui" style="text-align:center"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div></div></div>
+                  <!-- 12 Give away -->
+                  <div class="stage" id="v12"><div class="ui" style="text-align:center"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div></div>
+                  <!-- 13 Suggested ask -->
+                  <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:var(--warn)"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
                 </div>
+                <div class="navbar"><div>Home</div><div>Assess</div><div>Recycle</div><div>Profile</div></div>
               </div>
             </div>
-
-            <!-- 10 Want money? -->
-            <div class="stage" id="s10">
-              <div class="ui" style="text-align:center">
-                <div style="font-weight:900">Do you want money from this?</div>
-                <div style="margin-top:8px" class="row">
-                  <span class="pill">Yes</span>
-                  <span class="pill">No</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 11 Partners -->
-            <div class="stage" id="s11">
-              <div class="ui" style="text-align:center">
-                <div class="k">We can connect you to:</div>
-                <div class="badges" style="margin-top:8px">
-                  <span class="badge">Cashify</span>
-                  <span class="badge">Zolopik</span>
-                  <span class="badge">Servify</span>
-                  <span class="badge">ReGlobe</span>
-                  <span class="badge">Attero</span>
-                  <span class="badge">Karo Sambhav</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 12 Give away -->
-            <div class="stage" id="s12">
-              <div class="ui" style="text-align:center">
-                <div class="k">Prefer to give it away yourself?</div>
-                <div class="badges" style="margin-top:8px">
-                  <span class="badge">e-Waste Collection Center</span>
-                  <span class="badge">City Recycling Hub</span>
-                  <span class="badge">Green NGO Drop-off</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 13 Suggested ask + honesty -->
-            <div class="stage" id="s13">
-              <div class="ui" style="text-align:center">
-                <div>Suggested ask (self-listing):</div>
-                <div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div>
-                <div style="margin-top:8px;color:var(--warn)">
-                  <b>⚠️ Be honest:</b> Price shown is based on your inputs; it’s not a dealer offer.
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
 
-        <!-- Progress + Controls -->
+        <!-- Progress + Controls (page UI) -->
         <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
-        <div class="label" id="label">Step 1 · Tap the EcoVision app</div>
+        <div class="label" id="label">Step 1 · Open EcoVision from the app drawer</div>
         <div class="controls">
-          <button class="btn" id="replay">Replay</button>
+          <button class="btn fill" id="replay">Replay</button>
           <button class="btn ghost" id="speed">Speed: Fast</button>
         </div>
       </div>
 
       <div>
         <h2>Exactly what happens</h2>
-        <p>• You <b>tap EcoVision</b> → app <b>opens</b>.<br/>
-           • You upload photos → we <b>assess damage</b>.<br/>
-           • You select <b>model</b> and <b>purchase date</b>.<br/>
-           • You answer <b>Google-Form style</b> questions (power, cameras, charging, speakers, motherboard).<br/>
-           • We show a <b>damage-aware value</b>.<br/>
-           • If you choose to <b>recycle</b>, we ask for your <b>location</b>.<br/>
-           • If you want <b>money</b>, we connect you to partners based on condition; or show places to <b>give away</b>.<br/>
-           • We provide a <b>suggested ask</b> and warn not to lie — it’s not a dealer quote.</p>
+        <p>• Real app drawer → tap <b>EcoVision</b> (ripple + zoom).<br/>
+           • In-app frame shows each step: <b>upload</b> → <b>damage</b> → <b>model</b> → <b>purchase date</b> → <b>internals</b> → <b>value</b> → <b>recycle?</b> → <b>location</b> → <b>money/give away</b> → <b>suggested ask</b>.</p>
       </div>
     </div>
   </section>
 </main>
 
-<nav class="tabbar">
-  <span class="tab active">Intro</span>
-</nav>
+<nav class="tabbar"><span class="tab active">Intro</span></nav>
 
 <script>
-  /* ===== Theme switcher (persists) ===== */
+  /* ===== Theme switcher ===== */
   const themeBtn = document.getElementById('themeBtn');
   const savedTheme = localStorage.getItem('ecovision_theme');
-  if(savedTheme === 'green'){ document.documentElement.setAttribute('data-theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
+  if(savedTheme==='green'){ document.documentElement.setAttribute('data-theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
   themeBtn.addEventListener('click', ()=>{
-    const isGreen = document.documentElement.getAttribute('data-theme') === 'green';
-    if(isGreen){
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('ecovision_theme','dark');
-      themeBtn.textContent='🎨 Theme: Dark';
-      themeBtn.setAttribute('aria-pressed','false');
-    }else{
-      document.documentElement.setAttribute('data-theme','green');
-      localStorage.setItem('ecovision_theme','green');
-      themeBtn.textContent='🎨 Theme: Green';
-      themeBtn.setAttribute('aria-pressed','true');
+    const isGreen = document.documentElement.getAttribute('data-theme')==='green';
+    if(isGreen){ document.documentElement.removeAttribute('data-theme'); localStorage.setItem('ecovision_theme','dark'); themeBtn.textContent='🎨 Theme: Dark'; themeBtn.setAttribute('aria-pressed','false'); }
+    else { document.documentElement.setAttribute('data-theme','green'); localStorage.setItem('ecovision_theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
+  });
+
+  /* ===== One-time pleasant audio on the green logo splash =====
+     (Autoplay with sound may be blocked on some mobile browsers until a tap; we start on first user interaction if needed.) */
+  let audioCtx=null, master=null;
+  function initAudio(){
+    if(audioCtx) return;
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    master=audioCtx.createGain(); master.gain.value=0.7; master.connect(audioCtx.destination);
+  }
+  function splashSound(){
+    if(!audioCtx) return;
+    // Soft swell (noise bandpass)
+    const dur=0.9;
+    const b=audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
+    const d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    const n=audioCtx.createBufferSource(); n.buffer=b;
+    const bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=900; bp.Q.value=0.6;
+    const g=audioCtx.createGain(); g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.35, audioCtx.currentTime+0.06);
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+dur);
+    n.connect(bp); bp.connect(g); g.connect(master); n.start();
+
+    // Gentle chime (E4–G#4–B4)
+    [329.63, 415.30, 493.88].forEach((f,i)=>{
+      const o=audioCtx.createOscillator(); o.type='sine'; o.frequency.value=f;
+      const g=audioCtx.createGain(); const t=audioCtx.currentTime + 0.1*i + 0.05;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.22, t+0.06);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.6);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t+0.8);
+    });
+  }
+
+  // Try to start audio on load; if blocked, wait for first tap/click.
+  function startIntro(){
+    const intro=document.getElementById('intro');
+    // Init audio; browsers may defer until a user gesture
+    try{ initAudio(); audioCtx.resume().then(()=>{ splashSound(); }); }catch(e){}
+    const t=setTimeout(endIntro, 2200);
+    intro.addEventListener('click', ()=>{ try{ initAudio(); audioCtx.resume().then(()=>splashSound()); }catch(e){}; clearTimeout(t); endIntro(); }, { once:true });
+  }
+  function endIntro(){
+    const intro=document.getElementById('intro');
+    intro.classList.add('hide');
+    setTimeout(()=>{ intro.style.display='none'; /* after splash, show drawer stage (s0 is already active) */ }, 380);
+  }
+  window.addEventListener('load', startIntro);
+
+  /* ===== Drawer → App transition (ripple + zoom) ===== */
+  const eco = document.getElementById('ecoApp');
+  const s0  = document.getElementById('s0');
+  const s1  = document.getElementById('s1');
+  const bar = document.getElementById('bar');
+  const label = document.getElementById('label');
+
+  function openAppFromIcon(ev){
+    const icon = eco;
+    const rect = icon.getBoundingClientRect();
+    // Ripple
+    const r = document.createElement('span');
+    r.className='ripple';
+    const x = (ev?.clientX ?? rect.left + rect.width/2);
+    const y = (ev?.clientY ?? rect.top  + rect.height/2);
+    r.style.left = (x - rect.left) + 'px';
+    r.style.top  = (y - rect.top ) + 'px';
+    icon.appendChild(r);
+    setTimeout(()=> r.remove(), 520);
+
+    // Zoom ghost
+    const ghost = icon.cloneNode(true);
+    ghost.classList.add('zoomGhost');
+    const screen = document.querySelector('.screen');
+    const sRect = screen.getBoundingClientRect();
+    const gx = rect.left - sRect.left;
+    const gy = rect.top  - sRect.top;
+    ghost.style.position='absolute';
+    ghost.style.left = gx+'px';
+    ghost.style.top  = gy+'px';
+    ghost.style.width= rect.width+'px';
+    ghost.style.height= rect.height+'px';
+    screen.appendChild(ghost);
+    requestAnimationFrame(()=>{
+      ghost.style.transform='scale(6)'; ghost.style.opacity='0';
+    });
+
+    // Switch to app frame after zoom
+    setTimeout(()=>{
+      s0.classList.remove('active');
+      s1.classList.add('active');
+      label.textContent='Step 2 · App opening…';
+      bar.style.width = (2/14*100)+'%';
+      // Start inner walkthrough after brief "starting"
+      setTimeout(()=> playInner(2), 700);
+      setTimeout(()=> ghost.remove(), 600);
+    }, 380);
+  }
+  eco.addEventListener('click', openAppFromIcon);
+
+  /* ===== Inner walkthrough stages (v1..v13) ===== */
+  const vStages=[...document.querySelectorAll('.viewport .stage')];
+  let vidx=1, speedMs=1600, timer=null;
+  function showInner(i){
+    vStages.forEach((s,n)=> s.classList.toggle('active', n===i-1));
+    const outerStep = i+0; // align with 14-step label total
+    label.textContent = [
+      'Step 1 · Open EcoVision from the app drawer',
+      'Step 2 · App opening…',
+      'Step 3 · Upload phone photos (front & back)',
+      'Step 4 · AI assesses visible damage',
+      'Step 5 · Select your phone model',
+      'Step 6 · Tell us when you bought it',
+      'Step 7 · Quick internals (Google-Form style)',
+      'Step 8 · Your damage-aware value',
+      'Step 9 · Do you wish to recycle this item?',
+      'Step 10 · Share your location',
+      'Step 11 · Do you want money from this?',
+      'Step 12 · Partners (based on condition)',
+      'Step 13 · Or give it away yourself',
+      'Step 14 · Suggested ask + honesty warning'
+    ][outerStep-1] || '';
+    bar.style.width = (outerStep/14*100)+'%';
+
+    if(i===7){ // value step
+      const gauge=document.getElementById('gauge');
+      if(gauge) gauge.style.setProperty('--pct','66%');
+      const price=document.getElementById('price');
+      if(price) price.textContent='₹12,800';
+    }
+  }
+  function playInner(start=1){
+    clearInterval(timer);
+    vidx=start;
+    showInner(vidx);
+    timer=setInterval(()=>{
+      vidx = (vidx % 13) + 1; // cycle v1..v13
+      showInner(vidx);
+    }, speedMs);
+  }
+
+  // Replay / speed controls for the whole demo
+  document.getElementById('replay').addEventListener('click', ()=>{
+    // Reset to drawer
+    document.getElementById('s1').classList.remove('active');
+    document.getElementById('s0').classList.add('active');
+    clearInterval(timer);
+    bar.style.width=(1/14*100)+'%';
+    label.textContent='Step 1 · Open EcoVision from the app drawer';
+  });
+  document.getElementById('speed').addEventListener('click', (e)=>{
+    if(speedMs===1600){ speedMs=2300; e.target.textContent='Speed: Normal'; }
+    else if(speedMs===2300){ speedMs=3300; e.target.textContent='Speed: Slow'; }
+    else { speedMs=1600; e.target.textContent='Speed: Fast'; }
+    if(document.getElementById('s1').classList.contains('active')){
+      playInner(vidx);
     }
   });
 
-  /* ===== Sound (WebAudio) ===== */
-  const soundBtn = document.getElementById('soundBtn');
-  let audioCtx=null, soundOn = (localStorage.getItem('ecovision_sound')||'on') === 'on';
-  function updateSoundBtn(){
-    soundBtn.textContent = soundOn ? '🔊 Sound: On' : '🔈 Sound: Off';
-    soundBtn.setAttribute('aria-pressed', soundOn ? 'true':'false');
-    localStorage.setItem('ecovision_sound', soundOn ? 'on' : 'off');
-  }
-  updateSoundBtn();
-
-  function ensureAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }
-  document.body.addEventListener('click', ensureAudio, { once:true });
-  soundBtn.addEventListener('click', ()=>{ soundOn=!soundOn; updateSoundBtn(); });
-
-  function beep(freq=760, ms=80){
-    if(!soundOn || !audioCtx) return;
-    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type='sine'; o.frequency.value=freq;
-    g.gain.value=0.0001; o.start();
-    g.gain.exponentialRampToValueAtTime(0.35, audioCtx.currentTime+0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+ms/1000);
-    o.stop(audioCtx.currentTime+ms/1000+0.02);
-  }
-  function clickTap(){
-    if(!soundOn || !audioCtx) return;
-    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type='square'; o.frequency.value=700;
-    g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.4, audioCtx.currentTime+0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.06);
-    o.stop(audioCtx.currentTime+0.08);
-  }
-  function whoosh(){
-    if(!soundOn || !audioCtx) return;
-    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type='sawtooth'; o.frequency.setValueAtTime(220, audioCtx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime+0.4);
-    g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.6, audioCtx.currentTime+0.06);
-    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.5);
-    o.stop(audioCtx.currentTime+0.52);
-  }
-
-  /* ===== Draw a GENERIC PHONE as PNGs via Canvas, then set on <img> ===== */
+  /* ===== Draw generic phone PNGs for previews ===== */
   function drawPhonePNG({cracked=false, back=false}){
-    const w=160, h=240, r=16;
-    const c=document.createElement('canvas'); c.width=w; c.height=h;
-    const ctx=c.getContext('2d');
-
-    // body
+    const w=160,h=240,r=10; const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d');
     ctx.fillStyle='#0f1a23'; roundRect(ctx,10,8,w-20,h-16,r); ctx.fill();
     ctx.strokeStyle='#2b3e55'; ctx.lineWidth=2; roundRect(ctx,10,8,w-20,h-16,r); ctx.stroke();
-
     if(back){
-      ctx.fillStyle='#101b26'; ctx.strokeStyle='#2b3e55'; ctx.lineWidth=2;
+      ctx.fillStyle='#101b26'; ctx.strokeStyle='#2b3e55';
       roundRect(ctx, w/2-22, 22, 44, 36, 8); ctx.fill(); ctx.stroke();
-      ctx.fillStyle='#223b55'; // lenses
-      ctx.beginPath(); ctx.arc(w/2-10, 40, 6, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2-10, 40, 6, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(w/2+10, 40, 6, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle='#0b1620'; ctx.strokeStyle='#2b3e55';
       roundRect(ctx, 26, 70, w-52, h-90, 8); ctx.fill(); ctx.stroke();
     } else {
-      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2, 22, 3, 0, Math.PI*2); ctx.fill(); // dot
+      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2, 22, 3, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle='#0b1620'; ctx.strokeStyle='#2b3e55';
       roundRect(ctx, 26, 30, w-52, h-50, 8); ctx.fill(); ctx.stroke();
-      if(cracked){
-        ctx.strokeStyle= getComputedStyle(document.documentElement).getPropertyValue('--bad') || '#ff5d5d';
-        ctx.lineWidth=2;
-        poly(ctx, [[30,140],[80,120],[100,130],[130,110]]);
-        poly(ctx, [[70,90],[66,105],[95,112]]);
-      }
+      if(cracked){ ctx.strokeStyle='#ff5d5d'; ctx.lineWidth=2; poly(ctx, [[30,140],[80,120],[100,130],[130,110]]); poly(ctx, [[70,90],[66,105],[95,112]]); }
     }
     return c.toDataURL('image/png');
-
-    function roundRect(ctx,x,y,w,h,r){
-      ctx.beginPath();
-      ctx.moveTo(x+r,y);
-      ctx.arcTo(x+w,y,x+w,y+h,r);
-      ctx.arcTo(x+w,y+h,x,y+h,r);
-      ctx.arcTo(x,y+h,x,y,r);
-      ctx.arcTo(x,y,x+w,y,r);
-      ctx.closePath();
-    }
-    function poly(ctx, pts){
-      ctx.beginPath();
-      ctx.moveTo(pts[0][0], pts[0][1]);
-      for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0], pts[i][1]);
-      ctx.stroke();
-    }
+    function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+    function poly(ctx,pts){ ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0],pts[i][1]); ctx.stroke(); }
   }
-  const frontImg = document.getElementById('frontImg');
-  const backImg  = document.getElementById('backImg');
-  frontImg.src = drawPhonePNG({cracked:true, back:false});
-  backImg.src  = drawPhonePNG({cracked:false, back:true});
-
-  /* ===== Phone Walkthrough Player ===== */
-  const labels = [
-    'Step 1 · Tap the EcoVision app',
-    'Step 2 · App opening…',
-    'Step 3 · Upload phone photos (front & back)',
-    'Step 4 · AI assesses visible damage',
-    'Step 5 · Select your phone model',
-    'Step 6 · Tell us when you bought it',
-    'Step 7 · Quick internals (Google-Form style)',
-    'Step 8 · Your damage-aware value',
-    'Step 9 · Do you wish to recycle this item?',
-    'Step 10 · Share your location',
-    'Step 11 · Do you want money from this?',
-    'Step 12 · Partners (based on condition)',
-    'Step 13 · Or give it away yourself',
-    'Step 14 · Suggested ask + honesty warning'
-  ];
-  const stages = [...document.querySelectorAll('.stage')];
-  const bar = document.getElementById('bar');
-  const label = document.getElementById('label');
-  let idx = 0, speedMs = 1600, timer = null;
-
-  function show(i){
-    stages.forEach((s,n)=> s.classList.toggle('active', n===i));
-    label.textContent = labels[i] || '';
-    bar.style.width = ((i+1)/labels.length*100)+'%';
-
-    // Step-specific SFX
-    if(i===0){ /* tap fired by thumb choreography */ }
-    else if(i===1){ whoosh(); }
-    else { beep(540 + i*20, 60); }
-
-    if(i===7){ // value step
-      const gauge = document.getElementById('gauge');
-      if(gauge) gauge.style.setProperty('--pct','66%');
-      const price = document.getElementById('price');
-      if(price) price.textContent = '₹12,800';
-    }
-  }
-  function play(start=0){
-    clearInterval(timer);
-    idx = start; show(idx);
-    timer = setInterval(()=>{
-      idx = (idx + 1) % stages.length;
-      show(idx);
-    }, speedMs);
-    if(idx===0) thumbTap();
-  }
-
-  document.getElementById('replay').addEventListener('click', ()=> play(0));
-  const speedBtn = document.getElementById('speed');
-  speedBtn.addEventListener('click', ()=>{
-    if(speedMs===1600){ speedMs=2300; speedBtn.textContent='Speed: Normal'; }
-    else if(speedMs===2300){ speedMs=3300; speedBtn.textContent='Speed: Slow'; }
-    else { speedMs=1600; speedBtn.textContent='Speed: Fast'; }
-    play(idx);
-  });
-
-  /* ===== Thumb tap choreography on homescreen ===== */
-  const thumb = document.getElementById('thumb');
-  function thumbTap(){
-    const eco = document.getElementById('ecoApp');
-    const screen = eco.closest('.screen');
-    const ecoRect = eco.getBoundingClientRect();
-    const scrRect = screen.getBoundingClientRect();
-    const x = ecoRect.left - scrRect.left + ecoRect.width/2 - 34;
-    const y = ecoRect.top  - scrRect.top  + ecoRect.height/2 - 34;
-
-    thumb.style.left = (x + 24) + 'px';
-    thumb.style.top  = (y + 60) + 'px';
-    thumb.classList.add('show');
-
-    setTimeout(()=>{ thumb.style.left = x + 'px'; thumb.style.top  = y + 'px'; }, 60);
-    setTimeout(()=>{ thumb.classList.add('tap'); clickTap(); }, 520);
-    setTimeout(()=>{ thumb.classList.remove('tap'); idx = 1; show(idx); }, 720);
-  }
-
-  /* ===== Intro Splash control ===== */
-  const intro = document.getElementById('intro');
-  function endIntro(){
-    intro.classList.add('hide');
-    setTimeout(()=>{ intro.style.display='none'; play(0); }, 380);
-  }
-  function startIntro(){
-    // respect reduced motion: skip animation quickly
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      intro.style.display='none'; play(0); return;
-    }
-    // try a gentle whoosh
-    whoosh();
-    // auto-hide after ~2.2s or on click
-    const t = setTimeout(endIntro, 2200);
-    intro.addEventListener('click', ()=>{ clearTimeout(t); endIntro(); }, { once:true });
-  }
-
-  // Kick off splash at load
-  window.addEventListener('load', startIntro);
+  const frontImg=document.getElementById('frontImg'); const backImg=document.getElementById('backImg');
+  if(frontImg) frontImg.src=drawPhonePNG({cracked:true, back:false});
+  if(backImg)  backImg.src =drawPhonePNG({cracked:false, back:true});
 </script>
 </body>
 </html>
