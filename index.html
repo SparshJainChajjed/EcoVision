@@ -4,12 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision — Intro</title>
-<meta name="description" content="EcoVision intro with green logo splash, real app drawer, and in-app demo." />
+<meta name="description" content="EcoVision intro with logo splash and fully automated demo." />
 <style>
   :root{
     --bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;
     --accent:#1f8cff;--accent2:#22c55e;--warn:#ffdf7f;--line:rgba(255,255,255,.08);
-    --ecoGreen1:#16a34a; --ecoGreen2:#22c55e; --ecoGreen3:#86efac;
     --shadow:0 22px 54px rgba(0,0,0,.38);
   }
   :root[data-theme="green"]{
@@ -21,7 +20,7 @@
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
 
-  /* Splash */
+  /* ===== Splash (logo only, no sound) ===== */
   .intro{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
     background: radial-gradient(900px 300px at 50% -80px, rgba(34,197,94,.18), transparent 60%),
                radial-gradient(700px 200px at 20% -60px, rgba(22,163,74,.16), transparent 60%),
@@ -29,39 +28,37 @@
     transition:opacity .38s ease, visibility .38s ease}
   .intro.hide{opacity:0;visibility:hidden}
   .introInner{display:grid;place-items:center;gap:10px;position:relative}
-  .introLogo{width:96px;height:96px;border-radius:24px;display:grid;place-items:center;
-    background:conic-gradient(from 180deg at 50% 50%, var(--ecoGreen1), var(--ecoGreen2), var(--ecoGreen1));
-    box-shadow:0 12px 30px rgba(34,197,94,.35), inset 0 0 30px rgba(255,255,255,.05);
-    animation:pop-in .5s cubic-bezier(.2,.7,.2,1.1) both, spin 12s linear infinite 1.2s}
-  .introLeaf{width:46px;height:46px;display:block;filter: drop-shadow(0 2px 6px rgba(34,197,94,.45))}
+  .ecoLogo{
+    width:132px;height:132px;border-radius:28px;display:grid;place-items:center;position:relative;
+    background:linear-gradient(180deg, rgba(22,163,74,.18), rgba(34,197,94,.10));
+    box-shadow:0 18px 40px rgba(34,197,94,.30), inset 0 0 30px rgba(255,255,255,.05);
+    animation:eco-pop .5s cubic-bezier(.2,.7,.2,1.1) both;
+  }
+  .ecoSvg{width:110px;height:110px;overflow:visible}
   .introWord{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
   .ring,.ring2{position:absolute;border-radius:999px;border:2px solid rgba(134,239,172,.22);pointer-events:none;
     animation:ring 1.4s ease-out .2s both}
   .ring{width:140px;height:140px}
   .ring2{width:190px;height:190px;animation-delay:.4s;border-color:rgba(134,239,172,.14)}
-  .tapHint{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);
-    font-size:12px;color:#a1f2b8;opacity:.85;transition:opacity .25s ease}
-  .tapHint.hide{opacity:0}
-  @keyframes pop-in{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  @keyframes eco-pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
   @keyframes ring{from{transform:scale(.6);opacity:.7}to{transform:scale(1.3);opacity:0}}
-  @media (prefers-reduced-motion: reduce){.introLogo{animation:none}.ring,.ring2{display:none}}
 
   /* Header & layout */
   header.app{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
     padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   :root[data-theme="green"] header.app{background:rgba(255,255,255,.85)}
   .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:conic-gradient(from 180deg at 50% 50%, var(--ecoGreen1), var(--ecoGreen2), var(--ecoGreen1));color:#0a0b0f;font-weight:900;font-size:20px}
+  .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+    background:conic-gradient(from 180deg at 50% 50%, #16a34a, #22c55e, #16a34a);color:#0a0b0f;font-weight:900;font-size:20px}
   h1{margin:0;font-size:18px;font-weight:900}
   .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
+  :root[data-theme="green"] .tag{color:#475569}
   .btn{padding:11px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
 
   .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.2)}
   h2{font-size:22px;margin:0 0 8px}
   p{color:var(--muted);line-height:1.55;margin:0 0 10px}
-
   .grid{display:grid;gap:12px}
   @media (min-width:760px){ .grid{grid-template-columns:1.1fr 1fr;align-items:center} }
 
@@ -134,19 +131,39 @@
 </head>
 <body>
 
-<!-- Splash -->
+<!-- SIMPLE LOGO SPLASH (no audio) -->
 <div id="intro" class="intro" role="dialog" aria-label="EcoVision intro" aria-modal="true">
   <div class="introInner">
-    <div class="introLogo" aria-hidden="true">
-      <svg class="introLeaf" viewBox="0 0 64 64">
-        <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="var(--ecoGreen2)"/><stop offset="1" stop-color="var(--ecoGreen1)"/></linearGradient></defs>
-        <path d="M14 42c18 6 27-5 30-12 7-15-6-21-20-12-8 5-12 16-10 24z" fill="url(#g)"/>
-        <path d="M16 40c10-2 17-9 22-17" stroke="var(--ecoGreen3)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <div class="ecoLogo" aria-hidden="true">
+      <svg viewBox="0 0 200 200" class="ecoSvg">
+        <defs>
+          <radialGradient id="ecoGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7CFFB2" stop-opacity="0.85"/>
+            <stop offset="60%" stop-color="#22C55E" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#14A34A" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#22c55e"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="68" fill="url(#ecoGlow)" opacity="0.55" />
+        <circle cx="100" cy="100" r="58" fill="none" stroke="#16a34a" stroke-width="6" stroke-linecap="round"
+                stroke-dasharray="365 365" stroke-dashoffset="0">
+          <animate attributeName="stroke-dashoffset" from="365" to="0" dur="1.1s" fill="freeze" begin="0.2s"/>
+        </circle>
+        <path d="M100 120 C100 120, 102 96, 100 72" fill="none" stroke="#86efac" stroke-width="4" stroke-linecap="round"
+              stroke-dasharray="60 60" stroke-dashoffset="60">
+          <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.8s" begin="0.45s" fill="freeze"/>
+        </path>
+        <path d="M120 86 C112 70, 92 66, 84 78 C78 88, 86 106, 102 108 C112 108, 124 98, 120 86 Z"
+              fill="url(#leaf)" opacity="0">
+          <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.7s" fill="freeze"/>
+          <animateTransform attributeName="transform" type="scale" from="0.8" to="1" dur="0.5s" begin="0.7s" fill="freeze"/>
+        </path>
       </svg>
     </div>
     <div class="introWord">EcoVision</div>
     <div class="ring"></div><div class="ring2"></div>
-    <div id="tapHint" class="tapHint">Tap for sound</div>
   </div>
 </div>
 
@@ -163,7 +180,7 @@
 <main class="wrap">
   <section class="card">
     <h2>Know your phone’s worth — then recycle or resell, the honest way</h2>
-    <p>Open from the app drawer → in-app flow: upload → damage → model & purchase date → internals form → value → recycle? → location → money or give away → suggested ask + honesty note.</p>
+    <p>Opens from the app drawer → in-app flow auto-plays: upload → damage → model & purchase date → internals → value → recycle? → location → money or give away → suggested ask.</p>
   </section>
 
   <section class="card">
@@ -193,10 +210,8 @@
                 </div>
                 <div class="pager"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
                 <div class="dock">
-                  <div class="dockicon">📞</div>
-                  <div class="dockicon">💬</div>
-                  <div class="dockicon">🌐</div>
-                  <div class="dockicon">📷</div>
+                  <div class="dockicon">📞</div><div class="dockicon">💬</div>
+                  <div class="dockicon">🌐</div><div class="dockicon">📷</div>
                 </div>
               </div>
             </div>
@@ -262,7 +277,7 @@
 
         <!-- Progress -->
         <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
-        <div class="label" id="label">Step 1 · Open EcoVision from the app drawer</div>
+        <div class="label" id="label">Step 1 · Opening from the app drawer…</div>
         <div class="controls">
           <button class="btn" id="replay">Replay</button>
           <button class="btn" id="speed">Speed: Fast</button>
@@ -271,7 +286,7 @@
 
       <div>
         <h2>Exactly what happens</h2>
-        <p>Tap EcoVision → app opens → upload photos → damage assessment → model & purchase date → internals → value → recycle & location → money or give away → suggested ask + honesty warning.</p>
+        <p>The demo auto-plays like a video. Tap “Replay” to watch again.</p>
       </div>
     </div>
   </section>
@@ -290,87 +305,57 @@ themeBtn.addEventListener('click', ()=>{
   else { document.documentElement.setAttribute('data-theme','green'); localStorage.setItem('ecovision_theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
 });
 
-/* ===== One-time intro audio (tap required on mobile) ===== */
-let audioCtx=null, master=null;
-function initAudio(){ if(audioCtx) return; audioCtx=new (window.AudioContext||window.webkitAudioContext)(); master=audioCtx.createGain(); master.gain.value=0.7; master.connect(audioCtx.destination); }
-function splashSound(){
-  if(!audioCtx) return;
-  // Soft swell
-  const dur=0.9;
-  const b=audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
-  const d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
-  const n=audioCtx.createBufferSource(); n.buffer=b;
-  const bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=900; bp.Q.value=0.6;
-  const g=audioCtx.createGain(); g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.35, audioCtx.currentTime+0.06);
-  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+dur);
-  n.connect(bp); bp.connect(g); g.connect(master); n.start();
+/* ===== Splash control (no audio) ===== */
+const intro=document.getElementById('intro');
+function endIntro(){ intro.classList.add('hide'); setTimeout(()=>{ intro.style.display='none'; autoStartDemo(); }, 380); }
+window.addEventListener('load', ()=>{ setTimeout(endIntro, 1900); });
 
-  // Gentle chime
-  [329.63, 415.30, 493.88].forEach((f,i)=>{
-    const o=audioCtx.createOscillator(); o.type='sine'; o.frequency.value=f;
-    const g=audioCtx.createGain(); const t=audioCtx.currentTime + 0.1*i + 0.05;
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.22, t+0.06);
-    g.gain.exponentialRampToValueAtTime(0.0001, t+0.6);
-    o.connect(g); g.connect(master);
-    o.start(t); o.stop(t+0.8);
-  });
-}
-const intro=document.getElementById('intro'); const tapHint=document.getElementById('tapHint');
-function endIntro(){ intro.classList.add('hide'); setTimeout(()=>{ intro.style.display='none'; }, 380); }
-function startIntro(){
-  // if autoplay blocked, wait for first interaction
-  intro.addEventListener('click', ()=>{ initAudio(); audioCtx.resume().then(()=>{ splashSound(); tapHint.classList.add('hide'); }); endIntro(); }, { once:true });
-  // also auto-close after 2.5s even if no tap (silent)
-  setTimeout(endIntro, 2500);
-}
-window.addEventListener('load', startIntro);
-
-/* ===== Drawer → App transition ===== */
+/* ===== Drawer → App transition (auto) ===== */
 const eco=document.getElementById('ecoApp');
-const s0=document.getElementById('s0'); const s1=document.getElementById('s1');
-const bar=document.getElementById('bar'); const label=document.getElementById('label');
-
-function openApp(ev){
-  if(!eco) return;
-  // Ripple in icon
+const s0=document.getElementById('s0'), s1=document.getElementById('s1');
+const bar=document.getElementById('bar'), label=document.getElementById('label');
+let opened=false;
+function openAppAuto(){
+  if(opened) return; opened=true;
   const rect=eco.getBoundingClientRect();
-  const x=(ev?.clientX ?? rect.left+rect.width/2);
-  const y=(ev?.clientY ?? rect.top +rect.height/2);
+  const screen=document.querySelector('.screen'); const sRect=screen.getBoundingClientRect();
+
+  // Ripple
   const r=document.createElement('span'); r.className='ripple';
-  r.style.left=(x-rect.left)+'px'; r.style.top=(y-rect.top)+'px';
+  r.style.left=(rect.width/2)+'px'; r.style.top=(rect.height/2)+'px';
   eco.appendChild(r); setTimeout(()=>r.remove(),520);
 
-  // Zoom ghost to feel native
+  // Zoom ghost
   const ghost=eco.cloneNode(true);
-  const screen=document.querySelector('.screen'); const sRect=screen.getBoundingClientRect();
   ghost.classList.add('zoomGhost');
-  ghost.style.position='absolute'; ghost.style.left=(rect.left-sRect.left)+'px'; ghost.style.top=(rect.top-sRect.top)+'px';
-  ghost.style.width=rect.width+'px'; ghost.style.height=rect.height+'px';
+  ghost.style.position='absolute';
+  ghost.style.left=(rect.left-sRect.left)+'px';
+  ghost.style.top =(rect.top -sRect.top )+'px';
+  ghost.style.width=rect.width+'px';
+  ghost.style.height=rect.height+'px';
   screen.appendChild(ghost);
   requestAnimationFrame(()=>{ ghost.style.transform='scale(6)'; ghost.style.opacity='0'; });
 
-  // Swap to app
+  // Swap to app and start inner demo
   setTimeout(()=>{
     s0.classList.remove('active');
     s1.classList.add('active');
     label.textContent='Step 2 · App opening…';
     bar.style.width=(2/14*100)+'%';
-    setTimeout(()=>{ playInner(1); ghost.remove(); }, 600);
-  }, 360);
+    setTimeout(()=>{ playInner(1); ghost.remove(); }, 500);
+  }, 340);
 }
-eco.addEventListener('click', openApp);
+eco.addEventListener('click', openAppAuto); // still clickable if user taps
+function autoStartDemo(){ openAppAuto(); } // called after splash
 
-/* ===== Inner demo player ===== */
+/* ===== Inner demo player (autoplays & loops) ===== */
 const vStages=[...document.querySelectorAll('.viewport .stage')];
 let vidx=1, speedMs=1600, timer=null;
 function showInner(i){
-  // i is 1..13 -> v1..v13
   vStages.forEach((s,n)=> s.classList.toggle('active', n===i-1));
-  const outerStep=i+1; // because Step1 was drawer
+  const outerStep=i+1;
   const stepLabels=[
-    'Step 1 · Open EcoVision from the app drawer',
+    'Step 1 · Opening from the app drawer…',
     'Step 2 · App opening…',
     'Step 3 · Upload phone photos (front & back)',
     'Step 4 · AI assesses visible damage',
@@ -385,24 +370,22 @@ function showInner(i){
     'Step 13 · Or give it away yourself',
     'Step 14 · Suggested ask + honesty warning'
   ];
-  label.textContent=stepLabels[outerStep-1]||'';
-  bar.style.width=(outerStep/14*100)+'%';
-
-  if(i===7){ const gauge=document.getElementById('gauge'); if(gauge) gauge.style.setProperty('--pct','66%'); const price=document.getElementById('price'); if(price) price.textContent='₹12,800'; }
+  label.textContent=stepLabels[outerStep-1]||''; bar.style.width=(outerStep/14*100)+'%';
+  if(i===7){ const g=document.getElementById('gauge'); if(g) g.style.setProperty('--pct','66%'); const p=document.getElementById('price'); if(p) p.textContent='₹12,800'; }
 }
 function playInner(start=1){
   clearInterval(timer);
   vidx=start; showInner(vidx);
-  timer=setInterval(()=>{ vidx = (vidx % 13) + 1; showInner(vidx); }, speedMs);
+  timer=setInterval(()=>{ vidx = (vidx % 13) + 1; showInner(vidx); }, speedMs); // loop like a video
 }
 
 /* Replay & speed */
 document.getElementById('replay').addEventListener('click', ()=>{
-  // Reset to drawer and progress
-  clearInterval(timer);
+  clearInterval(timer); opened=false;
   s1.classList.remove('active'); s0.classList.add('active');
   bar.style.width=(1/14*100)+'%';
-  label.textContent='Step 1 · Open EcoVision from the app drawer';
+  label.textContent='Step 1 · Opening from the app drawer…';
+  setTimeout(openAppAuto, 300); // auto open again
 });
 document.getElementById('speed').addEventListener('click', (e)=>{
   if(speedMs===1600){ speedMs=2300; e.target.textContent='Speed: Normal'; }
