@@ -8,21 +8,31 @@
 <style>
   :root{
     --bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;
-    --accent:#1f8cff;--accent-2:#62ff9e;--line:rgba(255,255,255,.08)
+    --accent:#1f8cff;--accent-2:#62ff9e;--warn:#ffdf7f;--line:rgba(255,255,255,.08)
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:960px;margin:0 auto;padding:16px 16px 96px}
-  header.app{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+
+  /* Header */
+  header.app{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:conic-gradient(from 180deg at 50% 50%, #27e6f5, #62ff9e, #27e6f5);color:#0a0b0f;font-weight:800;font-size:20px;animation:spin 6s linear infinite}
+  .logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+    background:conic-gradient(from 180deg at 50% 50%, #27e6f5, #62ff9e, #27e6f5);color:#0a0b0f;
+    font-weight:800;font-size:20px;animation:spin 6s linear infinite}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   .brand h1{margin:0;font-size:18px;font-weight:800;letter-spacing:.2px}
   .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
   .btn{display:inline-block;padding:11px 14px;border-radius:12px;font-weight:700;background:var(--accent);color:#fff;border:1px solid var(--accent)}
   .btn.ghost{background:#0d1117;border-color:var(--line);color:var(--text)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+  .btn.alt{background:var(--accent-2);color:#0a0b0f;border-color:transparent}
+
+  /* Cards */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;
+    box-shadow:0 10px 30px rgba(0,0,0,.2)}
   h2{font-size:22px;margin:0 0 8px}
   h3{font-size:18px;margin:0 0 10px}
   p{color:var(--muted);line-height:1.55;margin:0 0 10px}
@@ -30,40 +40,87 @@
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
   .chip{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0d1117}
   .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
   .hero{position:relative;background:
     radial-gradient(1200px 300px at 50% -100px, rgba(98,255,158,.12), transparent),
     radial-gradient(900px 200px at 20% -60px, rgba(39,230,245,.14), transparent),
     var(--card)}
-  /* Demo phone */
+
+  /* Layout */
   .grid{display:grid;gap:10px}
   @media(min-width:720px){.grid{grid-template-columns:1.1fr 1fr;align-items:center}}
+
+  /* Phone demo shell */
   .demo{display:grid;gap:12px}
-  .phone{position:relative;margin:0 auto;width:290px;max-width:100%;aspect-ratio:9/19;border-radius:26px;padding:10px;background:linear-gradient(180deg,#0e121a,#0b0e15);border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .phone{position:relative;margin:0 auto;width:290px;max-width:100%;aspect-ratio:9/19;border-radius:26px;padding:10px;
+    background:linear-gradient(180deg,#0e121a,#0b0e15);border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.35)}
   .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:110px;height:12px;background:#07090d;border-radius:0 0 10px 10px;border:1px solid var(--line)}
   .screen{position:absolute;inset:10px;border-radius:20px;overflow:hidden;background:
     radial-gradient(200px 280px at 20% 20%, rgba(39,230,245,.18), transparent),
     radial-gradient(240px 200px at 80% 80%, rgba(98,255,158,.16), transparent),
     #090c12;display:grid;place-items:center}
-  .reticle{width:74%;height:40%;border:2px dashed rgba(255,255,255,.25);border-radius:14px;animation:pulse 2.2s ease-in-out infinite}
-  @keyframes pulse{0%{transform:scale(.98);opacity:.9}50%{transform:scale(1.02);opacity:1}100%{transform:scale(.98);opacity:.9}}
-  .scanline{position:absolute;left:14%;right:14%;height:2px;background:linear-gradient(90deg,transparent,#27e6f5,transparent);animation:scan 2.6s cubic-bezier(.4,.0,.2,1) infinite}
-  @keyframes scan{0%{top:20%}50%{top:62%}100%{top:20%}}
-  .icons{position:absolute;inset:0;display:grid;place-items:center;font-size:54px}
-  .icons span{position:absolute;opacity:0;transform:translateY(8px);transition:opacity .6s, transform .6s}
-  .icons span.show{opacity:1;transform:translateY(0)}
-  .label{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(15,18,26,.9);border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-size:12px;color:#cfe7ff;text-align:center}
-  .stepsbar{display:flex;gap:6px;justify-content:center;margin-top:2px}
-  .dot{width:8px;height:8px;border-radius:50%;background:#2a3446;transition:transform .2s, background .2s}
-  .dot.active{background:var(--accent);transform:scale(1.2)}
-  .callouts{display:grid;gap:8px}
-  .callout{background:#0d1117;border:1px dashed var(--line);border-radius:12px;padding:10px}
-  .callout strong{color:#d7e9ff}
-  .warn{color:#ffdf7f}
-  /* Tabbar + footer */
+
+  /* STEP FRAMES */
+  .frame{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(10px) scale(.98);
+    transition:opacity .5s ease, transform .5s ease}
+  .frame.active{opacity:1;transform:translateY(0) scale(1)}
+
+  /* Step 1: Upload */
+  .upload-card{width:86%;background:#0d1117;border:1px dashed var(--line);border-radius:14px;padding:14px;text-align:center}
+  .upload-btn{display:inline-block;margin-top:10px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700}
+  .thumb{margin-top:12px;width:80px;height:110px;border-radius:10px;background:
+    linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border:1px solid var(--line);position:relative;overflow:hidden}
+  .shine{position:absolute;inset:-40% -40%;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:shine 2.5s linear infinite}
+  @keyframes shine{from{left:-120%}to{left:120%}}
+
+  /* Step 2: Damage heatmap */
+  .photo-wrap{position:relative;width:80%;height:58%;border-radius:16px;border:1px solid var(--line);background:#0b1016}
+  .damage{position:absolute;inset:0;background:
+    radial-gradient(80px 50px at 30% 30%, rgba(255,0,72,.45), transparent 60%),
+    radial-gradient(70px 50px at 70% 55%, rgba(255,165,0,.35), transparent 60%),
+    radial-gradient(60px 40px at 50% 78%, rgba(255,0,0,.35), transparent 60%);
+    mix-blend-mode:screen;filter:blur(6px);opacity:.9;animation:pulse 2.2s ease-in-out infinite}
+  @keyframes pulse{0%{transform:scale(.98);opacity:.85}50%{transform:scale(1.02);opacity:1}100%{transform:scale(.98);opacity:.85}}
+
+  /* Step 3: Model & Date form cards */
+  .form-stack{width:86%;display:grid;gap:10px}
+  .i{background:#0d1117;border:1px solid var(--line);border-radius:12px;padding:10px}
+  .i .l{font-size:11px;color:#8ea1b8;margin-bottom:4px}
+  .i .v{font-weight:700}
+
+  /* Step 4: Internals check toggles */
+  .tog{display:flex;justify-content:space-between;align-items:center}
+  .switch{position:relative;width:44px;height:24px;background:#2a3446;border-radius:999px}
+  .knob{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#c7d6ee;transition:left .25s}
+  .on .switch{background:var(--accent-2)}
+  .on .knob{left:23px}
+
+  /* Step 5: Price gauge */
+  .gauge{width:70%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;background:
+    conic-gradient(var(--accent-2) var(--pct,40%), #243042 0)}
+  .gauge::after{content:"";position:absolute;inset:10%;background:#0b0f16;border-radius:50%}
+  .price{position:absolute;font-weight:800;font-size:22px}
+
+  /* Step 6: Recycle choice */
+  .row{display:flex;gap:8px;width:86%}
+  .opt{flex:1;background:#0d1117;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  .opt b{display:block}
+
+  /* Step 7: Suggested ask + warning */
+  .note{width:86%;background:#0d1117;border:1px dashed var(--line);border-radius:12px;padding:12px;text-align:center}
+  .warning{color:var(--warn);font-weight:700}
+
+  /* Progress */
+  .progress{width:100%;height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin-top:12px}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .4s}
+
+  .label{margin-top:8px;font-size:12px;color:#cfe7ff;text-align:center}
+
+  /* Bottom nav */
   .tabbar{position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);display:flex}
   .tab{flex:1;display:grid;place-items:center;padding:12px 0;color:#a7b3c6;font-weight:700}
   .tab.active{color:#fff;border-top:2px solid var(--accent)}
-  footer{padding:18px 16px 84px;text-align:center;color:#92a0b8;font-size:12px}
 </style>
 </head>
 <body>
@@ -83,65 +140,109 @@
   <!-- HERO -->
   <section class="hero card">
     <h2>Know your phone’s worth — and recycle right</h2>
-    <p class="sub">Upload a photo, let EcoVision assess visible damage, answer a few questions, and get a fair value. Then choose to recycle for cash (e.g., Cashify/Zolopik) or give it away yourself — with a suggested ask price.</p>
+    <p class="sub">Upload a photo, let EcoVision assess visible damage, answer quick questions (model, purchase date, internals), and get a fair estimate. Then choose to recycle for cash (Cashify/Zolopik) or give it away yourself — with a suggested ask price.</p>
     <div class="actions">
       <a class="btn" href="#demo">See the flow</a>
       <a class="btn ghost" href="#use">How to use</a>
     </div>
   </section>
 
-  <!-- DEMO ANIMATION MATCHING YOUR FLOW -->
+  <!-- DEMO ANIMATION (MIRRORS YOUR FLOW) -->
   <section id="demo" class="card">
     <div class="grid">
       <div class="demo">
         <h3>How EcoVision works</h3>
-        <p class="sub">Animated walkthrough: <em>Upload → Assess → Model & Date → Internals → Price → Recycle → Suggest Ask</em>.</p>
+        <p class="sub">Animated walkthrough: <em>Upload → Damage → Model/Date → Internals → Price → Recycle choice → Suggested Ask</em>.</p>
 
         <div class="phone">
           <div class="notch"></div>
           <div class="screen">
-            <div class="reticle"></div>
-            <div class="scanline"></div>
 
-            <!-- Cycling icons: upload, damage, model/date, internals, price, recycle, suggest -->
-            <div class="icons" aria-hidden="true">
-              <span id="icon-0" class="show">⬆️</span>   <!-- Upload photo -->
-              <span id="icon-1">🛠️</span>                <!-- Damage assessment -->
-              <span id="icon-2">🔎</span>                <!-- Model & purchase date -->
-              <span id="icon-3">💡</span>                <!-- Internals Qs -->
-              <span id="icon-4">💰</span>                <!-- Price estimate -->
-              <span id="icon-5">♻️</span>                <!-- Recycle options -->
-              <span id="icon-6">📈</span>                <!-- Suggested ask -->
+            <!-- STEP 1: Upload -->
+            <div class="frame active" id="f0">
+              <div class="upload-card">
+                <div>⬆️ Upload a clear photo</div>
+                <a class="upload-btn">Choose Photo</a>
+                <div class="thumb">
+                  <div class="shine"></div>
+                </div>
+              </div>
             </div>
 
-            <div id="label" class="label">Step 1 · Upload a clear photo of your phone</div>
+            <!-- STEP 2: Damage heatmap -->
+            <div class="frame" id="f1">
+              <div class="photo-wrap">
+                <div class="damage"></div>
+              </div>
+            </div>
+
+            <!-- STEP 3: Model & Date -->
+            <div class="frame" id="f2">
+              <div class="form-stack">
+                <div class="i"><div class="l">Model</div><div class="v">iPhone 12</div></div>
+                <div class="i"><div class="l">Purchase Date</div><div class="v">Oct 2021</div></div>
+              </div>
+            </div>
+
+            <!-- STEP 4: Internals -->
+            <div class="frame" id="f3">
+              <div class="form-stack">
+                <div class="i tog" id="t1"><div>Camera</div><div class="switch"><div class="knob"></div></div></div>
+                <div class="i tog on" id="t2"><div>Speaker</div><div class="switch"><div class="knob"></div></div></div>
+                <div class="i tog on" id="t3"><div>Charging</div><div class="switch"><div class="knob"></div></div></div>
+                <div class="i tog" id="t4"><div>Motherboard</div><div class="switch"><div class="knob"></div></div></div>
+              </div>
+            </div>
+
+            <!-- STEP 5: Price gauge -->
+            <div class="frame" id="f4">
+              <div class="gauge" id="gauge" style="--pct:60%">
+                <div class="price" id="price">₹12,500</div>
+              </div>
+            </div>
+
+            <!-- STEP 6: Recycle choice -->
+            <div class="frame" id="f5">
+              <div class="row">
+                <div class="opt">
+                  <b>Get Money</b>
+                  <div>Cashify / Zolopik</div>
+                </div>
+                <div class="opt">
+                  <b>Give it away</b>
+                  <div>List trusted places</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 7: Suggested Ask + Honesty -->
+            <div class="frame" id="f6">
+              <div class="note">
+                <div>Suggested ask: <b>₹13,000 – ₹14,000</b></div>
+                <div class="warning" style="margin-top:6px">⚠️ Don’t misreport — estimate reflects your inputs, not a dealer’s final offer.</div>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div class="stepsbar" aria-label="progress">
-          <div id="dot-0" class="dot active"></div>
-          <div id="dot-1" class="dot"></div>
-          <div id="dot-2" class="dot"></div>
-          <div id="dot-3" class="dot"></div>
-          <div id="dot-4" class="dot"></div>
-          <div id="dot-5" class="dot"></div>
-          <div id="dot-6" class="dot"></div>
-        </div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <div class="label" id="label">Step 1 · Upload your phone photo</div>
       </div>
 
       <div>
         <h3>What you’ll get</h3>
         <ul>
-          <li><strong>Damage-aware estimate:</strong> AI uses your photo + answers to estimate value</li>
-          <li><strong>Honesty reminder:</strong> The displayed price reflects your inputs, not a dealer’s final offer</li>
-          <li><strong>Two paths:</strong> Recycle for money (Cashify/Zolopik) or give it away yourself</li>
-          <li><strong>Suggested ask price:</strong> If you pick self-donation/sale, we suggest what to ask</li>
+          <li><strong>Damage-aware estimate:</strong> Photo + answers → fair value</li>
+          <li><strong>Two paths:</strong> Paid recycling (Cashify/Zolopik) or self-giveaway</li>
+          <li><strong>Suggested ask price:</strong> Clear guidance if you list it yourself</li>
+          <li><strong>Honesty reminder:</strong> We show price based on inputs; dealers may differ</li>
         </ul>
         <div class="chips">
           <span class="chip">Mobile-first</span>
-          <span class="chip">Damage-aware</span>
           <span class="chip">Transparent pricing</span>
           <span class="chip">Recycle or Resell</span>
+          <span class="chip">Damage-aware</span>
         </div>
       </div>
     </div>
@@ -151,42 +252,16 @@
   <section id="use" class="card">
     <h3>How to use EcoVision</h3>
     <ol>
-      <li><strong>Upload photo:</strong> Good lighting; include front & back if possible.</li>
-      <li><strong>Auto assess:</strong> We highlight visible damage (cracks, dents, missing buttons).</li>
-      <li><strong>Tell us details:</strong> Pick model, purchase month/year, and answer quick internals checks (camera, speaker, charging, motherboard, battery health estimate, etc.).</li>
-      <li><strong>Get value:</strong> See a damage-adjusted estimate and confidence range.</li>
-      <li><strong>Choose an option:</strong>
-        <ul>
-          <li><em>Get money:</em> Share location → we suggest partners like <b>Cashify</b> or <b>Zolopik</b> based on condition.</li>
-          <li><em>Give it away yourself:</em> We list credible places and a <b>suggested ask price</b>.</li>
-        </ul>
-      </li>
+      <li><strong>Upload:</strong> Good lighting; include front & back if possible.</li>
+      <li><strong>Assess:</strong> We highlight visible damage (cracks, dents, etc.).</li>
+      <li><strong>Details:</strong> Select model, purchase month/year, and internals status.</li>
+      <li><strong>Estimate:</strong> See a damage-adjusted value with a confidence range.</li>
+      <li><strong>Choose:</strong> Recycle for money (Cashify/Zolopik) or give it away yourself; we also show a suggested ask.</li>
     </ol>
-    <div class="callouts">
-      <div class="callout"><strong>Note:</strong> The estimate is based on your inputs and photo; actual dealer price may differ.</div>
-      <div class="callout"><span class="warn">⚠️ Honesty matters:</span> Misreporting condition will skew the estimate and won’t reflect what a buyer pays.</div>
-    </div>
     <div class="actions">
-      <a class="btn" href="page2.html">Try it (Prototype Coming Soon)</a>
-      <a class="btn ghost" href="#why">Why this helps</a>
+      <a class="btn alt" href="page2.html">Try Prototype (Coming Soon)</a>
+      <a class="btn ghost" href="#demo">Replay Demo</a>
     </div>
-  </section>
-
-  <!-- WHY IT MATTERS -->
-  <section id="why" class="card">
-    <h3>Why this helps</h3>
-    <p>Millions of phones sit unused or get scrapped unfairly. EcoVision gives a transparent, damage-aware estimate and an easy path to recycle or resell, cutting e-waste and maximizing value.</p>
-  </section>
-
-  <!-- ROADMAP -->
-  <section class="card">
-    <h3>Roadmap</h3>
-    <ul>
-      <li>Multi-photo guidance for better crack detection</li>
-      <li>Battery cycle/health inference with user-provided stats</li>
-      <li>Partner APIs for instant quotes and pickups</li>
-      <li>On-device model (TFLite) for privacy & offline use</li>
-    </ul>
   </section>
 </main>
 
@@ -195,47 +270,44 @@
   <a class="tab" href="page2.html">Start</a>
 </nav>
 
-<footer>© 2025 EcoVision • Built for GitHub Pages</footer>
-
 <script>
-  // Animation sequence to exactly match your flow
+  // Steps data (labels + % for gauge)
   const steps = [
-    { label: "Step 1 · Upload a clear photo of your phone", icon: 0 },
-    { label: "Step 2 · We auto-assess visible damage", icon: 1 },
-    { label: "Step 3 · Tell us model & when you bought it", icon: 2 },
-    { label: "Step 4 · Quick internals check (camera, speaker, charging…)", icon: 3 },
-    { label: "Step 5 · Get a damage-aware price estimate", icon: 4 },
-    { label: "Step 6 · Recycle for money or give it away yourself", icon: 5 },
-    { label: "Step 7 · Suggested ask price + honesty reminder", icon: 6 },
+    { label: "Step 1 · Upload your phone photo" },
+    { label: "Step 2 · Auto-assess visible damage" },
+    { label: "Step 3 · Add model & purchase date" },
+    { label: "Step 4 · Quick internals check (camera, speaker, charging…)" },
+    { label: "Step 5 · Damage-aware price estimate" , pct: 65, price: "₹12,500" },
+    { label: "Step 6 · Choose: paid recycle or give away" },
+    { label: "Step 7 · Suggested ask + honesty reminder" },
   ];
-  const labelEl = document.getElementById("label");
-  const icons = [
-    document.getElementById("icon-0"),
-    document.getElementById("icon-1"),
-    document.getElementById("icon-2"),
-    document.getElementById("icon-3"),
-    document.getElementById("icon-4"),
-    document.getElementById("icon-5"),
-    document.getElementById("icon-6"),
-  ];
-  const dots = [
-    document.getElementById("dot-0"),
-    document.getElementById("dot-1"),
-    document.getElementById("dot-2"),
-    document.getElementById("dot-3"),
-    document.getElementById("dot-4"),
-    document.getElementById("dot-5"),
-    document.getElementById("dot-6"),
-  ];
-  let idx = 0;
 
-  function setStep(i){
+  const frames = [...document.querySelectorAll(".frame")];
+  const labelEl = document.getElementById("label");
+  const bar = document.getElementById("bar");
+  const gauge = document.getElementById("gauge");
+  const price = document.getElementById("price");
+
+  let idx = 0;
+  function showStep(i){
+    frames.forEach((f,n)=> f.classList.toggle("active", n===i));
     labelEl.textContent = steps[i].label;
-    icons.forEach((el,n)=> el.classList.toggle("show", n===steps[i].icon));
-    dots.forEach((d,n)=> d.classList.toggle("active", n===i));
+    const pct = ((i+1)/steps.length)*100;
+    bar.style.width = pct + "%";
+    if(i===4 && gauge){
+      const p = steps[i].pct ?? 60;
+      gauge.style.setProperty("--pct", p + "%");
+      if(price && steps[i].price) price.textContent = steps[i].price;
+    }
   }
-  setStep(0);
-  setInterval(()=>{ idx = (idx + 1) % steps.length; setStep(idx); }, 2000);
+  showStep(0);
+  setInterval(()=>{ idx=(idx+1)%steps.length; showStep(idx); }, 2100);
+
+  // Toggle switches animation for internals
+  document.getElementById("t1")?.addEventListener("click", e=> e.currentTarget.classList.toggle("on"));
+  document.getElementById("t2")?.addEventListener("click", e=> e.currentTarget.classList.toggle("on"));
+  document.getElementById("t3")?.addEventListener("click", e=> e.currentTarget.classList.toggle("on"));
+  document.getElementById("t4")?.addEventListener("click", e=> e.currentTarget.classList.toggle("on"));
 </script>
 </body>
 </html>
