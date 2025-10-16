@@ -1,124 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>eWaste Vision | MobileNetV3 Recycling App</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>EcoVision | See waste differently</title>
+<meta name="description" content="EcoVision uses mobile-friendly AI (MobileNetV3) to identify e-waste and guide safe recycling." />
 <style>
-body {
-  font-family: "Poppins", sans-serif;
-  background: #0a0b0f;
-  color: #e9ecf1;
-  margin: 0;
-  padding: 0;
-}
-header {
-  background: #11131a;
-  color: white;
-  text-align: center;
-  padding: 20px 10px;
-}
-h1 {
-  margin: 0;
-  font-size: 24px;
-}
-.tagline {
-  font-size: 14px;
-  opacity: 0.8;
-}
-main {
-  padding: 20px;
-}
-section {
-  background: #11131a;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  padding: 15px;
-}
-h2 {
-  font-size: 20px;
-  color: #62ff9e;
-}
-p, li {
-  line-height: 1.6;
-  color: #cfd6e4;
-}
-ul {
-  list-style-type: disc;
-  padding-left: 20px;
-}
-a.button {
-  display: inline-block;
-  margin-top: 15px;
-  background: #1f8cff;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 600;
-}
-footer {
-  text-align: center;
-  font-size: 13px;
-  color: #92a0b8;
-  padding: 20px 0;
-}
-</style>
-</head>
-<body>
+  :root{
+    --bg:#0a0b0f;
+    --card:#11131a;
+    --text:#e9ecf1;
+    --muted:#cfd6e4;
+    --accent:#1f8cff;
+    --accent-2:#62ff9e;
+    --line:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:960px;margin:0 auto;padding:16px 16px 96px}
+  header.app{
+    position:sticky;top:0;z-index:10;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)
+  }
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{
+    width:42px;height:42px;border-radius:14px;
+    display:grid;place-items:center;
+    background:conic-gradient(from 180deg at 50% 50%, #27e6f5, #62ff9e, #27e6f5);
+    color:#0a0b0f;font-weight:800;font-size:20px;
+    animation:spin 6s linear infinite
+  }
+  @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+  .brand h1{margin:0;font-size:18px;font-weight:800;letter-spacing:.2px}
+  .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
+  .btn{
+    display:inline-block;padding:11px 14px;border-radius:12px;font-weight:700;
+    background:var(--accent);color:#fff;border:1px solid var(--accent)
+  }
 
-<header>
-  <h1>♻️ eWaste Vision</h1>
-  <p class="tagline">AI that helps you recycle right</p>
-</header>
+  /* Cards */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.2)
+  }
+  h2{font-size:22px;margin:0 0 8px}
+  h3{font-size:18px;margin:0 0 10px}
+  p{color:var(--muted);line-height:1.55;margin:0 0 10px}
+  ul,ol{color:var(--muted);margin:8px 0 0 18px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .chip{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0d1117}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .btn.ghost{background:#0d1117;border-color:var(--line);color:var(--text)}
 
-<main>
-  <section>
-    <h2>About the Idea</h2>
-    <p><b>eWaste Vision</b> is a mobile-friendly AI web app that uses <b>MobileNetV3</b> to identify and classify electronic waste — like phones, chargers, and batteries — directly from your camera.</p>
-    <p>It helps users recycle responsibly by showing disposal guidance and nearby e-waste centers, all while working offline using lightweight AI models.</p>
-  </section>
+  /* HERO */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(1200px 300px at 50% -100px, rgba(98,255,158,.12), transparent),
+      radial-gradient(900px 200px at 20% -60px, rgba(39,230,245,.14), transparent),
+      var(--card);
+  }
+  .hero h2{font-size:24px}
+  .hero .sub{color:#a7b3c6}
 
-  <section>
-    <h2>What It Does</h2>
-    <ul>
-      <li>Identifies devices such as phones, chargers, and cables</li>
-      <li>Gives recycling or reuse tips</li>
-      <li>Shows nearby e-waste drop-off points</li>
-      <li>Tracks your “green score” for gamified sustainability</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>How It Works</h2>
-    <ol>
-      <li>Your camera captures an image of the item.</li>
-      <li>The MobileNetV3 model classifies it instantly.</li>
-      <li>The app gives recycling suggestions or reuse ideas.</li>
-      <li>You can locate authorized disposal centers near you.</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>How to Use</h2>
-    <ul>
-      <li>Open the app and allow camera access.</li>
-      <li>Point your camera at the electronic item.</li>
-      <li>Wait for identification and recycling tips.</li>
-      <li>Follow directions to drop-off centers or earn eco-points.</li>
-    </ul>
-    <a href="page2.html" class="button">Go to Scanner (Coming Soon)</a>
-  </section>
-
-  <section>
-    <h2>Why It Matters</h2>
-    <p>Electronic waste contains valuable materials like copper and aluminum but also toxins like lead. Recycling helps protect our planet and conserve natural resources.</p>
-  </section>
-</main>
-
-<footer>
-  <p>© 2025 eWaste Vision • Built for GitHub Pages</p>
-</footer>
-
-</body>
-</html>
+  /* === Demo Phone Animation === */
+  .demo{
+    display:grid;gap:12px
+  }
+  .phone{
+    position:relative;margin:0 auto;width:290px;max-width:100%;
+    aspect-ratio:9/19;
+    border-radius:26px;padding:10px;background:linear-gradient(180deg,#0e121a,#0b0e15);
+    border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.35)
+  }
+  .notch{
+    position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    width:110px;height:12px;background:#07090d;border-radius:0 0 10px 10px;border:1px solid var(--line)
+  }
+  .screen{
+    position:absolute;inset:10px;border-radius:20px;overflow:hidden;
+    background:radial-gradient(200px 280px at 20% 20%, rgba(39,230,245,.18), transparent),
+               radial-gradient(240px 200px at 80% 80%, rgba(98,255,158,.16), transparent),
+               #090c12;
+    display:grid;place-items:center
+  }
+  .reticle{
+    width:70%;height:38%;border:2px dashed rgba(255,255,255,.25);
+    border-radius:14px;animation:pulse
