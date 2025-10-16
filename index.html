@@ -89,4 +89,219 @@
   }
   .reticle{
     width:70%;height:38%;border:2px dashed rgba(255,255,255,.25);
-    border-radius:14px;animation:pulse
+    border-radius:14px;animation:pulse 2.2s ease-in-out infinite
+  }
+  @keyframes pulse{
+    0%{transform:scale(.98);opacity:.9}
+    50%{transform:scale(1.02);opacity:1}
+    100%{transform:scale(.98);opacity:.9}
+  }
+  .scanline{
+    position:absolute;left:14%;right:14%;height:2px;background:linear-gradient(90deg,transparent,#27e6f5,transparent);
+    animation:scan 2.6s cubic-bezier(.4,.0,.2,1) infinite
+  }
+  @keyframes scan{
+    0%{top:20%}
+    50%{top:62%}
+    100%{top:20%}
+  }
+  .icons{
+    position:absolute;inset:0;display:grid;place-items:center;font-size:54px;
+  }
+  .icons span{
+    position:absolute;opacity:0;transform:translateY(8px);
+    transition:opacity .6s, transform .6s
+  }
+  .icons span.show{opacity:1;transform:translateY(0)}
+  .label{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+    background:rgba(15,18,26,.9);border:1px solid var(--line);padding:8px 12px;border-radius:999px;
+    font-size:12px;color:#cfe7ff
+  }
+
+  .stepsbar{
+    display:flex;gap:6px;justify-content:center;margin-top:2px
+  }
+  .dot{
+    width:8px;height:8px;border-radius:50%;background:#2a3446;transition:transform .2s, background .2s
+  }
+  .dot.active{background:var(--accent);transform:scale(1.2)}
+
+  .grid{
+    display:grid;gap:10px
+  }
+  @media(min-width:720px){
+    .grid{grid-template-columns:1.1fr 1fr;align-items:center}
+  }
+
+  /* Tabbar */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);
+    display:flex
+  }
+  .tab{flex:1;display:grid;place-items:center;padding:12px 0;color:#a7b3c6;font-weight:700}
+  .tab.active{color:#fff;border-top:2px solid var(--accent)}
+
+  footer{padding:18px 16px 84px;text-align:center;color:#92a0b8;font-size:12px}
+</style>
+</head>
+<body>
+
+<header class="app">
+  <div class="brand">
+    <div class="logo">🌿</div>
+    <div>
+      <h1>EcoVision</h1>
+      <div class="tag">See waste differently</div>
+    </div>
+  </div>
+  <a class="btn" href="page2.html">Open App</a>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero card">
+    <h2>Turn your camera into a recycling guide</h2>
+    <p class="sub">EcoVision uses a lightweight MobileNetV3 model to recognize electronics and guide safe recycling — fast, private, and mobile-first.</p>
+    <div class="actions">
+      <a class="btn" href="#demo">See how it works</a>
+      <a class="btn ghost" href="#use">How to use</a>
+    </div>
+  </section>
+
+  <!-- DEMO ANIMATION -->
+  <section id="demo" class="card">
+    <div class="grid">
+      <div class="demo">
+        <h3>How it works (live demo)</h3>
+        <p class="sub">A quick, app-style animation of the EcoVision flow: <em>Open → Scan → Identify → Recycle</em>.</p>
+
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="reticle"></div>
+            <div class="scanline"></div>
+
+            <!-- Cycling icons (phone, charger, battery, keyboard) -->
+            <div class="icons" aria-hidden="true">
+              <span id="icon-0" class="show">📱</span>
+              <span id="icon-1">🔌</span>
+              <span id="icon-2">🔋</span>
+              <span id="icon-3">⌨️</span>
+            </div>
+
+            <!-- Dynamic label -->
+            <div id="label" class="label">Step 1 · Open the app</div>
+          </div>
+        </div>
+
+        <div class="stepsbar" aria-label="progress">
+          <div id="dot-0" class="dot active"></div>
+          <div id="dot-1" class="dot"></div>
+          <div id="dot-2" class="dot"></div>
+          <div id="dot-3" class="dot"></div>
+        </div>
+      </div>
+
+      <div>
+        <h3>What EcoVision does</h3>
+        <ul>
+          <li>Identifies e-waste like phones, chargers, batteries, cables</li>
+          <li>Gives clear recycle or reuse guidance</li>
+          <li>Optionally shows nearby authorized drop-off points</li>
+          <li>Works offline with on-device AI (when packaged as a PWA)</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">Mobile-first</span>
+          <span class="chip">Battery-friendly</span>
+          <span class="chip">Private (on-device)</span>
+          <span class="chip">Fast</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO USE -->
+  <section id="use" class="card">
+    <h3>How to use EcoVision</h3>
+    <ol>
+      <li><strong>Open:</strong> Tap “Open App” and allow camera access.</li>
+      <li><strong>Scan:</strong> Center the item in the box; good lighting helps.</li>
+      <li><strong>Identify:</strong> See the recognized item + safety tips.</li>
+      <li><strong>Recycle:</strong> Get directions to authorized centers and track your green impact.</li>
+    </ol>
+    <div class="actions">
+      <a class="btn" href="page2.html">Launch Scanner (Coming Soon)</a>
+      <a class="btn ghost" href="#why">Why this matters</a>
+    </div>
+  </section>
+
+  <!-- WHY IT MATTERS -->
+  <section id="why" class="card">
+    <h3>Why this matters</h3>
+    <p>E-waste contains valuable metals — and toxins. Proper recycling prevents pollution, protects health, and saves resources. EcoVision helps anyone make the right choice instantly.</p>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="card">
+    <h3>Roadmap</h3>
+    <ul>
+      <li>Object detection (multiple items in a frame)</li>
+      <li>Condition/material estimation</li>
+      <li>Gamified “Green Score” & school leaderboards</li>
+      <li>Pickup partners & donation drives</li>
+    </ul>
+  </section>
+
+</main>
+
+<nav class="tabbar" aria-label="bottom navigation">
+  <a class="tab active" href="index.html">Overview</a>
+  <a class="tab" href="page2.html">Scanner</a>
+</nav>
+
+<footer>© 2025 EcoVision • Built for GitHub Pages</footer>
+
+<script>
+  // Simple step cycler for the demo (Open → Scan → Identify → Recycle)
+  const steps = [
+    { label: "Step 1 · Open the app", icon: 0 },
+    { label: "Step 2 · Scan the item", icon: 1 },
+    { label: "Step 3 · Identify safely", icon: 2 },
+    { label: "Step 4 · Recycle nearby", icon: 3 },
+  ];
+  const labelEl = document.getElementById("label");
+  const icons = [
+    document.getElementById("icon-0"),
+    document.getElementById("icon-1"),
+    document.getElementById("icon-2"),
+    document.getElementById("icon-3"),
+  ];
+  const dots = [
+    document.getElementById("dot-0"),
+    document.getElementById("dot-1"),
+    document.getElementById("dot-2"),
+    document.getElementById("dot-3"),
+  ];
+  let idx = 0;
+
+  function setStep(i){
+    // label
+    labelEl.textContent = steps[i].label;
+    // icons
+    icons.forEach((el,n)=> el.classList.toggle("show", n===steps[i].icon));
+    // dots
+    dots.forEach((d,n)=> d.classList.toggle("active", n===i));
+  }
+
+  setInterval(()=>{
+    idx = (idx + 1) % steps.length;
+    setStep(idx);
+  }, 2100);
+
+  // Improve first paint state
+  setStep(0);
+</script>
+</body>
+</html>
