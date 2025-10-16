@@ -4,66 +4,41 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision — Intro</title>
-<meta name="description" content="EcoVision splash with unified leaf logo, then autoplay demo (no audio, no taps)." />
+<meta name="description" content="EcoVision splash and autoplay demo. Theme toggle fixed.">
 <style>
+  /* THEME TOKENS */
   :root{
-    --bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;
-    --accent:#1f8cff;--accent2:#22c55e;--warn:#ffdf7f;--line:rgba(255,255,255,.08);
+    --bg:#0a0b0f; --card:#11131a; --text:#e9ecf1; --muted:#cfd6e4;
+    --accent:#1f8cff; --accent2:#22c55e; --warn:#ffdf7f; --line:rgba(255,255,255,.08);
     --shadow:0 22px 54px rgba(0,0,0,.38);
-    --leaf1:#22c55e; --leaf2:#86efac; --halo:#14A34A;
   }
+  :root[data-theme="green"]{
+    --bg:#ffffff; --card:#ffffff; --text:#0a0b0f; --muted:#334155;
+    --accent:#16a34a; --accent2:#22c55e; --warn:#a16207; --line:rgba(0,0,0,.10);
+    --shadow:none;
+  }
+
+  /* BASE */
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
 
-  /* ===== Splash (unified logo, longer view, no audio) ===== */
-  .intro{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
-    background:
-      radial-gradient(900px 300px at 50% -80px, rgba(34,197,94,.18), transparent 60%),
-      radial-gradient(700px 200px at 20% -60px, rgba(22,163,74,.16), transparent 60%),
-      #0a0b0f;
-    transition:opacity .38s ease, visibility .38s ease}
-  .intro.hide{opacity:0;visibility:hidden}
-  .introInner{display:grid;place-items:center;gap:14px}
-  .introWord{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
 
-  .ecoLogo{
-    width:156px;height:156px;border-radius:32px;display:grid;place-items:center;position:relative;
-    background:linear-gradient(180deg, rgba(22,163,74,.20), rgba(34,197,94,.12));
-    box-shadow:0 18px 40px rgba(34,197,94,.30), inset 0 0 30px rgba(255,255,255,.05);
-    animation:logo-pop .45s cubic-bezier(.2,.7,.2,1.1) both;
-  }
-  .ecoSvg{width:132px;height:132px;overflow:visible}
-  @keyframes logo-pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-
-  /* Logo animations */
-  .halo{opacity:.55}
-  .ring{fill:none;stroke:var(--leaf1);stroke-width:5.5;stroke-linecap:round;
-        stroke-dasharray:365 365;stroke-dashoffset:365;animation:ring-draw 1.3s ease-out .1s forwards}
-  @keyframes ring-draw{to{stroke-dashoffset:0}}
-
-  .stem{fill:none;stroke:#bbf7d0;stroke-width:4;stroke-linecap:round;
-        stroke-dasharray:90 90;stroke-dashoffset:90;animation:stem-draw 1s ease-out .9s forwards}
-  @keyframes stem-draw{to{stroke-dashoffset:0}}
-
-  .leaf{fill:url(#leafGrad);opacity:0;transform-origin:100px 92px;
-        animation:leaf-pop .6s cubic-bezier(.2,1,.2,1) 1.25s forwards}
-  @keyframes leaf-pop{
-    0%{opacity:0;transform:scale(.85) rotate(-6deg)}
-    60%{opacity:1;transform:scale(1.06) rotate(2deg)}
-    100%{opacity:1;transform:scale(1) rotate(0)}
-  }
-
-  /* ===== Header & layout ===== */
+  /* HEADER */
   header.app{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
     padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  :root[data-theme="green"] header.app{background:rgba(255,255,255,.85)}
   .brand{display:flex;gap:12px;align-items:center}
   .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(180deg, rgba(22,163,74,.25), rgba(34,197,94,.12));}
   .logo svg{width:28px;height:28px;display:block}
   h1{margin:0;font-size:18px;font-weight:900}
   .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
-  .btn{padding:11px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
+  :root[data-theme="green"] .tag{color:#475569}
+  .btn{padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
 
+  /* LAYOUT */
   .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.2)}
   h2{font-size:22px;margin:0 0 8px}
@@ -71,39 +46,26 @@
   .grid{display:grid;gap:12px}
   @media (min-width:760px){ .grid{grid-template-columns:1.1fr 1fr;align-items:center} }
 
-  /* ===== Phone / demo ===== */
+  /* PHONE DEMO (unchanged core) */
   .phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:12px;padding:6px;
     background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:var(--shadow)}
-  .screen{position:absolute;inset:6px;border-radius:10px;overflow:hidden;background:#0a0f16;display:grid;grid-template-rows:1fr}
+  .screen{position:absolute;inset:6px;border-radius:10px;overflow:hidden;background:#0a0f16;display:grid}
   .stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);transition:opacity .42s ease, transform .42s ease}
   .stage.active{opacity:1;transform:translateY(0) scale(1)}
-
-  /* App drawer */
   .drawer{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;gap:8px;padding:10px 12px;background:#0b1017}
   .drawer .search{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#9fb3c8;font-size:12px}
   .drawer .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:6px 0}
   .appicon{display:grid;place-items:center;height:72px;border-radius:16px;background:linear-gradient(180deg,#0f141c,#0e1218);border:1px solid var(--line);position:relative;overflow:hidden}
   .appicon span{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#cfe7ff}
-  .appicon .glyph{display:grid;place-items:center;width:28px;height:28px}
-  .appicon.eco{background:linear-gradient(135deg,#0f1d15,#0b2b1a);border-color:rgba(98,255,158,.35)}
   .dock{display:flex;justify-content:space-around;padding:8px;background:#0d1117;border:1px solid var(--line);border-radius:18px}
   .dock .dockicon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#0f141c;border:1px solid var(--line)}
   .pager{display:flex;justify-content:center;gap:6px}
   .dot{width:6px;height:6px;border-radius:999px;background:#3a475a}
   .dot.active{background:var(--accent2)}
-  .ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;background:radial-gradient(circle, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);width:12px;height:12px;opacity:.7;animation:rip .5s ease-out forwards}
-  @keyframes rip{to{opacity:0;transform:translate(-50%,-50%) scale(14)}}
-  .zoomGhost{position:absolute;border-radius:16px;inset:auto;box-shadow:0 8px 24px rgba(0,0,0,.35);background:inherit;border:inherit;transform-origin:center;transition:transform .42s cubic-bezier(.2,.8,.2,1), opacity .42s ease}
-
-  /* In-app frame */
   .appframe{position:absolute;inset:0;display:grid;grid-template-rows:auto auto 1fr auto;background:#0b1017}
   .statusbar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line);font-size:10px;color:#cfe7ff}
-  .status-icons{display:flex;gap:8px;align-items:center}
   .appbar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800}
   .viewport{position:relative;padding:12px}
-  .navbar{display:flex;justify-content:space-around;border-top:1px solid var(--line);padding:8px 0;font-size:12px;color:#cfe7ff}
-
-  /* UI blocks */
   .ui{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:12px;color:#cfe7ff;width:100%}
   .row{display:flex;gap:8px;flex-wrap:wrap}
   .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0f141c;font-size:12px}
@@ -116,84 +78,47 @@
   .hot{position:absolute;border-radius:50%;opacity:.9;mix-blend-mode:screen}
   .hot.red{background:radial-gradient(circle at 50% 50%, rgba(255,0,72,.9), rgba(255,0,72,.28) 60%, transparent 70%)}
   .hot.orange{background:radial-gradient(circle at 50% 50%, rgba(255,165,0,.95), rgba(255,165,0,.28) 60%, transparent 70%)}
-  .form{width:100%}
-  .q{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:12px;margin:8px 0}
-  .q legend{font-size:13px;color:#cfe7ff;margin-bottom:8px}
-  .opt{display:flex;align-items:center;gap:8px;margin:6px 0}
-  .opt input{accent-color:var(--accent2)}
   .gauge{width:68%;max-width:210px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--accent2) var(--pct,40%), #243042 0)}
   .gauge::after{content:"";position:absolute;inset:12%;background:#0b0f16;border-radius:50%}
   .price{position:absolute;font-weight:900;font-size:22px}
   .badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
   .badge{padding:8px 12px;border-radius:999px;background:#0d1117;border:1px solid var(--line);font-weight:700;color:#cfe7ff}
-
   .progress{height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin:10px 0 6px}
   .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
   .label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:8px}
-
-  .tabbar{position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);display:flex}
+  nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);display:flex}
+  :root[data-theme="green"] nav.tabbar{background:#ffffff}
   .tab{flex:1;display:grid;place-items:center;padding:12px 0;color:#a7b3c6;font-weight:800}
   .tab.active{color:#fff;border-top:2px solid var(--accent)}
 </style>
 </head>
 <body>
 
-<!-- ===== SVG SYMBOL (unified EcoVision mark) ===== -->
+<!-- Reusable logo symbol (simple, stable) -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="var(--leaf2)"/><stop offset="100%" stop-color="var(--leaf1)"/>
+    <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/>
     </linearGradient>
-    <!-- Reusable mark centered at 100,100 (for splash, header, and app icon) -->
-    <g id="EcoVisionMark">
-      <!-- halo circle -->
-      <circle cx="100" cy="100" r="70" fill="url(#leafGrad)" opacity="0.10"/>
-      <!-- ring -->
-      <circle class="ring" cx="100" cy="100" r="60"/>
-      <!-- stem -->
-      <path class="stem" d="M100 118 C100 118, 101 102, 100 86"/>
-      <!-- leaf shape -->
-      <path class="leaf" d="
-        M120 90
-        C112 78, 94 76, 88 86
-        C82 95, 90 110, 104 112
-        C114 111, 123 103, 120 90 Z"/>
-      <!-- vein (static for clarity) -->
-      <path d="M104 112 C110 104, 114 98, 118 90" fill="none" stroke="#c0f2ce" stroke-width="2" opacity=".9"/>
+    <g id="EcoMark">
+      <circle cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
+      <rect x="66" y="54" width="68" height="92" rx="12" fill="none" stroke="#BFEFD0" stroke-width="6"/>
+      <circle cx="100" cy="64" r="3.2" fill="#BFEFD0"/>
+      <rect x="72" y="70" width="56" height="70" rx="8" fill="#0B1320" opacity=".9"/>
+      <path d="M100 126 L100 94" stroke="#C8F7D9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <path d="M100 106 C112 100,124 100,130 104 C122 106,112 112,104 114 C101 114,99 110,100 106 Z" fill="url(#leafCore)"/>
+      <path d="M100 106 C88 100,76 100,70 104 C78 106,88 112,96 114 C99 114,101 110,100 106 Z" fill="url(#leafCore)"/>
     </g>
   </defs>
 </svg>
 
-<!-- ===== SPLASH (shows the same mark, larger) ===== -->
-<div id="intro" class="intro" role="dialog" aria-label="EcoVision intro" aria-modal="true">
-  <div class="introInner">
-    <div class="ecoLogo" id="logoSequencer" aria-hidden="true">
-      <svg viewBox="0 0 200 200" class="ecoSvg">
-        <defs>
-          <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#7CFFB2" stop-opacity="0.85"/>
-            <stop offset="60%" stop-color="#22C55E" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="var(--halo)" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle class="halo" cx="100" cy="100" r="72" fill="url(#halo)"/>
-        <!-- reuse the exact same mark -->
-        <use href="#EcoVisionMark"></use>
-      </svg>
-    </div>
-    <div class="introWord">EcoVision</div>
-  </div>
-</div>
-
 <header class="app">
   <div class="brand">
-    <div class="logo">
-      <!-- same mark, small -->
-      <svg viewBox="0 0 200 200"><use href="#EcoVisionMark"></use></svg>
-    </div>
+    <div class="logo"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
     <div><h1>EcoVision</h1><div class="tag">Intro • How the app works</div></div>
   </div>
   <div class="actions-right">
+    <a href="page2.html" class="btn" title="Go to Page 2">Page 2 →</a>
     <button id="themeBtn" class="btn" aria-pressed="false" title="Switch theme">🎨 Theme: Dark</button>
   </div>
 </header>
@@ -207,52 +132,49 @@
   <section class="card">
     <div class="grid">
       <div>
-        <!-- Phone Player -->
+        <!-- PHONE PLAYER -->
         <div class="phone" aria-label="EcoVision walkthrough">
           <div class="screen">
 
-            <!-- STAGE 0: Drawer -->
+            <!-- Drawer -->
             <div class="stage active" id="s0">
               <div class="drawer">
                 <div class="search">🔎 Search apps</div>
                 <div class="grid">
-                  <div class="appicon"><div class="glyph">📷</div><span>Camera</span></div>
-                  <div class="appicon"><div class="glyph">✉️</div><span>Mail</span></div>
-                  <div class="appicon"><div class="glyph">🗺️</div><span>Maps</span></div>
-                  <div class="appicon"><div class="glyph">🎵</div><span>Music</span></div>
-                  <div class="appicon eco" id="ecoApp">
-                    <div class="glyph">
-                      <!-- same mark in the grid icon -->
-                      <svg viewBox="0 0 200 200"><use href="#EcoVisionMark"></use></svg>
+                  <div class="appicon"><span>Camera</span></div>
+                  <div class="appicon"><span>Mail</span></div>
+                  <div class="appicon"><span>Maps</span></div>
+                  <div class="appicon"><span>Music</span></div>
+
+                  <!-- EcoVision icon using the same mark -->
+                  <div class="appicon" id="ecoApp" style="border-color:rgba(98,255,158,.35);background:linear-gradient(135deg,#0f1d15,#0b2b1a)">
+                    <div class="glyph" style="width:28px;height:28px">
+                      <svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg>
                     </div>
                     <span>EcoVision</span>
                   </div>
-                  <div class="appicon"><div class="glyph">🛒</div><span>Store</span></div>
-                  <div class="appicon"><div class="glyph">🛠️</div><span>Tools</span></div>
-                  <div class="appicon"><div class="glyph">💬</div><span>Chat</span></div>
-                  <div class="appicon"><div class="glyph">📁</div><span>Files</span></div>
-                  <div class="appicon"><div class="glyph">📅</div><span>Calendar</span></div>
-                  <div class="appicon"><div class="glyph">🌐</div><span>Browser</span></div>
-                  <div class="appicon"><div class="glyph">🖼️</div><span>Gallery</span></div>
+
+                  <div class="appicon"><span>Store</span></div>
+                  <div class="appicon"><span>Tools</span></div>
+                  <div class="appicon"><span>Chat</span></div>
+                  <div class="appicon"><span>Files</span></div>
+                  <div class="appicon"><span>Calendar</span></div>
+                  <div class="appicon"><span>Browser</span></div>
+                  <div class="appicon"><span>Gallery</span></div>
                 </div>
                 <div class="pager"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
                 <div class="dock">
-                  <div class="dockicon">📞</div><div class="dockicon">💬</div>
-                  <div class="dockicon">🌐</div><div class="dockicon">📷</div>
+                  <div class="dockicon">📞</div><div class="dockicon">💬</div><div class="dockicon">🌐</div><div class="dockicon">📷</div>
                 </div>
               </div>
             </div>
 
-            <!-- STAGE 1: App frame -->
+            <!-- App frame -->
             <div class="stage" id="s1">
               <div class="appframe">
-                <div class="statusbar">
-                  <div>09:41</div>
-                  <div class="status-icons"><span>📶</span><span>📡</span><span>🔋 87%</span></div>
-                </div>
+                <div class="statusbar"><div>09:41</div><div>📶 📡 🔋 87%</div></div>
                 <div class="appbar"><div style="font-weight:900">EcoVision</div></div>
                 <div class="viewport">
-                  <!-- v1..v13 -->
                   <div class="stage active" id="v1">
                     <div class="ui" style="text-align:center">
                       <div style="font-size:18px;font-weight:900;margin-bottom:6px">EcoVision</div>
@@ -280,13 +202,16 @@
                   <div class="stage" id="v4"><div class="ui"><div class="k">Model</div><div class="v">Generic Phone 12</div></div></div>
                   <div class="stage" id="v5"><div class="ui"><div class="k">Purchased</div><div class="v">Oct 2021</div></div></div>
                   <div class="stage" id="v6">
-                    <form class="form">
-                      <fieldset class="q"><legend>Does the phone turn on?</legend><label class="opt"><input type="radio" name="power" checked> Yes</label><label class="opt"><input type="radio" name="power"> No</label></fieldset>
-                      <fieldset class="q"><legend>Do both cameras work?</legend><label class="opt"><input type="radio" name="cams" checked> Yes</label><label class="opt"><input type="radio" name="cams"> No</label></fieldset>
-                      <fieldset class="q"><legend>Does it charge properly?</legend><label class="opt"><input type="radio" name="charge" checked> Yes</label><label class="opt"><input type="radio" name="charge"> No</label></fieldset>
-                      <fieldset class="q"><legend>Are the speakers fine?</legend><label class="opt"><input type="radio" name="spk" checked> Yes</label><label class="opt"><input type="radio" name="spk"> No</label></fieldset>
-                      <fieldset class="q"><legend>Any motherboard issues (bootloop/overheating)?</legend><label class="opt"><input type="radio" name="mb"> Yes</label><label class="opt"><input type="radio" name="mb" checked> No</label></fieldset>
-                    </form>
+                    <div class="ui">
+                      <div style="font-weight:900;margin-bottom:8px">Quick internals (Google-Form style)</div>
+                      <div class="row">
+                        <span class="pill">Turns on: Yes</span>
+                        <span class="pill">Cameras: Yes</span>
+                        <span class="pill">Charging: Yes</span>
+                        <span class="pill">Speakers: Yes</span>
+                        <span class="pill">Motherboard issues: No</span>
+                      </div>
+                    </div>
                   </div>
                   <div class="stage" id="v7"><div class="gauge" id="gauge" style="--pct:66%"><div class="price" id="price">₹12,800</div></div></div>
                   <div class="stage" id="v8"><div class="ui" style="text-align:center"><div style="font-weight:900">Recycle this item?</div><div class="row" style="margin-top:8px"><span class="pill">No</span><span class="pill">Yes</span></div></div></div>
@@ -296,24 +221,25 @@
                   <div class="stage" id="v12"><div class="ui" style="text-align:center"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div></div>
                   <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:var(--warn)"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
                 </div>
-                <div class="navbar"><div>Home</div><div>Assess</div><div>Recycle</div><div>Profile</div></div>
+                <div class="navbar" style="border-top:1px solid var(--line);padding:8px 0;text-align:center;color:#cfe7ff">Demo</div>
               </div>
             </div>
+
           </div>
         </div>
 
         <!-- Progress -->
         <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
         <div class="label" id="label">Step 1 · Opening from the app drawer…</div>
-        <div class="controls">
+        <div class="controls" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
           <button class="btn" id="replay">Replay</button>
           <button class="btn" id="speed">Speed: Fast</button>
         </div>
       </div>
 
       <div>
-        <h2>Exactly what happens</h2>
-        <p>The demo auto-plays like a video. Tap “Replay” to watch again.</p>
+        <h2>Page 2</h2>
+        <p>There’s a link in the header → “Page 2”. It’s blank now — ready for your content.</p>
       </div>
     </div>
   </section>
@@ -322,109 +248,66 @@
 <nav class="tabbar"><span class="tab active">Intro</span></nav>
 
 <script>
-/* ===== Theme (optional) ===== */
-const themeBtn=document.getElementById('themeBtn');
-const savedTheme=localStorage.getItem('ecovision_theme');
-if(savedTheme==='green'){ document.documentElement.setAttribute('data-theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
-themeBtn?.addEventListener('click', ()=>{
-  const isGreen=document.documentElement.getAttribute('data-theme')==='green';
-  if(isGreen){ document.documentElement.removeAttribute('data-theme'); localStorage.setItem('ecovision_theme','dark'); themeBtn.textContent='🎨 Theme: Dark'; themeBtn.setAttribute('aria-pressed','false'); }
-  else { document.documentElement.setAttribute('data-theme','green'); localStorage.setItem('ecovision_theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
-});
-
-/* ===== Splash timing =====
-   Longer logo view so it’s readable:
-   - Logo anim ~2.2s
-   - Hold still: 1.2s
-   - Then required +0.5s delay before demo
+/* ===== THEME FIX =====
+   Works across pages using localStorage. Applies early and updates the button.
 */
-const LOGO_ANIM_MS = 2200;
-const HOLD_MS       = 1200;
-const EXTRA_DELAY   = 500;
+(function initTheme(){
+  const saved = localStorage.getItem('ecovision_theme');  // 'dark' or 'green'
+  if(saved === 'green'){ document.documentElement.setAttribute('data-theme','green'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  const btn = document.getElementById('themeBtn');
+  if(btn){
+    const isGreen = document.documentElement.getAttribute('data-theme')==='green';
+    btn.textContent = isGreen ? '🎨 Theme: Green' : '🎨 Theme: Dark';
+    btn.setAttribute('aria-pressed', String(isGreen));
+    btn.addEventListener('click', ()=>{
+      const nowGreen = document.documentElement.getAttribute('data-theme')!=='green';
+      if(nowGreen){
+        document.documentElement.setAttribute('data-theme','green');
+        localStorage.setItem('ecovision_theme','green');
+        btn.textContent='🎨 Theme: Green'; btn.setAttribute('aria-pressed','true');
+      }else{
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('ecovision_theme','dark');
+        btn.textContent='🎨 Theme: Dark'; btn.setAttribute('aria-pressed','false');
+      }
+    });
+  }
+})();
 
-const intro=document.getElementById('intro');
-function endIntro(){ intro.classList.add('hide'); setTimeout(()=>{ intro.style.display='none'; autoStartDemo(); }, 380); }
-window.addEventListener('load', ()=>{
-  setTimeout(endIntro, LOGO_ANIM_MS + HOLD_MS + EXTRA_DELAY);
-});
-
-/* ===== Drawer → App transition (auto) ===== */
-const eco=document.getElementById('ecoApp');
+/* ===== DEMO AUTOPLAY (kept minimal) ===== */
 const s0=document.getElementById('s0'), s1=document.getElementById('s1');
 const bar=document.getElementById('bar'), label=document.getElementById('label');
-let opened=false;
+const vStages=[...document.querySelectorAll('.viewport .stage')];
+let vidx=1, speedMs=1600, timer=null, opened=false;
 
 function openAppAuto(){
   if(opened) return; opened=true;
-  requestAnimationFrame(()=>{
-    const rect=eco.getBoundingClientRect();
-    const screen=document.querySelector('.screen'); const sRect=screen.getBoundingClientRect();
-
-    // Ripple
-    const r=document.createElement('span'); r.className='ripple';
-    r.style.left=(rect.width/2)+'px'; r.style.top=(rect.height/2)+'px';
-    eco.appendChild(r); setTimeout(()=>r.remove(),520);
-
-    // Zoom ghost
-    const ghost=eco.cloneNode(true);
-    ghost.classList.add('zoomGhost');
-    ghost.style.position='absolute';
-    ghost.style.left=(rect.left-sRect.left)+'px';
-    ghost.style.top =(rect.top -sRect.top )+'px';
-    ghost.style.width=rect.width+'px';
-    ghost.style.height=rect.height+'px';
-    screen.appendChild(ghost);
-    requestAnimationFrame(()=>{ ghost.style.transform='scale(6)'; ghost.style.opacity='0'; });
-
-    // Switch to app and start inner demo
-    setTimeout(()=>{
-      s0.classList.remove('active');
-      s1.classList.add('active');
-      label.textContent='Step 2 · App opening…';
-      bar.style.width=(2/14*100)+'%';
-      setTimeout(()=>{ playInner(1); ghost.remove(); }, 480);
-    }, 340);
-  });
-}
-function autoStartDemo(){ setTimeout(openAppAuto, 80); } // slight settle
-
-/* ===== Inner demo player (autoplays & loops) ===== */
-const vStages=[...document.querySelectorAll('.viewport .stage')];
-let vidx=1, speedMs=1600, timer=null;
-function showInner(i){
-  vStages.forEach((s,n)=> s.classList.toggle('active', n===i-1));
-  const outerStep=i+1;
-  const stepLabels=[
-    'Step 1 · Opening from the app drawer…',
-    'Step 2 · App opening…',
-    'Step 3 · Upload phone photos (front & back)',
-    'Step 4 · AI assesses visible damage',
-    'Step 5 · Select your phone model',
-    'Step 6 · Tell us when you bought it',
-    'Step 7 · Quick internals (Google-Form style)',
-    'Step 8 · Your damage-aware value',
-    'Step 9 · Do you wish to recycle this item?',
-    'Step 10 · Share your location',
-    'Step 11 · Do you want money from this?',
-    'Step 12 · Partners (based on condition)',
-    'Step 13 · Or give it away yourself',
-    'Step 14 · Suggested ask + honesty warning'
-  ];
-  label.textContent=stepLabels[outerStep-1]||''; bar.style.width=(outerStep/14*100)+'%';
-  if(i===7){ const g=document.getElementById('gauge'); if(g) g.style.setProperty('--pct','66%'); const p=document.getElementById('price'); if(p) p.textContent='₹12,800'; }
+  s0.classList.remove('active'); s1.classList.add('active');
+  label.textContent='Step 2 · App opening…'; bar.style.width=(2/14*100)+'%';
+  setTimeout(()=>{ playInner(1); }, 380);
 }
 function playInner(start=1){
   clearInterval(timer);
   vidx=start; showInner(vidx);
-  timer=setInterval(()=>{ vidx=(vidx%13)+1; showInner(vidx); }, speedMs); // loop like video
+  timer=setInterval(()=>{ vidx=(vidx%13)+1; showInner(vidx); }, speedMs);
 }
-
-/* Replay & speed */
+function showInner(i){
+  vStages.forEach((s,n)=> s.classList.toggle('active', n===i-1));
+  const outerStep=i+1;
+  const steps=[
+    'Step 1 · Opening from the app drawer…','Step 2 · App opening…','Step 3 · Upload phone photos',
+    'Step 4 · AI assesses visible damage','Step 5 · Select your phone model','Step 6 · Purchase date',
+    'Step 7 · Internals (Google-Form style)','Step 8 · Your value','Step 9 · Recycle this item?',
+    'Step 10 · Share your location','Step 11 · Money or not?','Step 12 · Partners',
+    'Step 13 · Give away yourself','Step 14 · Suggested ask + honesty warning'
+  ];
+  label.textContent=steps[outerStep-1]||''; bar.style.width=(outerStep/14*100)+'%';
+  if(i===7){ document.getElementById('gauge')?.style.setProperty('--pct','66%'); document.getElementById('price').textContent='₹12,800'; }
+}
 document.getElementById('replay').addEventListener('click', ()=>{
-  clearInterval(timer); opened=false;
-  s1.classList.remove('active'); s0.classList.add('active');
-  bar.style.width=(1/14*100)+'%';
-  label.textContent='Step 1 · Opening from the app drawer…';
+  clearInterval(timer); opened=false; s1.classList.remove('active'); s0.classList.add('active');
+  bar.style.width=(1/14*100)+'%'; label.textContent='Step 1 · Opening from the app drawer…';
   setTimeout(openAppAuto, 300);
 });
 document.getElementById('speed').addEventListener('click', (e)=>{
@@ -434,7 +317,7 @@ document.getElementById('speed').addEventListener('click', (e)=>{
   if(s1.classList.contains('active')) playInner(vidx);
 });
 
-/* ===== Generate generic phone images (no external files) ===== */
+/* simple generic phone previews — no external images */
 function drawPhonePNG({cracked=false, back=false}){
   const w=160,h=240,r=10; const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d');
   ctx.fillStyle='#0f1a23'; roundRect(ctx,10,8,w-20,h-16,r); ctx.fill();
@@ -456,9 +339,12 @@ function drawPhonePNG({cracked=false, back=false}){
   function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
   function poly(ctx,pts){ ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0],pts[i][1]); ctx.stroke(); }
 }
-const frontImg=document.getElementById('frontImg'); const backImg=document.getElementById('backImg');
-if(frontImg) frontImg.src=drawPhonePNG({cracked:true, back:false});
-if(backImg)  backImg.src =drawPhonePNG({cracked:false, back:true});
+window.addEventListener('load', ()=>{
+  document.getElementById('frontImg').src=drawPhonePNG({cracked:true, back:false});
+  document.getElementById('backImg').src =drawPhonePNG({cracked:false, back:true});
+  // start demo automatically (no taps)
+  setTimeout(openAppAuto, 700); // brief settle
+});
 </script>
 </body>
 </html>
