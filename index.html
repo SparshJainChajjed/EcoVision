@@ -4,32 +4,46 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision — Intro</title>
-<meta name="description" content="EcoVision intro with animation: upload photo → AI damage → details → internals form → value → recycle options → partners or give away → suggested ask." />
+<meta name="description" content="EcoVision intro with animation: upload → AI damage → details → internals form → value → recycle options → partners or give away → suggested ask.">
 <style>
+  /* ========== THEME TOKENS (Dark by default) ========== */
   :root{
     --bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;
     --accent:#1f8cff;--accent2:#62ff9e;--warn:#ffdf7f;--line:rgba(255,255,255,.08);
     --ok:#27d17e;--bad:#ff5d5d;
+    --logo-grad: conic-gradient(from 180deg at 50% 50%, #27e6f5, #62ff9e, #27e6f5);
+    --tabbar-fg:#fff; --tabbar-fg-dim:#a7b3c6;
   }
+  /* ========== GREEN & WHITE THEME ========== */
+  :root[data-theme="green"]{
+    --bg:#ffffff;--card:#ffffff;--text:#0a0b0f;--muted:#334155;
+    --accent:#16a34a;--accent2:#22c55e;--warn:#a16207;--line:rgba(0,0,0,.08);
+    --logo-grad: conic-gradient(from 180deg at 50% 50%, #16a34a, #22c55e, #16a34a);
+    --tabbar-fg:#0a0b0f; --tabbar-fg-dim:#334155;
+  }
+
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
   a{color:inherit;text-decoration:none}
 
   header.app{
-    position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;
+    position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
     padding:14px 16px;background:rgba(10,11,15,.85);backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line)
   }
+  :root[data-theme="green"] header.app{background:rgba(255,255,255,.85)}
+  .brand{display:flex;gap:12px;align-items:center}
   .logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
-    background:conic-gradient(from 180deg at 50% 50%, #27e6f5, #62ff9e, #27e6f5);color:#0a0b0f;
-    font-weight:900;font-size:20px;animation:spin 6s linear infinite}
+    background:var(--logo-grad);color:#0a0b0f;font-weight:900;font-size:20px;animation:spin 6s linear infinite}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   h1{margin:0;font-size:18px;font-weight:900}
   .tag{margin:2px 0 0;font-size:12px;color:#92a0b8}
+  :root[data-theme="green"] .tag{color:#475569}
 
   .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+  :root[data-theme="green"] .card{box-shadow:none}
   h2{font-size:22px;margin:0 0 8px}
   p{color:var(--muted);line-height:1.55;margin:0 0 10px}
 
@@ -94,22 +108,32 @@
   .label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:8px}
   .controls{display:flex;gap:10px;justify-content:center;margin-top:10px}
   .btn{padding:11px 14px;border-radius:12px;font-weight:800;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
-  .btn.ghost{background:#0d1117;border:1px solid var(--line);color:#fff}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
 
   .hero{position:relative;background:
     radial-gradient(1200px 300px at 50% -100px, rgba(98,255,158,.12), transparent),
     radial-gradient(900px 200px at 20% -60px, rgba(39,230,245,.14), transparent),
     var(--card)}
+  :root[data-theme="green"] .hero{background:var(--card)}
+
+  /* Bottom tab */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);display:flex}
+  :root[data-theme="green"] .tabbar{background:#ffffff}
+  .tab{flex:1;display:grid;place-items:center;padding:12px 0;color:var(--tabbar-fg-dim);font-weight:800}
+  .tab.active{color:var(--tabbar-fg);border-top:2px solid var(--accent)}
 </style>
 </head>
 <body>
 
 <header class="app">
-  <div class="logo">🌿</div>
-  <div>
-    <h1>EcoVision</h1>
-    <div class="tag">Intro • How the app works</div>
+  <div class="brand">
+    <div class="logo">🌿</div>
+    <div>
+      <h1>EcoVision</h1>
+      <div class="tag">Intro • How the app works</div>
+    </div>
   </div>
+  <button id="themeBtn" class="btn ghost" aria-pressed="false" title="Switch theme">🎨 Theme: Dark</button>
 </header>
 
 <main class="wrap">
@@ -206,8 +230,8 @@
               <div class="ui" style="text-align:center">
                 <div style="font-weight:900">Recycle this item?</div>
                 <div style="margin-top:8px" class="row">
-                  <span class="pill" style="border-color:#1f8cff;background:#122033">No</span>
-                  <span class="pill" style="border-color:#27d17e;background:#0f1c16">Yes</span>
+                  <span class="pill" style="border-color:var(--accent)">No</span>
+                  <span class="pill" style="border-color:var(--accent2)">Yes</span>
                 </div>
               </div>
             </div>
@@ -298,12 +322,31 @@
   </section>
 </main>
 
-<nav class="tabbar" style="position:fixed;left:0;right:0;bottom:0;background:#0d1117;border-top:1px solid var(--line);display:flex">
-  <span class="tab" style="flex:1;display:grid;place-items:center;padding:12px 0;color:#fff;border-top:2px solid var(--accent)">Intro</span>
+<nav class="tabbar">
+  <span class="tab active">Intro</span>
 </nav>
 
 <script>
-  /* Draw a GENERIC PHONE as a PNG via Canvas, then set on <img> so it always shows */
+  /* ===== Theme switcher (persists) ===== */
+  const themeBtn = document.getElementById('themeBtn');
+  const savedTheme = localStorage.getItem('ecovision_theme');
+  if(savedTheme === 'green'){ document.documentElement.setAttribute('data-theme','green'); themeBtn.textContent='🎨 Theme: Green'; themeBtn.setAttribute('aria-pressed','true'); }
+  themeBtn.addEventListener('click', ()=>{
+    const isGreen = document.documentElement.getAttribute('data-theme') === 'green';
+    if(isGreen){
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('ecovision_theme','dark');
+      themeBtn.textContent='🎨 Theme: Dark';
+      themeBtn.setAttribute('aria-pressed','false');
+    }else{
+      document.documentElement.setAttribute('data-theme','green');
+      localStorage.setItem('ecovision_theme','green');
+      themeBtn.textContent='🎨 Theme: Green';
+      themeBtn.setAttribute('aria-pressed','true');
+    }
+  });
+
+  /* ===== Draw a GENERIC PHONE as PNGs via Canvas, then set on <img> ===== */
   function drawPhonePNG({cracked=false, back=false}){
     const w=160, h=240, r=16;
     const c=document.createElement('canvas'); c.width=w; c.height=h;
@@ -311,23 +354,18 @@
 
     // body
     ctx.fillStyle='#0f1a23'; roundRect(ctx,10,8,w-20,h-16,r); ctx.fill();
-    // outer stroke
     ctx.strokeStyle='#2b3e55'; ctx.lineWidth=2; roundRect(ctx,10,8,w-20,h-16,r); ctx.stroke();
 
     if(back){
-      // camera island
       ctx.fillStyle='#101b26'; ctx.strokeStyle='#2b3e55'; ctx.lineWidth=2;
       roundRect(ctx, w/2-22, 22, 44, 36, 8); ctx.fill(); ctx.stroke();
-      // lenses
-      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2-10, 40, 6, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle='#223b55'; // lenses
+      ctx.beginPath(); ctx.arc(w/2-10, 40, 6, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(w/2+10, 40, 6, 0, Math.PI*2); ctx.fill();
-      // panel
       ctx.fillStyle='#0b1620'; ctx.strokeStyle='#2b3e55';
       roundRect(ctx, 26, 70, w-52, h-90, 8); ctx.fill(); ctx.stroke();
     } else {
-      // front camera dot
-      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2, 22, 3, 0, Math.PI*2); ctx.fill();
-      // screen
+      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2, 22, 3, 0, Math.PI*2); ctx.fill(); // dot
       ctx.fillStyle='#0b1620'; ctx.strokeStyle='#2b3e55';
       roundRect(ctx, 26, 30, w-52, h-50, 8); ctx.fill(); ctx.stroke();
       if(cracked){
@@ -354,14 +392,12 @@
       ctx.stroke();
     }
   }
-
-  // Set the images once DOM loads
   const frontImg = document.getElementById('frontImg');
   const backImg  = document.getElementById('backImg');
   frontImg.src = drawPhonePNG({cracked:true, back:false});
   backImg.src  = drawPhonePNG({cracked:false, back:true});
 
-  /* Animation player */
+  /* ===== Animation player ===== */
   const labels = [
     'Step 1 · Upload phone photos (front & back)',
     'Step 2 · AI assesses visible damage',
@@ -385,7 +421,7 @@
     stages.forEach((s,n)=> s.classList.toggle('active', n===i));
     label.textContent = labels[i] || '';
     bar.style.width = ((i+1)/labels.length*100)+'%';
-    if(i===5){ // value step
+    if(i===5){
       const gauge = document.getElementById('gauge');
       if(gauge) gauge.style.setProperty('--pct','66%');
       const price = document.getElementById('price');
@@ -397,7 +433,6 @@
     idx = start; show(idx);
     timer = setInterval(()=>{ idx = (idx + 1) % stages.length; show(idx); }, speedMs);
   }
-
   document.getElementById('replay').addEventListener('click', ()=> play(0));
   const speedBtn = document.getElementById('speed');
   speedBtn.addEventListener('click', ()=>{
