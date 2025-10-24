@@ -7,71 +7,42 @@
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%2322C55E"/><stop offset="100%" stop-color="%2316A34A"/></linearGradient></defs><circle cx="100" cy="100" r="72" fill="none" stroke="url(%23g)" stroke-width="16"/></svg>'>
 <meta name="description" content="EcoVision — check your phone’s value and recycle or resell responsibly.">
 <style>
-/* ================= THEME ================= */
-:root{
-  --bg:#0a0b0f; --card:#11131a; --text:#e9ecf1; --muted:#cfd6e4;
-  --accent:#1f8cff; --accent2:#22c55e; --warn:#ffdf7f; --line:rgba(255,255,255,.08);
-  --good:#22c55e; --bad:#ef4444; --pill:#0f141c;
-}
-:root[data-theme="light"]{
-  --bg:#ffffff; --card:#f6fef9; --text:#0a0b0f; --muted:#334155;
-  --accent:#16a34a; --accent2:#22c55e; --warn:#a16207; --line:rgba(0,0,0,.10);
-  --pill:#ffffff;
-}
+:root{--bg:#0a0b0f;--card:#11131a;--text:#e9ecf1;--muted:#cfd6e4;--accent:#1f8cff;--accent2:#22c55e;--warn:#ffdf7f;--line:rgba(255,255,255,.08);--good:#22c55e;--bad:#ef4444;--pill:#0f141c}
+:root[data-theme="light"]{--bg:#ffffff;--card:#f6fef9;--text:#0a0b0f;--muted:#334155;--accent:#16a34a;--accent2:#22c55e;--warn:#a16207;--line:rgba(0,0,0,.10);--pill:#ffffff}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-
-/* ================= SPLASH (INTRO LOGO) ================= */
-.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;gap:10px;
-  background:#0a0b0f;transition:opacity .35s ease, visibility .35s ease}
+.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;gap:10px;background:#0a0b0f;transition:opacity .35s ease,visibility .35s ease}
 .splash.hide{opacity:0;visibility:hidden}
-.splash-logo{width:148px;height:148px;border-radius:30px;display:grid;place-items:center;
-  background:linear-gradient(180deg, rgba(22,163,74,.20), rgba(34,197,94,.12));
-  box-shadow:0 18px 40px rgba(34,197,94,.30), inset 0 0 30px rgba(255,255,255,.05)}
+.splash-logo{width:148px;height:148px;border-radius:30px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(22,163,74,.20),rgba(34,197,94,.12));box-shadow:0 18px 40px rgba(34,197,94,.30),inset 0 0 30px rgba(255,255,255,.05)}
 .splash-name{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
 .ring{stroke-dasharray:452;stroke-dashoffset:452;animation:ring-draw .8s ease-out .05s forwards}
 @keyframes ring-draw{to{stroke-dashoffset:0}}
 .leafIn{transform-origin:100px 100px;opacity:0;animation:leaf-in .6s cubic-bezier(.2,1,.2,1) .35s forwards}
 @keyframes leaf-in{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
-
-/* ================= HEADER ================= */
-header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line)}
 .brand{display:flex;gap:12px;align-items:center}
-.logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-  background:linear-gradient(180deg, rgba(34,197,94,.25), rgba(34,197,94,.10))}
+.logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(34,197,94,.25),rgba(34,197,94,.10))}
 .logo svg{width:26px;height:26px}
 h1{margin:0;font-size:18px;font-weight:900}
 .tag{margin:2px 0 0;font-size:12px;color:#94a3b8}
-.btn{padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);
-  background:transparent;color:var(--text);cursor:pointer}
-
-/* ================= LAYOUT ================= */
+.btn{padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
 .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
 .grid{display:grid;gap:16px}
-@media (min-width:860px){ .grid{grid-template-columns:1.2fr 1fr;align-items:center} }
+@media (min-width:860px){.grid{grid-template-columns:1.2fr 1fr;align-items:center}}
 h2{font-size:28px;margin:0 0 8px}
 p{color:var(--muted);line-height:1.55;margin:0 0 10px}
 ul.clean{margin:10px 0 0 0;padding:0;list-style:none}
 ul.clean li{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
-/* subtle divider */
-hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
-
-/* ================= PAGE 1: DEMO ================= */
-.phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:20px;padding:6px;
-  background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:20px;padding:6px;background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.35)}
 .screen{position:absolute;inset:6px;border-radius:16px;overflow:hidden;background:#0a0f16;display:grid}
-.stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);
-  transition:opacity .42s ease, transform .42s ease}
+.stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);transition:opacity .42s ease,transform .42s ease}
 .stage.active{opacity:1;transform:translateY(0) scale(1)}
 .drawer{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;gap:8px;padding:10px 12px;background:#0b1017}
-.drawer .search{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid var(--line);
-  border-radius:999px;padding:8px 12px;color:#9fb3c8;font-size:12px}
+.drawer .search{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#9fb3c8;font-size:12px}
 .drawer .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:6px 0}
-.appicon{display:grid;place-items:center;height:72px;border-radius:16px;background:linear-gradient(180deg,#0f141c,#0e1218);
-  border:1px solid var(--line);position:relative;overflow:hidden}
+.appicon{display:grid;place-items:center;height:72px;border-radius:16px;background:linear-gradient(180deg,#0f141c,#0e1218);border:1px solid var(--line);position:relative;overflow:hidden}
 .appicon span{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#cfe7ff}
 .appicon.eco{background:linear-gradient(135deg,#0f1d15,#0b2b1a);border-color:rgba(98,255,158,.35)}
 .dock{display:flex;justify-content:space-around;padding:8px;background:#0d1117;border:1px solid var(--line);border-radius:18px}
@@ -80,8 +51,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 .dot{width:6px;height:6px;border-radius:999px;background:#3a475a}
 .dot.active{background:var(--accent2)}
 .appframe{position:absolute;inset:0;display:grid;grid-template-rows:auto auto 1fr auto;background:#0b1017}
-.statusbar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line);
-  font-size:10px;color:#cfe7ff}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line);font-size:10px;color:#cfe7ff}
 .appbar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800}
 .viewport{position:relative;padding:12px}
 .ui{background:#0d1117;border:1px solid var(--line);border-radius:12px;padding:12px;color:#cfe7ff;width:100%}
@@ -94,50 +64,43 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 .ph img{display:block;max-width:100%;max-height:100%}
 .photoWrap{position:relative;width:100%;height:62%;border-radius:8px;border:1px solid var(--line);background:#061018}
 .hot{position:absolute;border-radius:50%;opacity:.9;mix-blend-mode:screen}
-.hot.red{background:radial-gradient(circle at 50% 50%, rgba(255,0,72,.9), rgba(255,0,72,.28) 60%, transparent 70%)}
-.hot.orange{background:radial-gradient(circle at 50% 50%, rgba(255,165,0,.95), rgba(255,165,0,.28) 60%, transparent 70%)}
-.gauge{width:68%;max-width:210px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;
-  background:conic-gradient(var(--accent2) var(--pct,40%), #243042 0)}
+.hot.red{background:radial-gradient(circle at 50% 50%,rgba(255,0,72,.9),rgba(255,0,72,.28) 60%,transparent 70%)}
+.hot.orange{background:radial-gradient(circle at 50% 50%,rgba(255,165,0,.95),rgba(255,165,0,.28) 60%,transparent 70%)}
+.gauge{width:68%;max-width:210px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--accent2) var(--pct,40%),#243042 0)}
 .gauge::after{content:"";position:absolute;inset:12%;background:#0b0f16;border-radius:50%}
 .price{position:absolute;font-weight:900;font-size:22px}
 .badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .badge{padding:8px 12px;border-radius:999px;background:#0d1117;border:1px solid var(--line);font-weight:700;color:#cfe7ff}
-
-/* Progress label (softer, user-facing) */
 .progress{height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin:14px 0 6px}
 .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
 .label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:6px}
-
-/* ================= PAGE 2 (unchanged layout) ================= */
 .page2{scroll-margin-top:70px}
 .hidden{display:none}
 .formCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 form.eco{display:grid;gap:12px}
-label span{display:block;font-size:13px;color:#cfd6e4;margin-bottom:4px}
-input,select,button,textarea{font:inherit;color:inherit}
-select, input[type="number"], input[type="text"], input[type="file"], input[type="range"]{
-  width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--pill)
-}
+label span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+input,select,button{font:inherit;color:inherit}
+select,input[type="file"]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--pill)}
 .rangeRow{display:flex;align-items:center;gap:10px}
 .rangeRow output{min-width:54px;text-align:right;font-weight:800}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:999px;background:linear-gradient(var(--accent2),var(--accent2)) 0/0% 100% no-repeat, var(--pill);border:1px solid var(--line);outline:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent2);border:2px solid #0b0f16;box-shadow:0 0 0 3px rgba(34,197,94,.25);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent2);border:2px solid #0b0f16;box-shadow:0 0 0 3px rgba(34,197,94,.25);cursor:pointer}
+input[type=range]::-moz-range-track{background:transparent}
 .options{display:flex;gap:8px;flex-wrap:wrap}
 .options .opt{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--pill);cursor:pointer}
 .options .opt[aria-pressed="true"]{outline:2px solid var(--accent2)}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .primary{background:var(--accent2);color:#053a16;border:none;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer}
 .ghost{background:transparent;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-weight:800;color:var(--text)}
-.step{display:none;opacity:0;transform:translateY(6px);transition:opacity .25s ease, transform .25s ease}
+.step{display:none;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
 .step.show{display:block;opacity:1;transform:translateY(0)}
 .resultCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
 .callouts{display:flex;gap:8px;flex-wrap:wrap}
 .callout{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill)}
 .warn{color:#b45309}
-
-/* ================= CHATBOT (taller) ================= */
-.chatFab{position:fixed;right:16px;bottom:16px;z-index:80;width:64px;height:64px;border-radius:50%;
-  background:var(--accent2);color:#053a16;border:none;font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.35)}
-.chatPanel{position:fixed;right:16px;bottom:92px;width:min(560px,calc(100vw - 32px));max-height:88vh;display:none;flex-direction:column;
-  background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;z-index:85}
+.chatFab{position:fixed;right:16px;bottom:16px;z-index:80;width:64px;height:64px;border-radius:50%;background:var(--accent2);color:#053a16;border:none;font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.chatPanel{position:fixed;right:16px;bottom:92px;width:min(600px,calc(100vw - 32px));max-height:88vh;display:none;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;z-index:85}
 .chatPanel.open{display:flex}
 .chatHead{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
 .chatTitle{display:flex;align-items:center;gap:8px;font-weight:900}
@@ -150,22 +113,16 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
 .chatFoot button{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text);font-weight:800;cursor:pointer}
 .spin{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.25);border-top-color:var(--accent2);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ================= 404 CRASH OVERLAY ================= */
 .crash{position:fixed;inset:0;z-index:5000;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column}
 .crash.show{display:flex}
 .crash h1{margin:0;font-size:42px}
-.crash p{color:var(--muted)}
+.crash p{color:#848d99}
 </style>
 </head>
 <body>
-
-<!-- ===== Reusable logo mark ===== -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"  stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/>
-    </linearGradient>
+    <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/></linearGradient>
     <g id="EcoMark">
       <circle class="ring" cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
       <g class="leafIn">
@@ -180,7 +137,6 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
   </defs>
 </svg>
 
-<!-- ===== SPLASH INTRO ===== -->
 <div id="splash" class="splash" role="dialog" aria-label="EcoVision intro">
   <div class="splash-logo"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
   <div class="splash-name">EcoVision</div>
@@ -200,32 +156,23 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
 </header>
 
 <main class="wrap">
-
-  <!-- ================= PAGE 1 (user-first copy; demo untouched) ================= -->
   <section id="page1" class="card">
     <div class="grid">
       <div>
         <h2>Check your phone’s value in minutes</h2>
         <p>Upload a photo, answer a few quick questions, then choose to <b>get paid</b> or <b>recycle responsibly</b>—all in one simple flow.</p>
         <ul class="clean">
-          <li>✅ <b>Fast estimate:</b> We highlight visible damage (e.g., cracked screen) and show an approximate value.</li>
-          <li>🔒 <b>Private by design:</b> Your photo stays in your browser for this demo—<i>it is not uploaded</i>.</li>
-          <li>🤝 <b>Your choice:</b> Connect to buyback partners for cash, or donate at trusted e-waste centers.</li>
+          <li>✅ <b>Fast estimate:</b> We highlight visible damage and show an approximate value.</li>
+          <li>🔒 <b>Private by design:</b> Your photo stays in your browser for this demo.</li>
+          <li>🤝 <b>Your choice:</b> Partners for cash or e-waste centers for donation.</li>
         </ul>
-
-        <!-- Progress + Next -->
         <div class="progress" aria-hidden="true" style="margin-top:16px"><div class="bar" id="bar"></div></div>
         <div class="label" id="label">Walkthrough playing…</div>
-        <div style="margin-top:10px">
-          <button id="nextBtn" class="primary" type="button">Next →</button>
-        </div>
+        <div style="margin-top:10px"><button id="nextBtn" class="primary" type="button">Next →</button></div>
       </div>
-
       <div>
-        <!-- Phone “video” player (UNCHANGED animation) -->
         <div class="phone" aria-label="EcoVision walkthrough">
           <div class="screen">
-            <!-- Drawer -->
             <div class="stage active" id="s0">
               <div class="drawer">
                 <div class="search">🔎 Search apps</div>
@@ -247,7 +194,6 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
                 <div class="dock"><div class="dockicon">📞</div><div class="dockicon">💬</div><div class="dockicon">🌐</div><div class="dockicon">📷</div></div>
               </div>
             </div>
-            <!-- App frame -->
             <div class="stage" id="s1">
               <div class="appframe">
                 <div class="statusbar"><div>09:41</div><div>📶 📡 🔋 87%</div></div>
@@ -304,66 +250,164 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
             </div>
           </div>
         </div>
-      </div><!-- /grid -->
+      </div>
     </div>
   </section>
 
-  <!-- ================= PAGE 2 (unchanged) ================= -->
   <section id="page2" class="page2 hidden">
     <div class="formCard">
       <h2>Get your phone’s value</h2>
       <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
 
       <form class="eco" id="ecoForm" onsubmit="return false;">
-        <label><span>Phone model</span>
+        <label>
+          <span>Phone model</span>
           <select id="model" required>
             <option value="" disabled selected>Select your phone</option>
-            <optgroup label="Apple"><option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option></optgroup>
-            <optgroup label="Samsung"><option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option></optgroup>
-            <optgroup label="OnePlus"><option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option></optgroup>
-            <optgroup label="Xiaomi / Redmi"><option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option></optgroup>
-            <optgroup label="Vivo"><option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option></optgroup>
-            <optgroup label="Oppo"><option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option></optgroup>
+            <optgroup label="Apple">
+              <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
+            </optgroup>
+            <optgroup label="Samsung">
+              <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
+            </optgroup>
+            <optgroup label="OnePlus">
+              <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
+            </optgroup>
+            <optgroup label="Xiaomi / Redmi">
+              <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
+            </optgroup>
+            <optgroup label="Vivo">
+              <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
+            </optgroup>
+            <optgroup label="Oppo">
+              <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
+            </optgroup>
           </select>
         </label>
-        <label><span>Age of the phone (years)</span><input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" required /></label>
-        <label><span>Storage (SSD size in GB)</span><input id="ssd" type="number" min="8" max="1024" step="8" placeholder="e.g., 128" required /></label>
-        <label><span>RAM (GB)</span><input id="ram" type="number" min="1" max="24" step="1" placeholder="e.g., 8" required /></label>
 
-        <div><span>Camera working?</span>
-          <div class="options" role="radiogroup"><button type="button" class="opt" data-name="cam" data-val="yes">Yes</button><button type="button" class="opt" data-name="cam" data-val="no">No</button></div>
+        <label>
+          <span>Age of the phone (years)</span>
+          <select id="age" required>
+            <option value="" disabled selected>Select age</option>
+            <option>0</option><option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option>
+            <option>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option><option>5.5</option>
+            <option>6</option><option>6.5</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option>
+            <option>9</option><option>9.5</option><option>10</option><option>11</option><option>12</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Storage (GB)</span>
+          <select id="ssd" required>
+            <option value="" disabled selected>Select storage</option>
+            <option>16</option><option>32</option><option>64</option><option>128</option><option>256</option><option>512</option><option value="1024">1024</option>
+          </select>
+        </label>
+
+        <label>
+          <span>RAM (GB)</span>
+          <select id="ram" required>
+            <option value="" disabled selected>Select RAM</option>
+            <option>2</option><option>3</option><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option><option>24</option>
+          </select>
+        </label>
+
+        <div>
+          <span>Camera working?</span>
+          <div class="options" role="radiogroup" aria-label="Camera working">
+            <button type="button" class="opt" data-name="cam" data-val="yes">Yes</button>
+            <button type="button" class="opt" data-name="cam" data-val="no">No</button>
+          </div>
         </div>
 
-        <div><span>Battery health</span>
-          <div class="rangeRow"><input id="bat" type="range" min="50" max="100" value="85" /><output id="batOut">85%</output></div>
+        <label>
+          <span>Battery health</span>
+          <div class="rangeRow">
+            <input id="bat" type="range" min="50" max="100" value="85" />
+            <output id="batOut">85%</output>
+          </div>
+        </label>
+
+        <label>
+          <span>Charging port working?</span>
+          <select id="port" required>
+            <option value="" disabled selected>Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Upload a photo</span>
+          <input id="photo" type="file" accept="image/*" required />
+        </label>
+
+        <div class="actions">
+          <button id="predictBtn" class="primary" type="button">Predict</button>
+          <button id="resetBtn" class="ghost" type="button">Reset</button>
         </div>
-
-        <div><span>Charging port working?</span>
-          <div class="options" role="radiogroup"><button type="button" class="opt" data-name="port" data-val="yes">Yes</button><button type="button" class="opt" data-name="port" data-val="no">No</button></div>
-        </div>
-
-        <label><span>Upload a photo</span><input id="photo" type="file" accept="image/*" required /></label>
-
-        <div class="actions"><button id="predictBtn" class="primary" type="button">Predict</button><button id="resetBtn" class="ghost" type="button">Reset</button></div>
       </form>
 
       <div id="resultBlock" class="resultCard step" aria-live="polite">
         <h3 style="margin-top:0">Result</h3>
-        <div class="callouts"><div class="callout">📱 <b>Cracked screen detected</b></div><div class="callout">💰 <b>Approx value: ₹23,200</b></div></div>
+        <div class="callouts">
+          <div class="callout">📱 <b>Cracked screen detected</b></div>
+          <div class="callout">💰 <b>Approx value: ₹23,200</b></div>
+        </div>
         <hr class="sep">
-        <div id="qRecycle" class="step"><div style="font-weight:900;margin-bottom:6px">Do you wish to recycle this item?</div><div class="options"><button class="opt" type="button" data-flow="recycle" data-val="no">No</button><button class="opt" type="button" data-flow="recycle" data-val="yes">Yes</button></div></div>
-        <div id="qLocation" class="step"><div style="font-weight:900;margin-bottom:6px">Share your location?</div><div class="options"><button class="opt" type="button" data-flow="loc" data-val="once">Allow Once</button><button class="opt" type="button" data-flow="loc" data-val="while">Allow While Using App</button></div><div id="locStatus" style="margin-top:8px;display:none;color:var(--muted)">Location captured (demo).</div></div>
-        <div id="qMoney" class="step"><div style="font-weight:900;margin-bottom:6px">Do you want money from this?</div><div class="options"><button class="opt" type="button" data-flow="money" data-val="yes">Yes</button><button class="opt" type="button" data-flow="money" data-val="no">No</button></div></div>
-        <div id="partners" class="step"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div><div id="condNote" style="margin-top:8px;color:var(--muted)"></div></div>
-        <div id="donate" class="step"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div>
-        <div id="ask" class="step"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px" class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div></div>
+        <div id="qRecycle" class="step">
+          <div style="font-weight:900;margin-bottom:6px">Do you wish to recycle this item?</div>
+          <div class="actions">
+            <button class="opt primary" type="button" data-flow="recycle" data-val="yes">Yes</button>
+            <button class="opt ghost" type="button" data-flow="recycle" data-val="no">No</button>
+          </div>
+        </div>
+        <div id="qLocation" class="step">
+          <div style="font-weight:900;margin-bottom:6px">Share your location?</div>
+          <div class="actions">
+            <button class="opt primary" type="button" data-flow="loc" data-val="once">Allow Once</button>
+            <button class="opt ghost" type="button" data-flow="loc" data-val="while">Allow While Using App</button>
+          </div>
+          <div id="locStatus" style="margin-top:8px;display:none;color:var(--muted)">Location captured (demo).</div>
+        </div>
+        <div id="qMoney" class="step">
+          <div style="font-weight:900;margin-bottom:6px">Do you want money from this?</div>
+          <div class="actions">
+            <button class="opt primary" type="button" data-flow="money" data-val="yes">Yes</button>
+            <button class="opt ghost" type="button" data-flow="money" data-val="no">No</button>
+          </div>
+        </div>
+        <div id="partners" class="step">
+          <div class="k">We can connect you to:</div>
+          <div class="badges" style="margin-top:8px">
+            <span class="badge">Cashify</span>
+            <span class="badge">Zolopik</span>
+            <span class="badge">Servify</span>
+            <span class="badge">ReGlobe</span>
+            <span class="badge">Attero</span>
+            <span class="badge">Karo Sambhav</span>
+          </div>
+          <div id="condNote" style="margin-top:8px;color:var(--muted)"></div>
+        </div>
+        <div id="donate" class="step">
+          <div class="k">Prefer to give it away yourself?</div>
+          <div class="badges" style="margin-top:8px">
+            <span class="badge">e-Waste Collection Center</span>
+            <span class="badge">City Recycling Hub</span>
+            <span class="badge">Green NGO Drop-off</span>
+          </div>
+        </div>
+        <div id="ask" class="step">
+          <div>Suggested ask (self-listing):</div>
+          <div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div>
+          <div style="margin-top:8px" class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div>
+        </div>
         <div class="actions" style="margin-top:10px"><button id="restartFlow" class="ghost" type="button">Start Again</button></div>
       </div>
     </div>
   </section>
 </main>
 
-<!-- ===== Chatbot (taller) ===== -->
 <button id="chatFab" class="chatFab" title="Chat">💬</button>
 <section id="chatPanel" class="chatPanel" aria-label="EcoVision Chat">
   <div class="chatHead">
@@ -377,267 +421,144 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
   </div>
 </section>
 
-<!-- ===== 404 Crash Overlay ===== -->
 <div id="crash" class="crash" role="alert" aria-live="assertive">
   <h1>Error 404</h1>
   <p>Reload the page.</p>
 </div>
 
 <script>
-/* ================= THEME TOGGLE ================= */
-(function initTheme(){
-  const btn = document.getElementById('themeBtn');
-  const saved = localStorage.getItem('ecovision_theme');
-  if(saved === 'light'){ document.documentElement.setAttribute('data-theme','light'); btn.textContent='🌙 Dark Mode'; btn.setAttribute('aria-pressed','true'); }
-  else { document.documentElement.removeAttribute('data-theme'); btn.textContent='🌞 Light Mode'; btn.setAttribute('aria-pressed','false'); }
-  btn.addEventListener('click', ()=>{
-    const isLight = document.documentElement.getAttribute('data-theme')==='light';
-    if(isLight){
-      document.documentElement.removeAttribute('data-theme'); localStorage.setItem('ecovision_theme','dark');
-      btn.textContent='🌞 Light Mode'; btn.setAttribute('aria-pressed','false');
-    }else{
-      document.documentElement.setAttribute('data-theme','light'); localStorage.setItem('ecovision_theme','light');
-      btn.textContent='🌙 Dark Mode'; btn.setAttribute('aria-pressed','true');
-    }
-  });
+(function(){
+  const btn=document.getElementById('themeBtn');const saved=localStorage.getItem('ecovision_theme');
+  if(saved==='light'){document.documentElement.setAttribute('data-theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}
+  else{document.documentElement.removeAttribute('data-theme');btn.textContent='🌞 Light Mode';btn.setAttribute('aria-pressed','false')}
+  btn.addEventListener('click',()=>{const isLight=document.documentElement.getAttribute('data-theme')==='light';
+    if(isLight){document.documentElement.removeAttribute('data-theme');localStorage.setItem('ecovision_theme','dark');btn.textContent='🌞 Light Mode';btn.setAttribute('aria-pressed','false')}
+    else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('ecovision_theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}})
 })();
-
-/* ================= SPLASH TIMING ================= */
-(function intro(){
-  const splash = document.getElementById('splash');
-  const HOLD = 900;
-  window.addEventListener('load', ()=>{ setTimeout(()=>{ splash.classList.add('hide'); }, HOLD); });
-})();
-
-/* ================= PAGE 1 DEMO AUTOPLAY ================= */
-const s0=document.getElementById('s0'), s1=document.getElementById('s1');
-const bar=document.getElementById('bar'), label=document.getElementById('label');
-const vStages=[...document.querySelectorAll('.viewport .stage')];
-let vidx=1, speedMs=1600, timer=null, opened=false;
-
-function openAppAuto(){
-  if(opened) return; opened=true;
-  s0.classList.remove('active'); s1.classList.add('active');
-  label.textContent='Walkthrough playing…'; bar.style.width=(2/14*100)+'%';
-  setTimeout(()=>{ playInner(1); }, 380);
-}
-function playInner(start=1){
-  clearInterval(timer);
-  vidx=start; showInner(vidx);
-  timer=setInterval(()=>{ vidx=(vidx%13)+1; showInner(vidx); }, speedMs);
-}
-function showInner(i){
-  vStages.forEach((s,n)=> s.classList.toggle('active', n===i-1));
-  const outerStep=i+1;
-  bar.style.width=(outerStep/14*100)+'%';
-  if(i===7){ document.getElementById('gauge')?.style.setProperty('--pct','66%'); const p=document.getElementById('price'); if(p) p.textContent='₹12,800'; }
-}
-window.addEventListener('load', ()=>{
-  function drawPhonePNG({cracked=false, back=false}){
-    const w=160,h=240,r=10; const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d');
-    ctx.fillStyle='#0f1a23'; roundRect(ctx,10,8,w-20,h-16,r); ctx.fill();
-    ctx.strokeStyle='#2b3e55'; ctx.lineWidth=2; roundRect(ctx,10,8,w-20,h-16,r); ctx.stroke();
-    if(back){
-      ctx.fillStyle='#101b26'; ctx.strokeStyle='#2b3e55';
-      roundRect(ctx, w/2-22, 22, 44, 36, 8); ctx.fill(); ctx.stroke();
-      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2-10, 40, 6, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(w/2+10, 40, 6, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle='#0b1620'; ctx.strokeStyle='#2b3e55';
-      roundRect(ctx, 26, 70, w-52, h-90, 8); ctx.fill(); ctx.stroke();
-    } else {
-      ctx.fillStyle='#223b55'; ctx.beginPath(); ctx.arc(w/2, 22, 3, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle='#0b1620'; ctx.strokeStyle='#2b3e55';
-      roundRect(ctx, 26, 30, w-52, h-50, 8); ctx.fill(); ctx.stroke();
-      if(cracked){ ctx.strokeStyle='#ff5d5d'; ctx.lineWidth=2; poly(ctx, [[30,140],[80,120],[100,130],[130,110]]); poly(ctx, [[70,90],[66,105],[95,112]]); }
-    }
-    return c.toDataURL('image/png');
-    function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-    function poly(ctx,pts){ ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0],pts[i][1]); ctx.stroke(); }
-  }
-  document.getElementById('frontImg').src=drawPhonePNG({cracked:true});
-  document.getElementById('backImg').src =drawPhonePNG({back:true});
-  setTimeout(openAppAuto, 1000);
-});
-
-/* ================= NEXT BUTTON: reveal + scroll (unchanged) ================= */
-document.getElementById('nextBtn').addEventListener('click', ()=>{
-  const page2 = document.getElementById('page2');
-  if(page2.classList.contains('hidden')){
-    page2.classList.remove('hidden');
-    setTimeout(()=>{ page2.scrollIntoView({behavior:'smooth', block:'start'}); }, 30);
-  }else{
-    page2.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-});
-
-/* ================= PAGE 2 FLOW (unchanged) ================= */
-const form = document.getElementById('ecoForm');
-const bat = document.getElementById('bat'); const batOut = document.getElementById('batOut'); bat.addEventListener('input', ()=> batOut.textContent = bat.value + '%');
-const radioState = { cam:null, port:null };
-document.querySelectorAll('.options .opt[data-name]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const name=btn.dataset.name, val=btn.dataset.val;
-    document.querySelectorAll(`.options .opt[data-name="${name}"]`).forEach(b=>b.setAttribute('aria-pressed','false'));
-    btn.setAttribute('aria-pressed','true'); radioState[name]=val;
+(function(){const splash=document.getElementById('splash');const HOLD=900;window.addEventListener('load',()=>{setTimeout(()=>{splash.classList.add('hide')},HOLD)})})();
+const s0=document.getElementById('s0'),s1=document.getElementById('s1');const bar=document.getElementById('bar'),label=document.getElementById('label');const vStages=[...document.querySelectorAll('.viewport .stage')];let vidx=1,speedMs=1600,timer=null,opened=false;
+function openAppAuto(){if(opened)return;opened=true;s0.classList.remove('active');s1.classList.add('active');label.textContent='Walkthrough playing…';bar.style.width=(2/14*100)+'%';setTimeout(()=>{playInner(1)},380)}
+function playInner(start=1){clearInterval(timer);vidx=start;showInner(vidx);timer=setInterval(()=>{vidx=(vidx%13)+1;showInner(vidx)},speedMs)}
+function showInner(i){vStages.forEach((s,n)=>s.classList.toggle('active',n===i-1));const outerStep=i+1;bar.style.width=(outerStep/14*100)+'%';if(i===7){document.getElementById('gauge')?.style.setProperty('--pct','66%');const p=document.getElementById('price');if(p)p.textContent='₹12,800'}}
+window.addEventListener('load',()=>{function drawPhonePNG({cracked=false,back=false}){const w=160,h=240,r=10;const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#0f1a23';roundRect(ctx,10,8,w-20,h-16,r);ctx.fill();ctx.strokeStyle='#2b3e55';ctx.lineWidth=2;roundRect(ctx,10,8,w-20,h-16,r);ctx.stroke();if(back){ctx.fillStyle='#101b26';ctx.strokeStyle='#2b3e55';roundRect(ctx,w/2-22,22,44,36,8);ctx.fill();ctx.stroke();ctx.fillStyle='#223b55';ctx.beginPath();ctx.arc(w/2-10,40,6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(w/2+10,40,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0b1620';ctx.strokeStyle='#2b3e55';roundRect(ctx,26,70,w-52,h-90,8);ctx.fill();ctx.stroke()}else{ctx.fillStyle='#223b55';ctx.beginPath();ctx.arc(w/2,22,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0b1620';ctx.strokeStyle='#2b3e55';roundRect(ctx,26,30,w-52,h-50,8);ctx.fill();ctx.stroke();if(cracked){ctx.strokeStyle='#ff5d5d';ctx.lineWidth=2;poly(ctx,[[30,140],[80,120],[100,130],[130,110]]);poly(ctx,[[70,90],[66,105],[95,112]])}}return c.toDataURL('image/png');function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}function poly(ctx,pts){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.stroke()}}
+  document.getElementById('frontImg').src=drawPhonePNG({cracked:true});document.getElementById('backImg').src=drawPhonePNG({back:true});setTimeout(openAppAuto,1000)})
+document.getElementById('nextBtn').addEventListener('click',()=>{const page2=document.getElementById('page2');if(page2.classList.contains('hidden')){page2.classList.remove('hidden');setTimeout(()=>{page2.scrollIntoView({behavior:'smooth',block:'start'})},30)}else{page2.scrollIntoView({behavior:'smooth',block:'start'})}})
+const form=document.getElementById('ecoForm');const bat=document.getElementById('bat');const batOut=document.getElementById('batOut');
+function paintRange(){const min=parseInt(bat.min,10),max=parseInt(bat.max,10),val=parseInt(bat.value,10);const pct=((val-min)*100)/(max-min);bat.style.backgroundSize=pct+'% 100%';batOut.textContent=val+'%'}
+bat.addEventListener('input',paintRange);window.addEventListener('load',paintRange);
+const radioState={cam:null};
+document.querySelectorAll('.options .opt[data-name="cam"]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.options .opt[data-name="cam"]').forEach(b=>b.setAttribute('aria-pressed','false'));
+    btn.setAttribute('aria-pressed','true');radioState.cam=btn.dataset.val;
   });
 });
-document.getElementById('resetBtn').addEventListener('click', ()=>{
-  form.reset(); batOut.textContent='85%';
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  form.reset();setTimeout(paintRange,0);
   document.querySelectorAll('.options .opt[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));
-  hideAllSteps(); document.getElementById('resultBlock').classList.remove('show');
-  document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
+  radioState.cam=null;hideAllSteps();document.getElementById('resultBlock').classList.remove('show');
+  document.getElementById('page2').scrollIntoView({behavior:'smooth',block:'start'})
 });
-function show(el){ el.classList.add('show'); }
-function hide(el){ el.classList.remove('show'); }
-function hideAllSteps(){ ['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=> hide(document.getElementById(id))); }
-document.getElementById('predictBtn').addEventListener('click', ()=>{
-  const model = document.getElementById('model').value;
-  const age = document.getElementById('age').value;
-  const ssd = document.getElementById('ssd').value;
-  const ram = document.getElementById('ram').value;
-  const cam = radioState.cam;
-  const port = radioState.port;
-  const photo = document.getElementById('photo').files[0];
-  if(!model || !age || !ssd || !ram || !cam || !port){ alert('Please answer all questions first.'); return; }
-  if(!photo){ alert('Please upload a photo first.'); return; }
-  hideAllSteps(); const res = document.getElementById('resultBlock'); res.classList.add('show'); show(document.getElementById('qRecycle')); res.scrollIntoView({behavior:'smooth', block:'start'});
+function show(el){el.classList.add('show')}
+function hide(el){el.classList.remove('show')}
+function hideAllSteps(){['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=>hide(document.getElementById(id)))}
+document.getElementById('predictBtn').addEventListener('click',()=>{
+  const model=document.getElementById('model').value;
+  const age=document.getElementById('age').value;
+  const ssd=document.getElementById('ssd').value;
+  const ram=document.getElementById('ram').value;
+  const cam=radioState.cam;
+  const port=document.getElementById('port').value;
+  const photo=document.getElementById('photo').files[0];
+  if(!model||!age||!ssd||!ram||!cam||!port){alert('Please answer all questions first.');return}
+  if(!photo){alert('Please upload a photo first.');return}
+  hideAllSteps();const res=document.getElementById('resultBlock');res.classList.add('show');show(document.getElementById('qRecycle'));res.scrollIntoView({behavior:'smooth',block:'start'})
 });
-document.querySelectorAll('#qRecycle .opt').forEach(btn=>{ btn.addEventListener('click', ()=>{ const val=btn.dataset.val; if(val==='yes'){ show(document.getElementById('qLocation')); } else { hideAllSteps(); show(document.getElementById('ask')); } }); });
-document.querySelectorAll('#qLocation .opt').forEach(btn=>{ btn.addEventListener('click', ()=>{ document.getElementById('locStatus').style.display='block'; show(document.getElementById('qMoney')); }); });
+document.querySelectorAll('#qRecycle .opt').forEach(btn=>{btn.addEventListener('click',()=>{const val=btn.dataset.val;if(val==='yes'){show(document.getElementById('qLocation'))}else{hideAllSteps();show(document.getElementById('ask'))}})});
+document.querySelectorAll('#qLocation .opt').forEach(btn=>{btn.addEventListener('click',()=>{document.getElementById('locStatus').style.display='block';show(document.getElementById('qMoney'))})});
 document.querySelectorAll('#qMoney .opt').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const wantMoney = btn.dataset.val==='yes';
+  btn.addEventListener('click',()=>{
+    const wantMoney=btn.dataset.val==='yes';
     if(wantMoney){
       show(document.getElementById('partners'));
-      const age = parseFloat(document.getElementById('age').value||'0');
-      const bh = parseInt(document.getElementById('bat').value||'0',10);
-      const isWorking = (radioState.cam==='yes') && (radioState.port==='yes') && bh>=70 && age<=4;
-      const cond = isWorking ? 'Working condition: direct partners like Cashify, Servify.' : 'Not fully working: refurb/recycle partners like Zolopik, Attero.';
-      document.getElementById('condNote').textContent = cond;
-    } else { show(document.getElementById('donate')); }
+      const age=parseFloat(document.getElementById('age').value||'0');
+      const bh=parseInt(document.getElementById('bat').value||'0',10);
+      const camOk=radioState.cam==='yes';
+      const portOk=document.getElementById('port').value==='yes';
+      const isWorking=camOk&&portOk&&bh>=70&&age<=4;
+      const cond=isWorking?'Working condition: direct partners like Cashify, Servify.':'Not fully working: refurb/recycle partners like Zolopik, Attero.';
+      document.getElementById('condNote').textContent=cond;
+    }else{
+      show(document.getElementById('donate'));
+    }
     show(document.getElementById('ask'));
   });
 });
-document.getElementById('restartFlow').addEventListener('click', ()=>{ hideAllSteps(); document.getElementById('resultBlock').classList.remove('show'); document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'}); });
-
-/* ================= CHATBOT (taller + typo-tolerant FAQs) ================= */
-const chatFab = document.getElementById('chatFab');
-const chatPanel = document.getElementById('chatPanel');
-const chatClose = document.getElementById('chatClose');
-const chatBody = document.getElementById('chatBody');
-const chatInput = document.getElementById('chatInput');
-const chatSend = document.getElementById('chatSend');
-const crashOverlay = document.getElementById('crash');
-
-function openChat(){
-  chatPanel.classList.add('open');
-  if(!chatBody.dataset.boot){
-    addBot('Hi! I’m the EcoVision chatbot. Ask me anything about the project.');
-    chatBody.dataset.boot = '1';
-  }
-  chatInput.focus();
-}
-function closeChat(){ chatPanel.classList.remove('open'); }
-chatFab.addEventListener('click', openChat);
-chatClose.addEventListener('click', closeChat);
-chatSend.addEventListener('click', handleChat);
-chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); handleChat(); }});
-
-function addUser(text){ const div=document.createElement('div'); div.className='chatMsg user'; div.textContent=text; chatBody.appendChild(div); chatBody.scrollTop=chatBody.scrollHeight; }
-function addBot(text){ const div=document.createElement('div'); div.className='chatMsg bot'; div.textContent=text; chatBody.appendChild(div); chatBody.scrollTop=chatBody.scrollHeight; return div; }
-function typeOut(div, text, speed=45, cb){ let i=0; (function step(){ div.textContent=text.slice(0,++i); chatBody.scrollTop=chatBody.scrollHeight; if(i<text.length) setTimeout(step,speed); else cb&&cb(); })(); }
-function normalize(s){
-  return (s||'').toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu,' ')
-    .replace(/\s+/g,' ')
-    .replace(/(.)\1{2,}/g,'$1$1') // shrink loooong letters
-    .trim();
-}
-// Damerau–Levenshtein (small + fast)
-function editDistance(a,b){
-  a=normalize(a); b=normalize(b);
-  const al=a.length, bl=b.length; if(!al||!bl) return Math.max(al,bl);
-  const dp=Array.from({length:al+1},()=>Array(bl+1).fill(0));
-  for(let i=0;i<=al;i++) dp[i][0]=i; for(let j=0;j<=bl;j++) dp[0][j]=j;
-  for(let i=1;i<=al;i++){
-    for(let j=1;j<=bl;j++){
-      const cost=a[i-1]===b[j-1]?0:1;
-      dp[i][j]=Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
-      if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]){
-        dp[i][j]=Math.min(dp[i][j], dp[i-2][j-2]+1);
-      }
-    }
-  }
-  return dp[al][bl];
-}
-function closeMatch(q, key, thr=2){ return editDistance(q,key) <= Math.max(2, Math.floor(key.length*0.25), thr); }
-
-const FAQ = [
-  {keys:['what is ecovision','ecovision','about ecovision','whats this','what does this do'],
-   ans:'EcoVision helps you estimate your phone’s value from a photo and a few quick checks, then guides you to sell for money or recycle responsibly.'},
-  {keys:['how does it work','how it works','how do i use','steps','guide','flow'],
-   ans:'1) Choose your model and answer quick checks (turns on, camera, charging, etc.). 2) Upload a photo. 3) We show a demo value and options to recycle or get paid.'},
-  {keys:['privacy','data','where do images go','upload go','photos go','safe'],
-   ans:'In this demo, your image never leaves your device. It stays in your browser and is not uploaded anywhere.'},
-  {keys:['supported phones','which phones','phone list','models'],
-   ans:'Supported: iPhone 11–15, Galaxy S20–S23 & A52, OnePlus 7–10 & Nord 2, Redmi Note 9–11, Mi 10, Mi 11X, Vivo V20/V21/Y20/Y21/X60, Oppo F17/F19/Reno 6/A74/A55.'},
-  {keys:['partners','cashify','zolopik','servify','sell','recycle','money'],
-   ans:'If you want money, we can connect you to Cashify, Servify, ReGlobe, etc. If not fully working, options like Zolopik/Attero. Donation shows nearby e-waste centers/NGOs.'},
-  {keys:['donate','give away','no money'],
-   ans:'Choose “No” for money and we’ll list e-waste collection centers and NGOs so you can donate responsibly.'},
-  {keys:['value','price','how much worth','calculate'],
-   ans:'The number shown is a demo estimate based on your inputs and visible damage—It is not a dealer offer.'},
-  {keys:['pickup','doorstep','collect'],
-   ans:'Pickup options depend on the partner; this demo just shows who you could contact after your assessment.'},
-  {keys:['location','supported cities','where available'],
-   ans:'The demo runs anywhere. Partner availability varies by city; we show examples after you choose money or donation.'}
+document.getElementById('restartFlow').addEventListener('click',()=>{hideAllSteps();document.getElementById('resultBlock').classList.remove('show');document.getElementById('page2').scrollIntoView({behavior:'smooth',block:'start'})});
+const chatFab=document.getElementById('chatFab');const chatPanel=document.getElementById('chatPanel');const chatClose=document.getElementById('chatClose');const chatBody=document.getElementById('chatBody');const chatInput=document.getElementById('chatInput');const chatSend=document.getElementById('chatSend');const crashOverlay=document.getElementById('crash');
+function openChat(){chatPanel.classList.add('open');if(!chatBody.dataset.boot){addBot('Hi! I’m the EcoVision chatbot. Ask me anything about the project.');chatBody.dataset.boot='1'}chatInput.focus()}
+function closeChat(){chatPanel.classList.remove('open')}
+chatFab.addEventListener('click',openChat);chatClose.addEventListener('click',closeChat);chatSend.addEventListener('click',handleChat);chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handleChat()}})
+function addUser(text){const div=document.createElement('div');div.className='chatMsg user';div.textContent=text;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight}
+function addBot(text){const div=document.createElement('div');div.className='chatMsg bot';div.textContent=text;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight;return div}
+function typeOut(div,text,speed=45,cb){let i=0;(function step(){div.textContent=text.slice(0,++i);chatBody.scrollTop=chatBody.scrollHeight;if(i<text.length)setTimeout(step,speed);else cb&&cb()})()}
+function normalize(s){return (s||'').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').replace(/(.)\1{2,}/g,'$1$1').trim()}
+function editDistance(a,b){a=normalize(a);b=normalize(b);const al=a.length,bl=b.length;if(!al||!bl)return Math.max(al,bl);const dp=Array.from({length:al+1},()=>Array(bl+1).fill(0));for(let i=0;i<=al;i++)dp[i][0]=i;for(let j=0;j<=bl;j++)dp[0][j]=j;for(let i=1;i<=al;i++){for(let j=1;j<=bl;j++){const cost=a[i-1]===b[j-1]?0:1;dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+cost);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]){dp[i][j]=Math.min(dp[i][j],dp[i-2][j-2]+1)}}}return dp[al][bl]}
+function closeMatch(q,key,thr=2){return editDistance(q,key)<=Math.max(2,Math.floor(key.length*0.25),thr)}
+function any(q,arr){return arr.some(k=>q.includes(normalize(k))||closeMatch(q,normalize(k)))}
+function words(q){return new Set(normalize(q).split(' '))}
+function hasAll(q,arr){const w=words(q);return arr.every(t=>w.has(t))}
+function getLS(k,def){try{return JSON.parse(localStorage.getItem(k)||'null')??def}catch(e){return def}}
+function setLS(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const FAQ_BASE=[
+  {keys:['what is ecovision','ecovision','about ecovision','whats this','what does this do'],ans:'EcoVision helps you estimate your phone’s value from a photo and a few quick checks, then guides you to sell for money or recycle responsibly.'},
+  {keys:['how does it work','how it works','how do i use','steps','guide','flow','how to start'],ans:'1) Choose your model and quick checks. 2) Upload a photo. 3) See an estimate and choose money or donation, then follow the prompts.'},
+  {keys:['privacy','data','where do images go','upload go','photos go','safe','store'],ans:'In this demo, your image never leaves your device. It stays in your browser and is not uploaded anywhere.'},
+  {keys:['supported phones','which phones','phone list','models'],ans:'Supported: iPhone 11–15, Galaxy S20–S23 & A52, OnePlus 7–10 & Nord 2, Redmi Note 9–11, Mi 10, Mi 11X, Vivo V20/V21/Y20/Y21/X60, Oppo F17/F19/Reno 6/A74/A55.'},
+  {keys:['partners','cashify','zolopik','servify','sell','recycle','money','buyback'],ans:'If you want money, we can connect you to Cashify, Servify, ReGlobe, etc. If not fully working, options like Zolopik/Attero. For donation, we show e-waste centers/NGOs.'},
+  {keys:['donate','give away','no money','charity'],ans:'Choose “No” for money and we’ll list e-waste collection centers and NGOs so you can donate responsibly.'},
+  {keys:['value','price','how much worth','calculate','estimate','accuracy'],ans:'The number shown is a demo estimate based on your inputs and visible damage. Actual dealer offers can differ.'},
+  {keys:['theme','light mode','dark mode'],ans:'Use the Light/Dark button on the top-right to switch themes. Your choice is saved on this device.'},
+  {keys:['next button','page two','page 2','where is next'],ans:'On Page 1, tap the green “Next →” button to reveal Page 2 and auto-scroll to it.'},
+  {keys:['file type','photo type','png','jpg','jpeg','heic'],ans:'Use common image formats like JPG or PNG. Large HEIC files may need conversion in some browsers.'},
+  {keys:['offline','internet','network'],ans:'The demo works offline after the page loads, since everything runs in your browser.'},
+  {keys:['reset','start again','clear form'],ans:'Use the “Reset” button on Page 2 to clear your answers and start again.'},
+  {keys:['pickup','doorstep','collect','home collection'],ans:'Pickup depends on the partner you choose. The demo only shows potential partners after your assessment.'},
+  {keys:['support','contact','help'],ans:'For now, use this chatbot. You can also keep notes by typing “note: your text” and view them with “list notes”.'},
+  {keys:['location','city','available where'],ans:'The demo runs anywhere. Partner availability varies by city; we show examples based on your choices.'}
 ];
-
+function customFaq(){return getLS('ecovision_faq_custom',[])}
+function addCustomFaq(q,a){const arr=customFaq();arr.push({q:q.trim(),a:a.trim()});setLS('ecovision_faq_custom',arr)}
+function listCustomFaq(){const arr=customFaq();if(!arr.length)return 'No custom FAQs yet.';return arr.map((x,i)=>`${i+1}. Q: ${x.q} — A: ${x.a}`).join('\n')}
 function handleChat(){
-  const raw = (chatInput.value||'').trim();
-  if(!raw) return;
-  addUser(raw);
-  chatInput.value = '';
-
-  const qNorm = normalize(raw);
-
-  // Special crash flow for "who made this"
+  const raw=(chatInput.value||'').trim();if(!raw)return;addUser(raw);chatInput.value='';
+  const qNorm=normalize(raw);
   if(/who\s+(made|built)\s+(this|it)|\bcreator\b|made this/.test(qNorm)){
-    const bot = addBot('');
-    const part1 = 'Sparsh Jain and Eshaan Godbole. ';
-    const part2 = 'Sparsh is proficient in hardware and website and Eshaan is good in ';
-    typeOut(bot, part1, 65, ()=>{
-      typeOut(bot, part2, 65, ()=>{
-        const spinner=document.createElement('span'); spinner.className='spin'; spinner.style.marginLeft='6px'; bot.appendChild(spinner);
-        chatBody.scrollTop=chatBody.scrollHeight;
-        setTimeout(()=>{ bot.textContent='Error 404'; crashSite(); }, 2200);
-      });
-    });
+    const bot=addBot('');const p1='Sparsh Jain and Eshaan Godbole. ';const p2='Sparsh is proficient in hardware and website and Eshaan is good in ';
+    typeOut(bot,p1,65,()=>{typeOut(bot,p2,65,()=>{const sp=document.createElement('span');sp.className='spin';sp.style.marginLeft='6px';bot.appendChild(sp);chatBody.scrollTop=chatBody.scrollHeight;setTimeout(()=>{bot.textContent='Error 404';crashSite()},2200)})});
     return;
   }
-
-  // Try exact/keyword includes first
-  for(const item of FAQ){
-    if(item.keys.some(k=> qNorm.includes(normalize(k)) )){
-      addBot(item.ans); return;
-    }
+  if(/^add\s*faq\s*:/i.test(raw)){
+    const m=raw.match(/^add\s*faq\s*:\s*(.+?)\s*\|\s*(.+)$/i);
+    if(m&&m[1]&&m[2]){addCustomFaq(m[1],m[2]);addBot('Added your FAQ. Ask it to test.');return}
+    addBot('Format: add faq: your question | your answer');return
   }
-  // Fuzzy match (handles spelling mistakes)
-  for(const item of FAQ){
-    if(item.keys.some(k=> closeMatch(qNorm, normalize(k)) )){
-      addBot(item.ans); return;
-    }
+  if(/^list\s*faq/i.test(qNorm)){addBot(listCustomFaq());return}
+  if(/^(note|add|remember)\s*:/i.test(raw)){
+    const txt=raw.replace(/^(note|add|remember)\s*:/i,'').trim();const notes=getLS('ecovision_notes',[]);notes.push({t:Date.now(),v:txt});setLS('ecovision_notes',notes);addBot('Saved. Type “list notes” to view.');return
   }
-
-  // Fallback
-  addBot('I can help with how EcoVision works, privacy, supported phones, partners, donation vs money, and value estimates. Try asking one of those.');
+  if(/^list\s*notes/i.test(qNorm)){
+    const notes=getLS('ecovision_notes',[]);if(!notes.length){addBot('No notes yet.');return}
+    const out=notes.map((n,i)=>`${i+1}. ${n.v}`).join('\n');addBot(out);return
+  }
+  const allFaq=[...FAQ_BASE,...customFaq().map(x=>({keys:[x.q],ans:x.a}))];
+  for(const item of allFaq){if(item.keys.some(k=> qNorm.includes(normalize(k)) )){addBot(item.ans);return}}
+  for(const item of allFaq){if(item.keys.some(k=> closeMatch(qNorm,normalize(k)) )){addBot(item.ans);return}}
+  if(hasAll(qNorm,['how','use'])||hasAll(qNorm,['get','started'])){addBot('Tap “Next →”, fill the dropdowns, upload a photo, then press Predict. Follow the prompts.');return}
+  if(hasAll(qNorm,['where','photo'])||any(qNorm,['upload go','image store','privacy'])){addBot('Your photo stays in your browser for this demo and is not uploaded.');return}
+  addBot('I can help with how EcoVision works, privacy, supported phones, partners, donation vs money, value estimates, theme, Next button, file types, offline use, and more. You can also teach me: “add faq: Q | A”.')
 }
-
-function crashSite(){
-  document.getElementById('crash').classList.add('show');
-  document.body.style.overflow = 'hidden';
-  document.querySelectorAll('body *:not(#crash)').forEach(el=>{ el.style.pointerEvents = 'none'; });
-}
+function crashSite(){document.getElementById('crash').classList.add('show');document.body.style.overflow='hidden';document.querySelectorAll('body *:not(#crash)').forEach(el=>{el.style.pointerEvents='none'})}
 </script>
 </body>
 </html>
