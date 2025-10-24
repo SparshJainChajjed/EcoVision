@@ -4,9 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision</title>
-<!-- Inline SVG favicon -->
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%2322C55E"/><stop offset="100%" stop-color="%2316A34A"/></linearGradient></defs><circle cx="100" cy="100" r="72" fill="none" stroke="url(%23g)" stroke-width="16"/></svg>'>
-<meta name="description" content="EcoVision: splash + demo, then full dummy app flow on the same page with Light/Dark mode.">
+<meta name="description" content="EcoVision — check your phone’s value and recycle or resell responsibly.">
 <style>
 /* ================= THEME ================= */
 :root{
@@ -51,10 +50,13 @@ h1{margin:0;font-size:18px;font-weight:900}
 /* ================= LAYOUT ================= */
 .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
-.grid{display:grid;gap:12px}
-@media (min-width:760px){ .grid{grid-template-columns:1.1fr 1fr;align-items:center} }
-h2{font-size:22px;margin:0 0 8px}
+.grid{display:grid;gap:16px}
+@media (min-width:860px){ .grid{grid-template-columns:1.2fr 1fr;align-items:center} }
+h2{font-size:28px;margin:0 0 8px}
 p{color:var(--muted);line-height:1.55;margin:0 0 10px}
+ul.clean{margin:10px 0 0 0;padding:0;list-style:none}
+ul.clean li{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
+/* subtle divider */
 hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 
 /* ================= PAGE 1: DEMO ================= */
@@ -100,18 +102,18 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 .price{position:absolute;font-weight:900;font-size:22px}
 .badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .badge{padding:8px 12px;border-radius:999px;background:#0d1117;border:1px solid var(--line);font-weight:700;color:#cfe7ff}
-.progress{height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin:10px 0 6px}
-.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
-.label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:8px}
-.nextWrap{display:flex;justify-content:center;margin-top:12px}
-.nextBtn{background:var(--accent2);color:#053a16;border:none;font-weight:900;padding:12px 18px;border-radius:12px;cursor:pointer}
 
-/* ================= PAGE 2: FORM (classic in-page result) ================= */
+/* Progress label (softer, user-facing) */
+.progress{height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin:14px 0 6px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:6px}
+
+/* ================= PAGE 2 (unchanged layout) ================= */
 .page2{scroll-margin-top:70px}
 .hidden{display:none}
 .formCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 form.eco{display:grid;gap:12px}
-label span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+label span{display:block;font-size:13px;color:#cfd6e4;margin-bottom:4px}
 input,select,button,textarea{font:inherit;color:inherit}
 select, input[type="number"], input[type="text"], input[type="file"], input[type="range"]{
   width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--pill)
@@ -124,8 +126,6 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .primary{background:var(--accent2);color:#053a16;border:none;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer}
 .ghost{background:transparent;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-weight:800;color:var(--text)}
-
-/* Results / steps (in-page) */
 .step{display:none;opacity:0;transform:translateY(6px);transition:opacity .25s ease, transform .25s ease}
 .step.show{display:block;opacity:1;transform:translateY(0)}
 .resultCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
@@ -133,10 +133,10 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
 .callout{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill)}
 .warn{color:#b45309}
 
-/* ================= CHATBOT (bigger panel) ================= */
+/* ================= CHATBOT (taller) ================= */
 .chatFab{position:fixed;right:16px;bottom:16px;z-index:80;width:64px;height:64px;border-radius:50%;
   background:var(--accent2);color:#053a16;border:none;font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.35)}
-.chatPanel{position:fixed;right:16px;bottom:92px;width:min(520px,calc(100vw - 32px));max-height:78vh;display:none;flex-direction:column;
+.chatPanel{position:fixed;right:16px;bottom:92px;width:min(560px,calc(100vw - 32px));max-height:88vh;display:none;flex-direction:column;
   background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;z-index:85}
 .chatPanel.open{display:flex}
 .chatHead{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
@@ -191,7 +191,7 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
     <div class="logo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
     <div>
       <h1>EcoVision</h1>
-      <div class="tag">Intro • Demo • App Flow</div>
+      <div class="tag">Check value • Sell or Recycle • Do good</div>
     </div>
   </div>
   <div class="actions-right">
@@ -201,14 +201,28 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
 
 <main class="wrap">
 
-  <!-- ================= PAGE 1: INTRO + DEMO ================= -->
+  <!-- ================= PAGE 1 (user-first copy; demo untouched) ================= -->
   <section id="page1" class="card">
-    <h2>Know your phone’s worth — and recycle it right</h2>
-    <p>Auto-plays: upload → damage scan → model & purchase date → internals → value → recycle? → location → money or give away → suggested ask.</p>
-
     <div class="grid">
       <div>
-        <!-- Phone “video” player -->
+        <h2>Check your phone’s value in minutes</h2>
+        <p>Upload a photo, answer a few quick questions, then choose to <b>get paid</b> or <b>recycle responsibly</b>—all in one simple flow.</p>
+        <ul class="clean">
+          <li>✅ <b>Fast estimate:</b> We highlight visible damage (e.g., cracked screen) and show an approximate value.</li>
+          <li>🔒 <b>Private by design:</b> Your photo stays in your browser for this demo—<i>it is not uploaded</i>.</li>
+          <li>🤝 <b>Your choice:</b> Connect to buyback partners for cash, or donate at trusted e-waste centers.</li>
+        </ul>
+
+        <!-- Progress + Next -->
+        <div class="progress" aria-hidden="true" style="margin-top:16px"><div class="bar" id="bar"></div></div>
+        <div class="label" id="label">Walkthrough playing…</div>
+        <div style="margin-top:10px">
+          <button id="nextBtn" class="primary" type="button">Next →</button>
+        </div>
+      </div>
+
+      <div>
+        <!-- Phone “video” player (UNCHANGED animation) -->
         <div class="phone" aria-label="EcoVision walkthrough">
           <div class="screen">
             <!-- Drawer -->
@@ -283,194 +297,73 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
                   <div class="stage" id="v10"><div class="ui" style="text-align:center"><div style="font-weight:900">Do you want money from this?</div><div class="row" style="margin-top:8px"><span class="pill">Yes</span><span class="pill">No</span></div></div></div>
                   <div class="stage" id="v11"><div class="ui" style="text-align:center"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div></div></div>
                   <div class="stage" id="v12"><div class="ui" style="text-align:center"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div></div>
-                  <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:var(--warn)"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
+                  <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:#ffdf7f"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
                 </div>
                 <div class="navbar" style="border-top:1px solid var(--line);padding:8px 0;text-align:center;color:#cfe7ff">Demo</div>
               </div>
             </div>
           </div>
         </div>
+      </div><!-- /grid -->
+    </div>
+  </section>
 
-        <div>
-          <h2>Exactly what happens</h2>
-          <p>The demo auto-plays like a video, no taps needed. Hit <b>Next</b> to reveal Page 2 (hidden) and auto-scroll to it.</p>
-        </div>
-      </div>
-
-      <!-- Progress + Next -->
-      <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
-      <div class="label" id="label">Step 1 · Opening from the app drawer…</div>
-      <div class="nextWrap"><button id="nextBtn" class="nextBtn" type="button">Next →</button></div>
-    </section>
-
-  <!-- ================= PAGE 2: DUMMY APP (classic inline flow) ================= -->
+  <!-- ================= PAGE 2 (unchanged) ================= -->
   <section id="page2" class="page2 hidden">
     <div class="formCard">
       <h2>Get your phone’s value</h2>
       <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
 
       <form class="eco" id="ecoForm" onsubmit="return false;">
-        <!-- Model -->
-        <label>
-          <span>Phone model</span>
+        <label><span>Phone model</span>
           <select id="model" required>
             <option value="" disabled selected>Select your phone</option>
-            <optgroup label="Apple">
-              <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
-            </optgroup>
-            <optgroup label="Samsung">
-              <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
-            </optgroup>
-            <optgroup label="OnePlus">
-              <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
-            </optgroup>
-            <optgroup label="Xiaomi / Redmi">
-              <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
-            </optgroup>
-            <optgroup label="Vivo">
-              <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
-            </optgroup>
-            <optgroup label="Oppo">
-              <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
-            </optgroup>
+            <optgroup label="Apple"><option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option></optgroup>
+            <optgroup label="Samsung"><option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option></optgroup>
+            <optgroup label="OnePlus"><option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option></optgroup>
+            <optgroup label="Xiaomi / Redmi"><option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option></optgroup>
+            <optgroup label="Vivo"><option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option></optgroup>
+            <optgroup label="Oppo"><option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option></optgroup>
           </select>
         </label>
+        <label><span>Age of the phone (years)</span><input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" required /></label>
+        <label><span>Storage (SSD size in GB)</span><input id="ssd" type="number" min="8" max="1024" step="8" placeholder="e.g., 128" required /></label>
+        <label><span>RAM (GB)</span><input id="ram" type="number" min="1" max="24" step="1" placeholder="e.g., 8" required /></label>
 
-        <!-- Age -->
-        <label>
-          <span>Age of the phone (years)</span>
-          <input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" required />
-        </label>
-
-        <!-- SSD / Storage -->
-        <label>
-          <span>Storage (SSD size in GB)</span>
-          <input id="ssd" type="number" min="8" max="1024" step="8" placeholder="e.g., 128" required />
-        </label>
-
-        <!-- RAM -->
-        <label>
-          <span>RAM (GB)</span>
-          <input id="ram" type="number" min="1" max="24" step="1" placeholder="e.g., 8" required />
-        </label>
-
-        <!-- Camera -->
-        <div>
-          <span>Camera working?</span>
-          <div class="options" role="radiogroup" aria-label="Camera working">
-            <button type="button" class="opt" data-name="cam" data-val="yes">Yes</button>
-            <button type="button" class="opt" data-name="cam" data-val="no">No</button>
-          </div>
+        <div><span>Camera working?</span>
+          <div class="options" role="radiogroup"><button type="button" class="opt" data-name="cam" data-val="yes">Yes</button><button type="button" class="opt" data-name="cam" data-val="no">No</button></div>
         </div>
 
-        <!-- Battery health -->
-        <div>
-          <span>Battery health</span>
-          <div class="rangeRow">
-            <input id="bat" type="range" min="50" max="100" value="85" />
-            <output id="batOut">85%</output>
-          </div>
+        <div><span>Battery health</span>
+          <div class="rangeRow"><input id="bat" type="range" min="50" max="100" value="85" /><output id="batOut">85%</output></div>
         </div>
 
-        <!-- Charging port -->
-        <div>
-          <span>Charging port working?</span>
-          <div class="options" role="radiogroup" aria-label="Charging port working">
-            <button type="button" class="opt" data-name="port" data-val="yes">Yes</button>
-            <button type="button" class="opt" data-name="port" data-val="no">No</button>
-          </div>
+        <div><span>Charging port working?</span>
+          <div class="options" role="radiogroup"><button type="button" class="opt" data-name="port" data-val="yes">Yes</button><button type="button" class="opt" data-name="port" data-val="no">No</button></div>
         </div>
 
-        <!-- Upload -->
-        <label>
-          <span>Upload a photo</span>
-          <input id="photo" type="file" accept="image/*" required />
-        </label>
+        <label><span>Upload a photo</span><input id="photo" type="file" accept="image/*" required /></label>
 
-        <!-- Actions -->
-        <div class="actions">
-          <button id="predictBtn" class="primary" type="button">Predict</button>
-          <button id="resetBtn" class="ghost" type="button">Reset</button>
-        </div>
+        <div class="actions"><button id="predictBtn" class="primary" type="button">Predict</button><button id="resetBtn" class="ghost" type="button">Reset</button></div>
       </form>
 
-      <!-- ============== RESULTS & FOLLOW-UP FLOW (inline) ============== -->
       <div id="resultBlock" class="resultCard step" aria-live="polite">
         <h3 style="margin-top:0">Result</h3>
-        <div class="callouts">
-          <div class="callout">📱 <b>Cracked screen detected</b></div>
-          <div class="callout">💰 <b>Approx value: ₹23,200</b></div>
-        </div>
+        <div class="callouts"><div class="callout">📱 <b>Cracked screen detected</b></div><div class="callout">💰 <b>Approx value: ₹23,200</b></div></div>
         <hr class="sep">
-
-        <!-- Recycle? -->
-        <div id="qRecycle" class="step">
-          <div style="font-weight:900;margin-bottom:6px">Do you wish to recycle this item?</div>
-          <div class="options">
-            <button class="opt" type="button" data-flow="recycle" data-val="no">No</button>
-            <button class="opt" type="button" data-flow="recycle" data-val="yes">Yes</button>
-          </div>
-        </div>
-
-        <!-- Location -->
-        <div id="qLocation" class="step">
-          <div style="font-weight:900;margin-bottom:6px">Share your location?</div>
-          <div class="options">
-            <button class="opt" type="button" data-flow="loc" data-val="once">Allow Once</button>
-            <button class="opt" type="button" data-flow="loc" data-val="while">Allow While Using App</button>
-          </div>
-          <div id="locStatus" style="margin-top:8px;display:none;color:var(--muted)">Location captured (demo).</div>
-        </div>
-
-        <!-- Money? -->
-        <div id="qMoney" class="step">
-          <div style="font-weight:900;margin-bottom:6px">Do you want money from this?</div>
-          <div class="options">
-            <button class="opt" type="button" data-flow="money" data-val="yes">Yes</button>
-            <button class="opt" type="button" data-flow="money" data-val="no">No</button>
-          </div>
-        </div>
-
-        <!-- Partners (paid) -->
-        <div id="partners" class="step">
-          <div class="k">We can connect you to:</div>
-          <div class="badges" style="margin-top:8px">
-            <span class="badge">Cashify</span>
-            <span class="badge">Zolopik</span>
-            <span class="badge">Servify</span>
-            <span class="badge">ReGlobe</span>
-            <span class="badge">Attero</span>
-            <span class="badge">Karo Sambhav</span>
-          </div>
-          <div id="condNote" style="margin-top:8px;color:var(--muted)"></div>
-        </div>
-
-        <!-- Donation (no money) -->
-        <div id="donate" class="step">
-          <div class="k">Prefer to give it away yourself?</div>
-          <div class="badges" style="margin-top:8px">
-            <span class="badge">e-Waste Collection Center</span>
-            <span class="badge">City Recycling Hub</span>
-            <span class="badge">Green NGO Drop-off</span>
-          </div>
-        </div>
-
-        <!-- Suggested Ask + Warning -->
-        <div id="ask" class="step">
-          <div>Suggested ask (self-listing):</div>
-          <div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div>
-          <div style="margin-top:8px" class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div>
-        </div>
-
-        <div class="actions" style="margin-top:10px">
-          <button id="restartFlow" class="ghost" type="button">Start Again</button>
-        </div>
+        <div id="qRecycle" class="step"><div style="font-weight:900;margin-bottom:6px">Do you wish to recycle this item?</div><div class="options"><button class="opt" type="button" data-flow="recycle" data-val="no">No</button><button class="opt" type="button" data-flow="recycle" data-val="yes">Yes</button></div></div>
+        <div id="qLocation" class="step"><div style="font-weight:900;margin-bottom:6px">Share your location?</div><div class="options"><button class="opt" type="button" data-flow="loc" data-val="once">Allow Once</button><button class="opt" type="button" data-flow="loc" data-val="while">Allow While Using App</button></div><div id="locStatus" style="margin-top:8px;display:none;color:var(--muted)">Location captured (demo).</div></div>
+        <div id="qMoney" class="step"><div style="font-weight:900;margin-bottom:6px">Do you want money from this?</div><div class="options"><button class="opt" type="button" data-flow="money" data-val="yes">Yes</button><button class="opt" type="button" data-flow="money" data-val="no">No</button></div></div>
+        <div id="partners" class="step"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div><div id="condNote" style="margin-top:8px;color:var(--muted)"></div></div>
+        <div id="donate" class="step"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div>
+        <div id="ask" class="step"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px" class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div></div>
+        <div class="actions" style="margin-top:10px"><button id="restartFlow" class="ghost" type="button">Start Again</button></div>
       </div>
     </div>
   </section>
 </main>
 
-<!-- ===== Chatbot ===== -->
+<!-- ===== Chatbot (taller) ===== -->
 <button id="chatFab" class="chatFab" title="Chat">💬</button>
 <section id="chatPanel" class="chatPanel" aria-label="EcoVision Chat">
   <div class="chatHead">
@@ -491,7 +384,7 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
 </div>
 
 <script>
-/* ================= THEME TOGGLE (Light/Dark) ================= */
+/* ================= THEME TOGGLE ================= */
 (function initTheme(){
   const btn = document.getElementById('themeBtn');
   const saved = localStorage.getItem('ecovision_theme');
@@ -500,12 +393,10 @@ select, input[type="number"], input[type="text"], input[type="file"], input[type
   btn.addEventListener('click', ()=>{
     const isLight = document.documentElement.getAttribute('data-theme')==='light';
     if(isLight){
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('ecovision_theme','dark');
+      document.documentElement.removeAttribute('data-theme'); localStorage.setItem('ecovision_theme','dark');
       btn.textContent='🌞 Light Mode'; btn.setAttribute('aria-pressed','false');
     }else{
-      document.documentElement.setAttribute('data-theme','light');
-      localStorage.setItem('ecovision_theme','light');
+      document.documentElement.setAttribute('data-theme','light'); localStorage.setItem('ecovision_theme','light');
       btn.textContent='🌙 Dark Mode'; btn.setAttribute('aria-pressed','true');
     }
   });
@@ -527,7 +418,7 @@ let vidx=1, speedMs=1600, timer=null, opened=false;
 function openAppAuto(){
   if(opened) return; opened=true;
   s0.classList.remove('active'); s1.classList.add('active');
-  label.textContent='Step 2 · App opening…'; bar.style.width=(2/14*100)+'%';
+  label.textContent='Walkthrough playing…'; bar.style.width=(2/14*100)+'%';
   setTimeout(()=>{ playInner(1); }, 380);
 }
 function playInner(start=1){
@@ -538,18 +429,10 @@ function playInner(start=1){
 function showInner(i){
   vStages.forEach((s,n)=> s.classList.toggle('active', n===i-1));
   const outerStep=i+1;
-  const steps=[
-    'Step 1 · Opening from the app drawer…','Step 2 · App opening…','Step 3 · Upload phone photos',
-    'Step 4 · AI assesses visible damage','Step 5 · Select your phone model','Step 6 · Purchase date',
-    'Step 7 · Internals (Google-Form style)','Step 8 · Your value','Step 9 · Recycle this item?',
-    'Step 10 · Share your location','Step 11 · Money or not?','Step 12 · Partners',
-    'Step 13 · Give away yourself','Step 14 · Suggested ask + honesty warning'
-  ];
-  label.textContent=steps[outerStep-1]||''; bar.style.width=(outerStep/14*100)+'%';
+  bar.style.width=(outerStep/14*100)+'%';
   if(i===7){ document.getElementById('gauge')?.style.setProperty('--pct','66%'); const p=document.getElementById('price'); if(p) p.textContent='₹12,800'; }
 }
 window.addEventListener('load', ()=>{
-  // draw generic phone images (no external files)
   function drawPhonePNG({cracked=false, back=false}){
     const w=160,h=240,r=10; const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d');
     ctx.fillStyle='#0f1a23'; roundRect(ctx,10,8,w-20,h-16,r); ctx.fill();
@@ -576,7 +459,7 @@ window.addEventListener('load', ()=>{
   setTimeout(openAppAuto, 1000);
 });
 
-/* ================= NEXT BUTTON: REVEAL + AUTOSCROLL ================= */
+/* ================= NEXT BUTTON: reveal + scroll (unchanged) ================= */
 document.getElementById('nextBtn').addEventListener('click', ()=>{
   const page2 = document.getElementById('page2');
   if(page2.classList.contains('hidden')){
@@ -587,7 +470,7 @@ document.getElementById('nextBtn').addEventListener('click', ()=>{
   }
 });
 
-/* ================= PAGE 2: DUMMY FLOW (inline) ================= */
+/* ================= PAGE 2 FLOW (unchanged) ================= */
 const form = document.getElementById('ecoForm');
 const bat = document.getElementById('bat'); const batOut = document.getElementById('batOut'); bat.addEventListener('input', ()=> batOut.textContent = bat.value + '%');
 const radioState = { cam:null, port:null };
@@ -601,17 +484,12 @@ document.querySelectorAll('.options .opt[data-name]').forEach(btn=>{
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   form.reset(); batOut.textContent='85%';
   document.querySelectorAll('.options .opt[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));
-  hideAllSteps();
-  document.getElementById('resultBlock').classList.remove('show');
+  hideAllSteps(); document.getElementById('resultBlock').classList.remove('show');
   document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
 });
-
 function show(el){ el.classList.add('show'); }
 function hide(el){ el.classList.remove('show'); }
-function hideAllSteps(){
-  ['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=> hide(document.getElementById(id)));
-}
-
+function hideAllSteps(){ ['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=> hide(document.getElementById(id))); }
 document.getElementById('predictBtn').addEventListener('click', ()=>{
   const model = document.getElementById('model').value;
   const age = document.getElementById('age').value;
@@ -620,35 +498,12 @@ document.getElementById('predictBtn').addEventListener('click', ()=>{
   const cam = radioState.cam;
   const port = radioState.port;
   const photo = document.getElementById('photo').files[0];
-
   if(!model || !age || !ssd || !ram || !cam || !port){ alert('Please answer all questions first.'); return; }
   if(!photo){ alert('Please upload a photo first.'); return; }
-
-  hideAllSteps();
-  const res = document.getElementById('resultBlock');
-  res.classList.add('show');
-  show(document.getElementById('qRecycle'));
-  res.scrollIntoView({behavior:'smooth', block:'start'});
+  hideAllSteps(); const res = document.getElementById('resultBlock'); res.classList.add('show'); show(document.getElementById('qRecycle')); res.scrollIntoView({behavior:'smooth', block:'start'});
 });
-
-// Recycle?
-document.querySelectorAll('#qRecycle .opt').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const val = btn.dataset.val;
-    if(val==='yes'){ show(document.getElementById('qLocation')); }
-    else { hideAllSteps(); show(document.getElementById('ask')); }
-  });
-});
-
-// Location
-document.querySelectorAll('#qLocation .opt').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.getElementById('locStatus').style.display='block';
-    show(document.getElementById('qMoney'));
-  });
-});
-
-// Money?
+document.querySelectorAll('#qRecycle .opt').forEach(btn=>{ btn.addEventListener('click', ()=>{ const val=btn.dataset.val; if(val==='yes'){ show(document.getElementById('qLocation')); } else { hideAllSteps(); show(document.getElementById('ask')); } }); });
+document.querySelectorAll('#qLocation .opt').forEach(btn=>{ btn.addEventListener('click', ()=>{ document.getElementById('locStatus').style.display='block'; show(document.getElementById('qMoney')); }); });
 document.querySelectorAll('#qMoney .opt').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const wantMoney = btn.dataset.val==='yes';
@@ -657,24 +512,15 @@ document.querySelectorAll('#qMoney .opt').forEach(btn=>{
       const age = parseFloat(document.getElementById('age').value||'0');
       const bh = parseInt(document.getElementById('bat').value||'0',10);
       const isWorking = (radioState.cam==='yes') && (radioState.port==='yes') && bh>=70 && age<=4;
-      const cond = isWorking ? 'Working condition: direct partners like Cashify, Servify.' :
-                               'Not fully working: refurb/recycle partners like Zolopik, Attero.';
+      const cond = isWorking ? 'Working condition: direct partners like Cashify, Servify.' : 'Not fully working: refurb/recycle partners like Zolopik, Attero.';
       document.getElementById('condNote').textContent = cond;
-    }else{
-      show(document.getElementById('donate'));
-    }
+    } else { show(document.getElementById('donate')); }
     show(document.getElementById('ask'));
   });
 });
+document.getElementById('restartFlow').addEventListener('click', ()=>{ hideAllSteps(); document.getElementById('resultBlock').classList.remove('show'); document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'}); });
 
-// Restart
-document.getElementById('restartFlow').addEventListener('click', ()=>{
-  hideAllSteps();
-  document.getElementById('resultBlock').classList.remove('show');
-  document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
-});
-
-/* ================= CHATBOT (bigger + first message says it's the chatbot) ================= */
+/* ================= CHATBOT (taller + typo-tolerant FAQs) ================= */
 const chatFab = document.getElementById('chatFab');
 const chatPanel = document.getElementById('chatPanel');
 const chatClose = document.getElementById('chatClose');
@@ -694,88 +540,101 @@ function openChat(){
 function closeChat(){ chatPanel.classList.remove('open'); }
 chatFab.addEventListener('click', openChat);
 chatClose.addEventListener('click', closeChat);
-
 chatSend.addEventListener('click', handleChat);
 chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); handleChat(); }});
 
-function addUser(text){
-  const div = document.createElement('div');
-  div.className = 'chatMsg user';
-  div.textContent = text;
-  chatBody.appendChild(div);
-  chatBody.scrollTop = chatBody.scrollHeight;
+function addUser(text){ const div=document.createElement('div'); div.className='chatMsg user'; div.textContent=text; chatBody.appendChild(div); chatBody.scrollTop=chatBody.scrollHeight; }
+function addBot(text){ const div=document.createElement('div'); div.className='chatMsg bot'; div.textContent=text; chatBody.appendChild(div); chatBody.scrollTop=chatBody.scrollHeight; return div; }
+function typeOut(div, text, speed=45, cb){ let i=0; (function step(){ div.textContent=text.slice(0,++i); chatBody.scrollTop=chatBody.scrollHeight; if(i<text.length) setTimeout(step,speed); else cb&&cb(); })(); }
+function normalize(s){
+  return (s||'').toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu,' ')
+    .replace(/\s+/g,' ')
+    .replace(/(.)\1{2,}/g,'$1$1') // shrink loooong letters
+    .trim();
 }
-function addBot(text){
-  const div = document.createElement('div');
-  div.className = 'chatMsg bot';
-  div.textContent = text;
-  chatBody.appendChild(div);
-  chatBody.scrollTop = chatBody.scrollHeight;
-  return div;
+// Damerau–Levenshtein (small + fast)
+function editDistance(a,b){
+  a=normalize(a); b=normalize(b);
+  const al=a.length, bl=b.length; if(!al||!bl) return Math.max(al,bl);
+  const dp=Array.from({length:al+1},()=>Array(bl+1).fill(0));
+  for(let i=0;i<=al;i++) dp[i][0]=i; for(let j=0;j<=bl;j++) dp[0][j]=j;
+  for(let i=1;i<=al;i++){
+    for(let j=1;j<=bl;j++){
+      const cost=a[i-1]===b[j-1]?0:1;
+      dp[i][j]=Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
+      if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]){
+        dp[i][j]=Math.min(dp[i][j], dp[i-2][j-2]+1);
+      }
+    }
+  }
+  return dp[al][bl];
 }
-function typeOut(div, text, speed=55, cb){
-  let i=0;
-  (function step(){
-    div.textContent = text.slice(0,i+1);
-    i++;
-    chatBody.scrollTop = chatBody.scrollHeight;
-    if(i < text.length){ setTimeout(step, speed); } else { cb && cb(); }
-  })();
-}
+function closeMatch(q, key, thr=2){ return editDistance(q,key) <= Math.max(2, Math.floor(key.length*0.25), thr); }
+
+const FAQ = [
+  {keys:['what is ecovision','ecovision','about ecovision','whats this','what does this do'],
+   ans:'EcoVision helps you estimate your phone’s value from a photo and a few quick checks, then guides you to sell for money or recycle responsibly.'},
+  {keys:['how does it work','how it works','how do i use','steps','guide','flow'],
+   ans:'1) Choose your model and answer quick checks (turns on, camera, charging, etc.). 2) Upload a photo. 3) We show a demo value and options to recycle or get paid.'},
+  {keys:['privacy','data','where do images go','upload go','photos go','safe'],
+   ans:'In this demo, your image never leaves your device. It stays in your browser and is not uploaded anywhere.'},
+  {keys:['supported phones','which phones','phone list','models'],
+   ans:'Supported: iPhone 11–15, Galaxy S20–S23 & A52, OnePlus 7–10 & Nord 2, Redmi Note 9–11, Mi 10, Mi 11X, Vivo V20/V21/Y20/Y21/X60, Oppo F17/F19/Reno 6/A74/A55.'},
+  {keys:['partners','cashify','zolopik','servify','sell','recycle','money'],
+   ans:'If you want money, we can connect you to Cashify, Servify, ReGlobe, etc. If not fully working, options like Zolopik/Attero. Donation shows nearby e-waste centers/NGOs.'},
+  {keys:['donate','give away','no money'],
+   ans:'Choose “No” for money and we’ll list e-waste collection centers and NGOs so you can donate responsibly.'},
+  {keys:['value','price','how much worth','calculate'],
+   ans:'The number shown is a demo estimate based on your inputs and visible damage—It is not a dealer offer.'},
+  {keys:['pickup','doorstep','collect'],
+   ans:'Pickup options depend on the partner; this demo just shows who you could contact after your assessment.'},
+  {keys:['location','supported cities','where available'],
+   ans:'The demo runs anywhere. Partner availability varies by city; we show examples after you choose money or donation.'}
+];
 
 function handleChat(){
-  const q = (chatInput.value||'').trim();
-  if(!q) return;
-  addUser(q);
+  const raw = (chatInput.value||'').trim();
+  if(!raw) return;
+  addUser(raw);
   chatInput.value = '';
 
-  const lower = q.toLowerCase();
+  const qNorm = normalize(raw);
 
   // Special crash flow for "who made this"
-  if(/who (made|built) (this|it)|creator|made this/.test(lower)){
+  if(/who\s+(made|built)\s+(this|it)|\bcreator\b|made this/.test(qNorm)){
     const bot = addBot('');
     const part1 = 'Sparsh Jain and Eshaan Godbole. ';
     const part2 = 'Sparsh is proficient in hardware and website and Eshaan is good in ';
     typeOut(bot, part1, 65, ()=>{
       typeOut(bot, part2, 65, ()=>{
-        const spinner = document.createElement('span');
-        spinner.className = 'spin';
-        spinner.style.marginLeft = '6px';
-        bot.appendChild(spinner);
-        chatBody.scrollTop = chatBody.scrollHeight;
-        setTimeout(()=>{
-          bot.textContent = 'Error 404';
-          crashSite();
-        }, 2200);
+        const spinner=document.createElement('span'); spinner.className='spin'; spinner.style.marginLeft='6px'; bot.appendChild(spinner);
+        chatBody.scrollTop=chatBody.scrollHeight;
+        setTimeout(()=>{ bot.textContent='Error 404'; crashSite(); }, 2200);
       });
     });
     return;
   }
 
-  // Where do images go?
-  if(/where.*image|upload.*go|photos.*go|privacy|store.*image/.test(lower)){
-    addBot('In this demo, the image you upload never leaves your device. It stays in your browser only and is not sent anywhere.');
-    return;
+  // Try exact/keyword includes first
+  for(const item of FAQ){
+    if(item.keys.some(k=> qNorm.includes(normalize(k)) )){
+      addBot(item.ans); return;
+    }
   }
-
-  // Generic project answers
-  if(/how.*work|what.*do|explain|flow|steps|predict/.test(lower)){
-    addBot('EcoVision asks your phone model, age, storage, RAM, and quick hardware checks, then lets you upload a photo. The demo shows a fake damage finding and value. Then you choose recycle, share location, and pick paid partners or donation.');
-    return;
-  }
-
-  if(/partners|cashify|zolopik|sell|recycle/.test(lower)){
-    addBot('If you want money, we show partners like Cashify, Zolopik, Servify, ReGlobe, Attero, and Karo Sambhav based on condition. If you prefer to donate, we show e-waste centers and NGOs.');
-    return;
+  // Fuzzy match (handles spelling mistakes)
+  for(const item of FAQ){
+    if(item.keys.some(k=> closeMatch(qNorm, normalize(k)) )){
+      addBot(item.ans); return;
+    }
   }
 
   // Fallback
-  addBot('Got it. Ask about the flow, privacy, partners, or “who made this”.');
+  addBot('I can help with how EcoVision works, privacy, supported phones, partners, donation vs money, and value estimates. Try asking one of those.');
 }
 
 function crashSite(){
-  // Show full-screen crash until reload
-  crashOverlay.classList.add('show');
+  document.getElementById('crash').classList.add('show');
   document.body.style.overflow = 'hidden';
   document.querySelectorAll('body *:not(#crash)').forEach(el=>{ el.style.pointerEvents = 'none'; });
 }
