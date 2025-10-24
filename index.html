@@ -3,13 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-<title>EcoVision — Demo + App Flow</title>
-<meta name="description" content="EcoVision: Splash + demo, then full dummy app flow on the same page with Light/Dark mode.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16a34a">
+<title>EcoVision</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%2322C55E'/%3E%3Cpath d='M50 20 C70 40,70 60,50 80 C30 60,30 40,50 20 Z' fill='white'/%3E%3C/svg%3E">
+<meta name="description" content="EcoVision: Splash + demo, then full dummy app flow on the same page with Light/Dark mode and a built-in chatbot.">
 <style>
 /* ================= THEME ================= */
 :root{
   --bg:#0a0b0f; --card:#11131a; --text:#e9ecf1; --muted:#cfd6e4;
-  --accent:#1f8cff; --accent2:#22c55e; --warn:#ffdf7f; --line:rgba(255,255,255,.08);
+  --accent:#16a34a; --accent2:#22c55e; --warn:#ffdf7f; --line:rgba(255,255,255,.08);
   --good:#22c55e; --bad:#ef4444; --pill:#0f141c;
 }
 :root[data-theme="light"]{
@@ -18,14 +21,21 @@
   --pill:#ffffff;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;touch-action:manipulation}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;-webkit-tap-highlight-color:transparent}
+
+/* ================= APP SHELL (mobile-optimized) ================= */
+.appShell{max-width:430px;margin:0 auto;min-height:100vh;position:relative}
+.osbar{height:26px;display:flex;justify-content:space-between;align-items:center;
+  padding:6px 12px;color:#9fb3c8;font-size:12px;opacity:.85}
+.homeIndicator{position:fixed;left:50%;transform:translateX(-50%);bottom:6px;width:120px;height:4px;border-radius:999px;
+  background:rgba(255,255,255,.25);z-index:60}
+:root[data-theme="light"] .homeIndicator{background:rgba(0,0,0,.18)}
 
 /* ================= SPLASH (INTRO LOGO) ================= */
 .splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;gap:10px;
-  background:#0a0b0f; /* stays dark even if theme is light for contrast */
-  transition:opacity .35s ease, visibility .35s ease}
+  background:#0a0b0f;transition:opacity .35s ease, visibility .35s ease}
 .splash.hide{opacity:0;visibility:hidden}
 .splash-logo{width:148px;height:148px;border-radius:30px;display:grid;place-items:center;
   background:linear-gradient(180deg, rgba(22,163,74,.20), rgba(34,197,94,.12));
@@ -44,10 +54,10 @@ header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;just
   background:linear-gradient(180deg, rgba(34,197,94,.25), rgba(34,197,94,.10));font-weight:900}
 .logo svg{width:26px;height:26px}
 h1{margin:0;font-size:18px;font-weight:900}
-.tag{margin:2px 0 0;font-size:12px;color:#94a3b8}
+.tag{display:none} /* keep header clean per your request */
 .btn{padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);
-  background:transparent;color:var(--text);cursor:pointer}
-a.btn{text-decoration:none}
+  background:transparent;color:var(--text);cursor:pointer;transition:transform .06s ease}
+.btn:active{transform:scale(.98)}
 
 /* ================= LAYOUT ================= */
 .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
@@ -59,9 +69,9 @@ p{color:var(--muted);line-height:1.55;margin:0 0 10px}
 hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 
 /* ================= PAGE 1: DEMO ================= */
-.phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:12px;padding:6px;
+.phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:20px;padding:6px;
   background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.35)}
-.screen{position:absolute;inset:6px;border-radius:10px;overflow:hidden;background:#0a0f16;display:grid}
+.screen{position:absolute;inset:6px;border-radius:16px;overflow:hidden;background:#0a0f16;display:grid}
 .stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);
   transition:opacity .42s ease, transform .42s ease}
 .stage.active{opacity:1;transform:translateY(0) scale(1)}
@@ -70,7 +80,8 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
   border-radius:999px;padding:8px 12px;color:#9fb3c8;font-size:12px}
 .drawer .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:6px 0}
 .appicon{display:grid;place-items:center;height:72px;border-radius:16px;background:linear-gradient(180deg,#0f141c,#0e1218);
-  border:1px solid var(--line);position:relative;overflow:hidden}
+  border:1px solid var(--line);position:relative;overflow:hidden;transition:transform .08s ease}
+.appicon:active{transform:scale(.96)}
 .appicon span{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#cfe7ff}
 .appicon.eco{background:linear-gradient(135deg,#0f1d15,#0b2b1a);border-color:rgba(98,255,158,.35)}
 .dock{display:flex;justify-content:space-around;padding:8px;background:#0d1117;border:1px solid var(--line);border-radius:18px}
@@ -83,7 +94,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
   font-size:10px;color:#cfe7ff}
 .appbar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800}
 .viewport{position:relative;padding:12px}
-.ui{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:12px;color:#cfe7ff;width:100%}
+.ui{background:#0d1117;border:1px solid var(--line);border-radius:12px;padding:12px;color:#cfe7ff;width:100%}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0f141c;font-size:12px}
 .k{font-size:11px;color:#8ea1b8;margin-bottom:4px}
@@ -105,7 +116,8 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
 .label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:8px}
 .nextWrap{display:flex;justify-content:center;margin-top:12px}
-.nextBtn{background:var(--accent2);color:#053a16;border:none;font-weight:900;padding:12px 18px;border-radius:12px;cursor:pointer}
+.nextBtn{background:var(--accent2);color:#053a16;border:none;font-weight:900;padding:12px 18px;border-radius:12px;cursor:pointer;transition:transform .06s ease}
+.nextBtn:active{transform:scale(.97)}
 
 /* ================= PAGE 2: FORM ================= */
 .page2{scroll-margin-top:70px}
@@ -115,277 +127,336 @@ form.eco{display:grid;gap:12px}
 label span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
 input,select,button,textarea{font:inherit;color:inherit}
 select, input[type="number"], input[type="text"], input[type="file"], input[type="range"]{
-  width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill)
+  width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--pill)
 }
+input[type="number"]{appearance:textfield}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{appearance:none;margin:0}
+#age,#ssd,#ram{inputmode:decimal}
 .rangeRow{display:flex;align-items:center;gap:10px}
 .rangeRow output{min-width:54px;text-align:right;font-weight:800}
 .options{display:flex;gap:8px;flex-wrap:wrap}
-.options .opt{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--pill);cursor:pointer}
+.options .opt{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--pill);cursor:pointer;transition:transform .06s ease}
+.options .opt:active{transform:scale(.97)}
 .options .opt[aria-pressed="true"]{outline:2px solid var(--accent2)}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-.primary{background:var(--accent2);color:#053a16;border:none;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer}
+.primary{background:var(--accent2);color:#053a16;border:none;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer;transition:transform .06s ease}
+.primary:active{transform:scale(.98)}
 .ghost{background:transparent;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-weight:800;color:var(--text);cursor:pointer}
 
-/* Results / steps */
+/* ================= RESULT SHEET (app-like) ================= */
+.sheetBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:999}
+.sheetBackdrop.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(100%);bottom:0;width:min(430px,100%);max-height:80vh;
+  background:var(--card);border:1px solid var(--line);border-bottom:0;border-top-left-radius:16px;border-top-right-radius:16px;
+  box-shadow:0 -18px 50px rgba(0,0,0,.35);overflow:auto;z-index:1000;transition:transform .35s cubic-bezier(.2,1,.2,1)}
+.sheet.open{transform:translateX(-50%) translateY(0)}
+.sheetHandle{width:48px;height:5px;background:rgba(255,255,255,.25);border-radius:999px;margin:8px auto}
+:root[data-theme="light"] .sheetHandle{background:rgba(0,0,0,.18)}
+.sheetHeader{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid var(--line)}
+.sheetHeader b{font-size:14px}
+.sheetClose{background:transparent;border:1px solid var(--line);border-radius:10px;padding:6px 10px;color:var(--text);cursor:pointer}
+.resultCard{background:transparent;border:none;border-radius:0;padding:12px}
 .step{display:none;opacity:0;transform:translateY(6px);transition:opacity .25s ease, transform .25s ease}
 .step.show{display:block;opacity:1;transform:translateY(0)}
-.resultCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 .callouts{display:flex;gap:8px;flex-wrap:wrap}
 .callout{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill)}
 .warn{color:#b45309}
 
-/* Footer */
-nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex}
-.tab{flex:1;display:grid;place-items:center;padding:10px 0;color:#a7b3c6;font-weight:800}
+/* ================= BOTTOM TABS ================= */
+nav.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(430px,100%);background:var(--card);
+  border:1px solid var(--line);border-radius:16px;display:flex;z-index:70;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.tab{flex:1;display:grid;place-items:center;padding:10px 0;color:#a7b3c6;font-weight:800;border-radius:16px}
 .tab.active{color:var(--text);border-top:2px solid var(--accent)}
+
+/* ================= CHATBOT (floating FAB + sheet) ================= */
+.chatFab{position:fixed;right:16px;bottom:82px;z-index:80;width:56px;height:56px;border-radius:50%;
+  border:1px solid var(--line);background:var(--accent);color:#053a16;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.chatSheet{position:fixed;left:50%;transform:translateX(-50%) translateY(100%);bottom:0;width:min(430px,100%);max-height:75vh;
+  background:var(--card);border:1px solid var(--line);border-bottom:0;border-top-left-radius:16px;border-top-right-radius:16px;
+  box-shadow:0 -18px 50px rgba(0,0,0,.35);overflow:hidden;z-index:1001;transition:transform .35s cubic-bezier(.2,1,.2,1)}
+.chatSheet.open{transform:translateX(-50%) translateY(0)}
+.chatHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.chatHead b{display:flex;align-items:center;gap:8px}
+.chatBody{padding:12px;height:55vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:85%;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--pill)}
+.msg.user{margin-left:auto;background:linear-gradient(0deg,rgba(34,197,94,.2),rgba(34,197,94,.1))}
+.msg.bot{margin-right:auto}
+.chatInput{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--card)}
+.chatInput input{flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--pill)}
+.chatInput button{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--accent2);color:#053a16;font-weight:900;cursor:pointer}
+.typing{display:inline-flex;align-items:center;gap:6px}
+.spinner{width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.25);border-top-color:var(--accent2);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ================= CRASH OVERLAY ================= */
+.crashOverlay{position:fixed;inset:0;background:#0a0b0f;display:grid;place-items:center;z-index:2000}
+.crashCard{color:#ff6b6b;text-align:center;padding:20px}
+.crashCard h1{margin:0 0 6px;font-size:28px}
+.crashCard p{color:#ffb3b3}
+@keyframes glitch{0%{transform:translate(0)} 20%{transform:translate(-1px,1px)} 40%{transform:translate(1px,-1px)} 60%{transform:translate(-1px,-1px)} 80%{transform:translate(1px,1px)} 100%{transform:translate(0)}}
+.crashCard h1{animation:glitch .7s infinite}
 </style>
 </head>
 <body>
+<div class="appShell">
 
-<!-- ===== Reusable logo symbol (with ring class for splash animation) ===== -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"  stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/>
-    </linearGradient>
-    <g id="EcoMark">
-      <circle class="ring" cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
-      <g class="leafIn">
-        <rect x="66" y="54" width="68" height="92" rx="12" fill="none" stroke="#BFEFD0" stroke-width="6"/>
-        <circle cx="100" cy="64" r="3.2" fill="#BFEFD0"/>
-        <rect x="72" y="70" width="56" height="70" rx="8" fill="#0B1320" opacity=".9"/>
-        <path d="M100 126 L100 94" stroke="#C8F7D9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-        <path d="M100 106 C112 100,124 100,130 104 C122 106,112 112,104 114 C101 114,99 110,100 106 Z" fill="url(#leafCore)"/>
-        <path d="M100 106 C88 100,76 100,70 104 C78 106,88 112,96 114 C99 114,101 110,100 106 Z" fill="url(#leafCore)"/>
+  <!-- ===== Reusable logo mark ===== -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%"  stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/>
+      </linearGradient>
+      <g id="EcoMark">
+        <circle class="ring" cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
+        <g class="leafIn">
+          <rect x="66" y="54" width="68" height="92" rx="12" fill="none" stroke="#BFEFD0" stroke-width="6"/>
+          <circle cx="100" cy="64" r="3.2" fill="#BFEFD0"/>
+          <rect x="72" y="70" width="56" height="70" rx="8" fill="#0B1320" opacity=".9"/>
+          <path d="M100 126 L100 94" stroke="#C8F7D9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <path d="M100 106 C112 100,124 100,130 104 C122 106,112 112,104 114 C101 114,99 110,100 106 Z" fill="url(#leafCore)"/>
+          <path d="M100 106 C88 100,76 100,70 104 C78 106,88 112,96 114 C99 114,101 110,100 106 Z" fill="url(#leafCore)"/>
+        </g>
       </g>
-    </g>
-  </defs>
-</svg>
+    </defs>
+  </svg>
 
-<!-- ===== SPLASH INTRO (logo shows on first load) ===== -->
-<div id="splash" class="splash" role="dialog" aria-label="EcoVision intro">
-  <div class="splash-logo"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
-  <div class="splash-name">EcoVision</div>
-</div>
-
-<header class="app">
-  <div class="brand">
-    <div class="logo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
-    <div>
-      <h1>EcoVision</h1>
-      <div class="tag">Intro • Demo • App Flow</div>
-    </div>
+  <!-- ===== SPLASH INTRO ===== -->
+  <div id="splash" class="splash" role="dialog" aria-label="EcoVision intro">
+    <div class="splash-logo"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
+    <div class="splash-name">EcoVision</div>
   </div>
-  <div class="actions-right">
-    <button id="themeBtn" class="btn" aria-pressed="false" title="Switch theme">🌞 Light Mode</button>
-  </div>
-</header>
 
-<main class="wrap">
+  <!-- OS-style status bar (visual) -->
+  <div class="osbar"><span>09:41</span><span>📶 📡 🔋 87%</span></div>
 
-  <!-- ================= PAGE 1: INTRO + DEMO ================= -->
-  <section id="page1" class="card">
-    <h2>Know your phone’s worth — and recycle it right</h2>
-    <p>Auto-plays: upload → damage scan → model & purchase date → internals → value → recycle? → location → money or give away → suggested ask.</p>
-
-    <div class="grid">
+  <!-- ===== HEADER ===== -->
+  <header class="app">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
       <div>
-        <!-- Phone “video” player -->
-        <div class="phone" aria-label="EcoVision walkthrough">
-          <div class="screen">
-            <!-- Drawer -->
-            <div class="stage active" id="s0">
-              <div class="drawer">
-                <div class="search">🔎 Search apps</div>
-                <div class="grid">
-                  <div class="appicon"><span>Camera</span></div>
-                  <div class="appicon"><span>Mail</span></div>
-                  <div class="appicon"><span>Maps</span></div>
-                  <div class="appicon"><span>Music</span></div>
-                  <div class="appicon eco" id="ecoApp"><span>EcoVision</span></div>
-                  <div class="appicon"><span>Store</span></div>
-                  <div class="appicon"><span>Tools</span></div>
-                  <div class="appicon"><span>Chat</span></div>
-                  <div class="appicon"><span>Files</span></div>
-                  <div class="appicon"><span>Calendar</span></div>
-                  <div class="appicon"><span>Browser</span></div>
-                  <div class="appicon"><span>Gallery</span></div>
-                </div>
-                <div class="pager"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
-                <div class="dock"><div class="dockicon">📞</div><div class="dockicon">💬</div><div class="dockicon">🌐</div><div class="dockicon">📷</div></div>
-              </div>
-            </div>
-            <!-- App frame -->
-            <div class="stage" id="s1">
-              <div class="appframe">
-                <div class="statusbar"><div>09:41</div><div>📶 📡 🔋 87%</div></div>
-                <div class="appbar"><div style="font-weight:900">EcoVision</div></div>
-                <div class="viewport">
-                  <div class="stage active" id="v1">
-                    <div class="ui" style="text-align:center">
-                      <div style="font-size:18px;font-weight:900;margin-bottom:6px">EcoVision</div>
-                      <div style="width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--accent2);margin:8px auto;animation:spin 1s linear infinite"></div>
-                      <div style="font-size:12px;color:#8ea1b8">Starting…</div>
-                    </div>
-                  </div>
-                  <div class="stage" id="v2">
-                    <div class="ui">
-                      <div style="display:flex;justify-content:space-between;align-items:center">
-                        <b>Upload phone photos</b><span class="pill">Front & Back</span>
-                      </div>
-                      <div class="preview" style="margin-top:10px">
-                        <div class="ph"><img id="frontImg" alt="Front phone photo" /></div>
-                        <div class="ph"><img id="backImg"  alt="Back phone photo"  /></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="stage" id="v3">
-                    <div class="photoWrap">
-                      <div class="hot red"    style="width:88px;height:68px;left:18%;top:22%"></div>
-                      <div class="hot orange" style="width:70px;height:60px;left:60%;top:52%"></div>
-                    </div>
-                  </div>
-                  <div class="stage" id="v4"><div class="ui"><div class="k">Model</div><div class="v">Generic Phone 12</div></div></div>
-                  <div class="stage" id="v5"><div class="ui"><div class="k">Purchased</div><div class="v">Oct 2021</div></div></div>
-                  <div class="stage" id="v6">
-                    <div class="ui">
-                      <div style="font-weight:900;margin-bottom:8px">Quick internals</div>
-                      <div class="row">
-                        <span class="pill">Turns on: Yes</span>
-                        <span class="pill">Cameras: Yes</span>
-                        <span class="pill">Charging: Yes</span>
-                        <span class="pill">Speakers: Yes</span>
-                        <span class="pill">Motherboard issues: No</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="stage" id="v7"><div class="gauge" id="gauge" style="--pct:66%"><div class="price" id="price">₹12,800</div></div></div>
-                  <div class="stage" id="v8"><div class="ui" style="text-align:center"><div style="font-weight:900">Recycle this item?</div><div class="row" style="margin-top:8px"><span class="pill">No</span><span class="pill">Yes</span></div></div></div>
-                  <div class="stage" id="v9"><div class="ui" style="text-align:center"><div style="font-weight:900">Share your location?</div><div class="row" style="margin-top:8px"><span class="pill">Allow Once</span><span class="pill">Allow While Using App</span></div></div></div>
-                  <div class="stage" id="v10"><div class="ui" style="text-align:center"><div style="font-weight:900">Do you want money from this?</div><div class="row" style="margin-top:8px"><span class="pill">Yes</span><span class="pill">No</span></div></div></div>
-                  <div class="stage" id="v11"><div class="ui" style="text-align:center"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div></div></div>
-                  <div class="stage" id="v12"><div class="ui" style="text-align:center"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div></div>
-                  <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:var(--warn)"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
-                </div>
-                <div class="navbar" style="border-top:1px solid var(--line);padding:8px 0;text-align:center;color:#cfe7ff">Demo</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Progress -->
-        <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
-        <div class="label" id="label">Step 1 · Opening from the app drawer…</div>
-        <div class="nextWrap"><button id="nextBtn" class="nextBtn" type="button">Next →</button></div>
-      </div>
-
-      <div>
-        <h2>Exactly what happens</h2>
-        <p>The demo auto-plays like a video, no taps needed. Hit <b>Next</b> to reveal Page 2 (hidden) and auto-scroll to it.</p>
+        <h1>EcoVision</h1>
+        <div class="tag"></div>
       </div>
     </div>
-  </section>
-
-  <!-- ================= PAGE 2: DUMMY APP (HIDDEN UNTIL NEXT) ================= -->
-  <section id="page2" class="page2 hidden">
-    <div class="formCard">
-      <h2>Get your phone’s value</h2>
-      <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
-
-      <form class="eco" id="ecoForm" onsubmit="return false;">
-        <!-- Model -->
-        <label>
-          <span>Phone model</span>
-          <select id="model" required>
-            <option value="" disabled selected>Select your phone</option>
-            <optgroup label="Apple">
-              <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
-            </optgroup>
-            <optgroup label="Samsung">
-              <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
-            </optgroup>
-            <optgroup label="OnePlus">
-              <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
-            </optgroup>
-            <optgroup label="Xiaomi / Redmi">
-              <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
-            </optgroup>
-            <optgroup label="Vivo">
-              <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
-            </optgroup>
-            <optgroup label="Oppo">
-              <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
-            </optgroup>
-          </select>
-        </label>
-
-        <!-- Age -->
-        <label>
-          <span>Age of the phone (years)</span>
-          <input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" required />
-        </label>
-
-        <!-- SSD / Storage -->
-        <label>
-          <span>Storage (SSD size in GB)</span>
-          <input id="ssd" type="number" min="8" max="1024" step="8" placeholder="e.g., 128" required />
-        </label>
-
-        <!-- RAM -->
-        <label>
-          <span>RAM (GB)</span>
-          <input id="ram" type="number" min="1" max="24" step="1" placeholder="e.g., 8" required />
-        </label>
-
-        <!-- Camera -->
-        <div>
-          <span>Camera working?</span>
-          <div class="options" role="radiogroup" aria-label="Camera working">
-            <button type="button" class="opt" data-name="cam" data-val="yes">Yes</button>
-            <button type="button" class="opt" data-name="cam" data-val="no">No</button>
-          </div>
-        </div>
-
-        <!-- Battery health -->
-        <div>
-          <span>Battery health</span>
-          <div class="rangeRow">
-            <input id="bat" type="range" min="50" max="100" value="85" />
-            <output id="batOut">85%</output>
-          </div>
-        </div>
-
-        <!-- Charging port -->
-        <div>
-          <span>Charging port working?</span>
-          <div class="options" role="radiogroup" aria-label="Charging port working">
-            <button type="button" class="opt" data-name="port" data-val="yes">Yes</button>
-            <button type="button" class="opt" data-name="port" data-val="no">No</button>
-          </div>
-        </div>
-
-        <!-- Upload -->
-        <label>
-          <span>Upload a photo</span>
-          <input id="photo" type="file" accept="image/*" required />
-        </label>
-
-        <!-- Actions -->
-        <div class="actions">
-          <button id="predictBtn" class="primary" type="button">Predict</button>
-          <button id="resetBtn" class="ghost" type="button">Reset</button>
-        </div>
-      </form>
+    <div class="actions-right">
+      <button id="themeBtn" class="btn" aria-pressed="false" title="Switch theme">🌞 Light Mode</button>
     </div>
+  </header>
 
-    <!-- ============== RESULTS & FOLLOW-UP FLOW ============== -->
-    <div id="resultBlock" class="resultCard step" aria-live="polite">
-      <h3 style="margin-top:0">Result</h3>
+  <main class="wrap">
+
+    <!-- ================= PAGE 1: INTRO + DEMO (unchanged) ================= -->
+    <section id="page1" class="card">
+      <h2>Know your phone’s worth — and recycle it right</h2>
+      <p>Auto-plays: upload → damage scan → model & purchase date → internals → value → recycle? → location → money or give away → suggested ask.</p>
+
+      <div class="grid">
+        <div>
+          <!-- Phone “video” player -->
+          <div class="phone" aria-label="EcoVision walkthrough">
+            <div class="screen">
+              <!-- Drawer -->
+              <div class="stage active" id="s0">
+                <div class="drawer">
+                  <div class="search">🔎 Search apps</div>
+                  <div class="grid">
+                    <div class="appicon"><span>Camera</span></div>
+                    <div class="appicon"><span>Mail</span></div>
+                    <div class="appicon"><span>Maps</span></div>
+                    <div class="appicon"><span>Music</span></div>
+                    <div class="appicon eco" id="ecoApp"><span>EcoVision</span></div>
+                    <div class="appicon"><span>Store</span></div>
+                    <div class="appicon"><span>Tools</span></div>
+                    <div class="appicon"><span>Chat</span></div>
+                    <div class="appicon"><span>Files</span></div>
+                    <div class="appicon"><span>Calendar</span></div>
+                    <div class="appicon"><span>Browser</span></div>
+                    <div class="appicon"><span>Gallery</span></div>
+                  </div>
+                  <div class="pager"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+                  <div class="dock"><div class="dockicon">📞</div><div class="dockicon">💬</div><div class="dockicon">🌐</div><div class="dockicon">📷</div></div>
+                </div>
+              </div>
+              <!-- App frame -->
+              <div class="stage" id="s1">
+                <div class="appframe">
+                  <div class="statusbar"><div>09:41</div><div>📶 📡 🔋 87%</div></div>
+                  <div class="appbar"><div style="font-weight:900">EcoVision</div></div>
+                  <div class="viewport">
+                    <div class="stage active" id="v1">
+                      <div class="ui" style="text-align:center">
+                        <div style="font-size:18px;font-weight:900;margin-bottom:6px">EcoVision</div>
+                        <div style="width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--accent2);margin:8px auto;animation:spin 1s linear infinite"></div>
+                        <div style="font-size:12px;color:#8ea1b8">Starting…</div>
+                      </div>
+                    </div>
+                    <div class="stage" id="v2">
+                      <div class="ui">
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                          <b>Upload phone photos</b><span class="pill">Front & Back</span>
+                        </div>
+                        <div class="preview" style="margin-top:10px">
+                          <div class="ph"><img id="frontImg" alt="Front phone photo" /></div>
+                          <div class="ph"><img id="backImg"  alt="Back phone photo"  /></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stage" id="v3">
+                      <div class="photoWrap">
+                        <div class="hot red"    style="width:88px;height:68px;left:18%;top:22%"></div>
+                        <div class="hot orange" style="width:70px;height:60px;left:60%;top:52%"></div>
+                      </div>
+                    </div>
+                    <div class="stage" id="v4"><div class="ui"><div class="k">Model</div><div class="v">Generic Phone 12</div></div></div>
+                    <div class="stage" id="v5"><div class="ui"><div class="k">Purchased</div><div class="v">Oct 2021</div></div></div>
+                    <div class="stage" id="v6">
+                      <div class="ui">
+                        <div style="font-weight:900;margin-bottom:8px">Quick internals</div>
+                        <div class="row">
+                          <span class="pill">Turns on: Yes</span>
+                          <span class="pill">Cameras: Yes</span>
+                          <span class="pill">Charging: Yes</span>
+                          <span class="pill">Speakers: Yes</span>
+                          <span class="pill">Motherboard issues: No</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stage" id="v7"><div class="gauge" id="gauge" style="--pct:66%"><div class="price" id="price">₹12,800</div></div></div>
+                    <div class="stage" id="v8"><div class="ui" style="text-align:center"><div style="font-weight:900">Recycle this item?</div><div class="row" style="margin-top:8px"><span class="pill">No</span><span class="pill">Yes</span></div></div></div>
+                    <div class="stage" id="v9"><div class="ui" style="text-align:center"><div style="font-weight:900">Share your location?</div><div class="row" style="margin-top:8px"><span class="pill">Allow Once</span><span class="pill">Allow While Using App</span></div></div></div>
+                    <div class="stage" id="v10"><div class="ui" style="text-align:center"><div style="font-weight:900">Do you want money from this?</div><div class="row" style="margin-top:8px"><span class="pill">Yes</span><span class="pill">No</span></div></div></div>
+                    <div class="stage" id="v11"><div class="ui" style="text-align:center"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div></div></div>
+                    <div class="stage" id="v12"><div class="ui" style="text-align:center"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Collection Center</span><span class="badge">City Recycling Hub</span><span class="badge">Green NGO Drop-off</span></div></div></div>
+                    <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:var(--warn)"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
+                  </div>
+                  <div class="navbar" style="border-top:1px solid var(--line);padding:8px 0;text-align:center;color:#cfe7ff">Demo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+          <div class="label" id="label">Step 1 · Opening from the app drawer…</div>
+          <div class="nextWrap"><button id="nextBtn" class="nextBtn" type="button">Next →</button></div>
+        </div>
+
+        <div>
+          <h2>Exactly what happens</h2>
+          <p>The demo auto-plays like a video, no taps needed. Hit <b>Next</b> to reveal Page 2 (hidden) and auto-scroll to it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE 2: DUMMY APP (HIDDEN UNTIL NEXT) ================= -->
+    <section id="page2" class="page2 hidden">
+      <div class="formCard">
+        <h2>Get your phone’s value</h2>
+        <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
+
+        <form class="eco" id="ecoForm" onsubmit="return false;">
+          <!-- Model -->
+          <label>
+            <span>Phone model</span>
+            <select id="model" required>
+              <option value="" disabled selected>Select your phone</option>
+              <optgroup label="Apple">
+                <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
+              </optgroup>
+              <optgroup label="Samsung">
+                <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
+              </optgroup>
+              <optgroup label="OnePlus">
+                <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
+              </optgroup>
+              <optgroup label="Xiaomi / Redmi">
+                <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
+              </optgroup>
+              <optgroup label="Vivo">
+                <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
+              </optgroup>
+              <optgroup label="Oppo">
+                <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
+              </optgroup>
+            </select>
+          </label>
+
+          <!-- Age -->
+          <label>
+            <span>Age of the phone (years)</span>
+            <input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" inputmode="decimal" required />
+          </label>
+
+          <!-- SSD / Storage -->
+          <label>
+            <span>Storage (SSD size in GB)</span>
+            <input id="ssd" type="number" min="8" max="1024" step="8" placeholder="e.g., 128" inputmode="decimal" required />
+          </label>
+
+          <!-- RAM -->
+          <label>
+            <span>RAM (GB)</span>
+            <input id="ram" type="number" min="1" max="24" step="1" placeholder="e.g., 8" inputmode="decimal" required />
+          </label>
+
+          <!-- Camera -->
+          <div>
+            <span>Camera working?</span>
+            <div class="options" role="radiogroup" aria-label="Camera working">
+              <button type="button" class="opt" data-name="cam" data-val="yes">Yes</button>
+              <button type="button" class="opt" data-name="cam" data-val="no">No</button>
+            </div>
+          </div>
+
+          <!-- Battery health -->
+          <div>
+            <span>Battery health</span>
+            <div class="rangeRow">
+              <input id="bat" type="range" min="50" max="100" value="85" />
+              <output id="batOut">85%</output>
+            </div>
+          </div>
+
+          <!-- Charging port -->
+          <div>
+            <span>Charging port working?</span>
+            <div class="options" role="radiogroup" aria-label="Charging port working">
+              <button type="button" class="opt" data-name="port" data-val="yes">Yes</button>
+              <button type="button" class="opt" data-name="port" data-val="no">No</button>
+            </div>
+          </div>
+
+          <!-- Upload -->
+          <label>
+            <span>Upload a photo</span>
+            <input id="photo" type="file" accept="image/*" required />
+          </label>
+
+          <!-- Actions -->
+          <div class="actions">
+            <button id="predictBtn" class="primary" type="button">Predict</button>
+            <button id="resetBtn" class="ghost" type="button">Reset</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Bottom-sheet (results) ===== -->
+  <div id="sheetBackdrop" class="sheetBackdrop" aria-hidden="true"></div>
+  <div id="sheet" class="sheet" role="dialog" aria-modal="true" aria-label="Prediction result">
+    <div class="sheetHandle"></div>
+    <div class="sheetHeader">
+      <b>Result</b>
+      <button id="sheetClose" class="sheetClose" type="button">Close</button>
+    </div>
+    <div class="resultCard">
       <div class="callouts">
         <div class="callout">📱 <b>Cracked screen detected</b></div>
         <div class="callout">💰 <b>Approx value: ₹23,200</b></div>
       </div>
-      <hr class="sep">
+      <hr class="sep" style="margin:16px 0">
 
       <!-- Recycle? -->
       <div id="qRecycle" class="step">
@@ -446,15 +517,37 @@ nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-
         <div style="margin-top:8px" class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div>
       </div>
 
-      <div class="actions" style="margin-top:10px">
+      <div class="actions" style="margin-top:12px">
         <button id="restartFlow" class="ghost" type="button">Start Again</button>
       </div>
     </div>
+  </div>
 
-  </section>
-</main>
+  <!-- ===== Bottom tabs ===== -->
+  <nav class="tabbar" aria-label="Bottom navigation">
+    <button id="tabHome" class="tab active" type="button">Home</button>
+    <button id="tabValue" class="tab" type="button">Value</button>
+  </nav>
 
-<nav class="tabbar"><span class="tab active">EcoVision</span></nav>
+  <!-- ===== Floating chatbot ===== -->
+  <button id="chatFab" class="chatFab" aria-label="Open chat">💬</button>
+  <div id="chatSheet" class="chatSheet" role="dialog" aria-modal="true" aria-label="EcoVision Assistant">
+    <div class="chatHead">
+      <b><svg viewBox="0 0 200 200" width="18" height="18"><use href="#EcoMark"/></svg> EcoVision Assistant</b>
+      <button id="chatClose" class="sheetClose" type="button">Close</button>
+    </div>
+    <div id="chatBody" class="chatBody">
+      <div class="msg bot">Hi! Ask me anything about EcoVision.</div>
+      <div class="msg bot">Tip: try “Who made this?” 😉</div>
+    </div>
+    <div class="chatInput">
+      <input id="chatInput" type="text" placeholder="Type your question…" enterkeyhint="send" />
+      <button id="chatSend" type="button">Send</button>
+    </div>
+  </div>
+
+  <div class="homeIndicator" aria-hidden="true"></div>
+</div>
 
 <script>
 /* ================= THEME TOGGLE (Light/Dark) ================= */
@@ -480,7 +573,7 @@ nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-
 /* ================= SPLASH TIMING (logo shows) ================= */
 (function intro(){
   const splash = document.getElementById('splash');
-  const HOLD = 950; // short & clean
+  const HOLD = 900; // short & clean
   window.addEventListener('load', ()=>{ setTimeout(()=>{ splash.classList.add('hide'); }, HOLD); });
 })();
 
@@ -547,16 +640,25 @@ window.addEventListener('load', ()=>{
 document.getElementById('nextBtn').addEventListener('click', ()=>{
   const page2 = document.getElementById('page2');
   if(page2.classList.contains('hidden')){
-    page2.classList.remove('hidden');            // reveal page 2
-    setTimeout(()=>{                              // let layout update, then scroll
-      page2.scrollIntoView({behavior:'smooth', block:'start'});
-    }, 30);
+    page2.classList.remove('hidden');
+    setTimeout(()=>{ page2.scrollIntoView({behavior:'smooth', block:'start'}); }, 30);
   }else{
     page2.scrollIntoView({behavior:'smooth', block:'start'});
   }
 });
 
-/* ================= PAGE 2: DUMMY FLOW ================= */
+/* ================= BOTTOM TABS ================= */
+const tabHome = document.getElementById('tabHome');
+const tabValue = document.getElementById('tabValue');
+function setTab(active){ tabHome.classList.toggle('active', active==='home'); tabValue.classList.toggle('active', active==='value'); }
+tabHome.addEventListener('click', ()=>{ setTab('home'); document.getElementById('page1').scrollIntoView({behavior:'smooth', block:'start'}); });
+tabValue.addEventListener('click', ()=>{
+  const p2 = document.getElementById('page2');
+  if(p2.classList.contains('hidden')) p2.classList.remove('hidden');
+  setTab('value'); p2.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ================= PAGE 2: DUMMY FLOW (with sheet) ================= */
 const form = document.getElementById('ecoForm');
 const bat = document.getElementById('bat'); const batOut = document.getElementById('batOut'); bat.addEventListener('input', ()=> batOut.textContent = bat.value + '%');
 const radioState = { cam:null, port:null };
@@ -570,8 +672,7 @@ document.querySelectorAll('.options .opt[data-name]').forEach(btn=>{
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   form.reset(); batOut.textContent='85%';
   document.querySelectorAll('.options .opt[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));
-  hideAllSteps();
-  document.getElementById('resultBlock').classList.remove('show');
+  hideAllSteps(); closeSheet();
   document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
 });
 
@@ -580,6 +681,15 @@ function hide(el){ el.classList.remove('show'); }
 function hideAllSteps(){
   ['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=> hide(document.getElementById(id)));
 }
+
+/* Sheet controls */
+const sheet = document.getElementById('sheet');
+const sheetBackdrop = document.getElementById('sheetBackdrop');
+const sheetClose = document.getElementById('sheetClose');
+function openSheet(){ sheet.classList.add('open'); sheetBackdrop.classList.add('open'); }
+function closeSheet(){ sheet.classList.remove('open'); sheetBackdrop.classList.remove('open'); }
+sheetBackdrop.addEventListener('click', closeSheet);
+sheetClose.addEventListener('click', closeSheet);
 
 document.getElementById('predictBtn').addEventListener('click', ()=>{
   // Ensure all pre-questions answered + photo present
@@ -594,12 +704,9 @@ document.getElementById('predictBtn').addEventListener('click', ()=>{
   if(!model || !age || !ssd || !ram || !cam || !port){ alert('Please answer all questions first.'); return; }
   if(!photo){ alert('Please upload a photo first.'); return; }
 
-  // Show dummy result → then full flow
-  const res = document.getElementById('resultBlock');
   hideAllSteps();
-  res.classList.add('show');
+  openSheet();
   show(document.getElementById('qRecycle'));
-  res.scrollIntoView({behavior:'smooth', block:'start'});
 });
 
 // Recycle?
@@ -625,10 +732,10 @@ document.querySelectorAll('#qMoney .opt').forEach(btn=>{
     const wantMoney = btn.dataset.val==='yes';
     if(wantMoney){
       show(document.getElementById('partners'));
-      // quick "condition" message using earlier answers
+      // simple "condition" note from earlier answers
       const age = parseFloat(document.getElementById('age').value||'0');
-      const bat = parseInt(document.getElementById('bat').value||'0',10);
-      const isWorking = (radioState.cam==='yes') && (radioState.port==='yes') && bat>=70 && age<=4;
+      const bh = parseInt(document.getElementById('bat').value||'0',10);
+      const isWorking = (radioState.cam==='yes') && (radioState.port==='yes') && bh>=70 && age<=4;
       const cond = isWorking ? 'Working condition: direct partners like Cashify, Servify.' :
                                'Not fully working: refurb/recycle partners like Zolopik, Attero.';
       document.getElementById('condNote').textContent = cond;
@@ -641,10 +748,98 @@ document.querySelectorAll('#qMoney .opt').forEach(btn=>{
 
 // Restart
 document.getElementById('restartFlow').addEventListener('click', ()=>{
-  hideAllSteps();
-  document.getElementById('resultBlock').classList.remove('show');
+  hideAllSteps(); closeSheet();
   document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
 });
+
+/* ================= CHATBOT ================= */
+const chatFab   = document.getElementById('chatFab');
+const chatSheet = document.getElementById('chatSheet');
+const chatClose = document.getElementById('chatClose');
+const chatBody  = document.getElementById('chatBody');
+const chatInput = document.getElementById('chatInput');
+const chatSend  = document.getElementById('chatSend');
+
+chatFab.addEventListener('click', ()=> chatSheet.classList.add('open'));
+chatClose.addEventListener('click', ()=> chatSheet.classList.remove('open'));
+chatSend.addEventListener('click', sendMsg);
+chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); sendMsg(); }});
+
+function addMsg(text, who='bot', html=false){
+  const div=document.createElement('div');
+  div.className='msg ' + who;
+  if(html) div.innerHTML=text; else div.textContent=text;
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function sendMsg(){
+  const text = chatInput.value.trim();
+  if(!text) return;
+  addMsg(text, 'user');
+  chatInput.value='';
+  setTimeout(()=> botReply(text), 250);
+}
+
+function botReply(q){
+  const s = q.toLowerCase();
+
+  // Special trigger: who made this → glitch sequence
+  if(/who\s+made|who\s+built|creator|credits/.test(s)){
+    addMsg("EcoVision was created by Sparsh Jain and Eshaan Godbole.", 'bot');
+    addMsg("Sparsh is proficient in hardware and website and Eshaan is good in ", 'bot', true);
+    const spin = `<span class="typing"><span class="spinner"></span> loading…</span>`;
+    addMsg(spin, 'bot', true);
+    setTimeout(()=>{
+      addMsg("Error 404 — crashed", 'bot');
+      crashSite();
+    }, 1200);
+    return;
+  }
+
+  if(/what\s+is|about|explain|how\s+does\s+it\s+work/.test(s)){
+    addMsg("EcoVision estimates your phone’s condition and value from a photo + your answers, then helps you recycle or resell (cash partners or donation).", 'bot');
+    return;
+  }
+  if(/model|phone\s+list|supported|devices?/.test(s)){
+    addMsg("Models now: iPhone 11–15, Galaxy S20–S23 & A52, OnePlus 7–10 & Nord 2, Redmi Note 9–11, Mi 10/11X, Vivo V20/V21/Y20/Y21/X60, Oppo F17/F19/Reno 6/A74/A55.", 'bot');
+    return;
+  }
+  if(/privacy|data|photo/.test(s)){
+    addMsg("This demo runs fully in your browser. Photos are not uploaded anywhere in the dummy app.", 'bot');
+    return;
+  }
+  if(/partners?|cashify|zolopik|servify|attero|reglobe|karo/.test(s)){
+    addMsg("If you want money: Cashify, Servify, ReGlobe. If not fully working: Zolopik, Attero. You can also donate via local e-waste centers or NGOs.", 'bot');
+    return;
+  }
+  if(/value|price|worth/.test(s)){
+    addMsg("The demo shows a fixed example: cracked screen → approx ₹23,200. Actual pricing needs a backend and real model.", 'bot');
+    return;
+  }
+  if(/recycle|donate|drop[-\s]?off/.test(s)){
+    addMsg("Choose recycle → share location → pick money (partners) or give away (centers/NGOs). We also suggest a ‘self-listing’ ask price.", 'bot');
+    return;
+  }
+
+  // default
+  addMsg("I can help with: how it works, supported models, value, recycling partners, privacy — or ask “Who made this?”.", 'bot');
+}
+
+/* Crash overlay (blocks all interaction until reload) */
+function crashSite(){
+  const ov = document.createElement('div');
+  ov.className = 'crashOverlay';
+  ov.innerHTML = `
+    <div class="crashCard">
+      <h1>ERROR 404 — CRASHED</h1>
+      <p>EcoVision encountered a playful crash. Reload the page to continue.</p>
+    </div>`;
+  document.body.appendChild(ov);
+  document.documentElement.style.overflow = 'hidden';
+}
+
+/* ================= END CHATBOT ================= */
 </script>
 </body>
 </html>
