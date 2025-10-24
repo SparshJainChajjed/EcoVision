@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>EcoVision — Demo + App Flow</title>
-<meta name="description" content="EcoVision: Intro + demo, then full dummy app flow on the same page with Light/Dark mode.">
+<meta name="description" content="EcoVision: Splash + demo, then full dummy app flow on the same page with Light/Dark mode.">
 <style>
 /* ================= THEME ================= */
 :root{
@@ -21,6 +21,20 @@
 html{scroll-behavior:smooth}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+
+/* ================= SPLASH (INTRO LOGO) ================= */
+.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;gap:10px;
+  background:#0a0b0f; /* stays dark even if theme is light for contrast */
+  transition:opacity .35s ease, visibility .35s ease}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-logo{width:148px;height:148px;border-radius:30px;display:grid;place-items:center;
+  background:linear-gradient(180deg, rgba(22,163,74,.20), rgba(34,197,94,.12));
+  box-shadow:0 18px 40px rgba(34,197,94,.30), inset 0 0 30px rgba(255,255,255,.05)}
+.splash-name{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
+.ring{stroke-dasharray:452;stroke-dashoffset:452;animation:ring-draw .8s ease-out .05s forwards}
+@keyframes ring-draw{to{stroke-dashoffset:0}}
+.leafIn{transform-origin:100px 100px;opacity:0;animation:leaf-in .6s cubic-bezier(.2,1,.2,1) .35s forwards}
+@keyframes leaf-in{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
 
 /* ================= HEADER ================= */
 header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -95,6 +109,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:24px 0}
 
 /* ================= PAGE 2: FORM ================= */
 .page2{scroll-margin-top:70px}
+.hidden{display:none}
 .formCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 form.eco{display:grid;gap:12px}
 label span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
@@ -127,23 +142,31 @@ nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-
 </head>
 <body>
 
-<!-- ===== Reusable simple logo mark (small and consistent) ===== -->
+<!-- ===== Reusable logo symbol (with ring class for splash animation) ===== -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%"  stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/>
     </linearGradient>
     <g id="EcoMark">
-      <circle cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
-      <rect x="66" y="54" width="68" height="92" rx="12" fill="none" stroke="#BFEFD0" stroke-width="6"/>
-      <circle cx="100" cy="64" r="3.2" fill="#BFEFD0"/>
-      <rect x="72" y="70" width="56" height="70" rx="8" fill="#0B1320" opacity=".9"/>
-      <path d="M100 126 L100 94" stroke="#C8F7D9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-      <path d="M100 106 C112 100,124 100,130 104 C122 106,112 112,104 114 C101 114,99 110,100 106 Z" fill="url(#leafCore)"/>
-      <path d="M100 106 C88 100,76 100,70 104 C78 106,88 112,96 114 C99 114,101 110,100 106 Z" fill="url(#leafCore)"/>
+      <circle class="ring" cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
+      <g class="leafIn">
+        <rect x="66" y="54" width="68" height="92" rx="12" fill="none" stroke="#BFEFD0" stroke-width="6"/>
+        <circle cx="100" cy="64" r="3.2" fill="#BFEFD0"/>
+        <rect x="72" y="70" width="56" height="70" rx="8" fill="#0B1320" opacity=".9"/>
+        <path d="M100 126 L100 94" stroke="#C8F7D9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <path d="M100 106 C112 100,124 100,130 104 C122 106,112 112,104 114 C101 114,99 110,100 106 Z" fill="url(#leafCore)"/>
+        <path d="M100 106 C88 100,76 100,70 104 C78 106,88 112,96 114 C99 114,101 110,100 106 Z" fill="url(#leafCore)"/>
+      </g>
     </g>
   </defs>
 </svg>
+
+<!-- ===== SPLASH INTRO (logo shows on first load) ===== -->
+<div id="splash" class="splash" role="dialog" aria-label="EcoVision intro">
+  <div class="splash-logo"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
+  <div class="splash-name">EcoVision</div>
+</div>
 
 <header class="app">
   <div class="brand">
@@ -253,18 +276,18 @@ nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-
         <!-- Progress -->
         <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
         <div class="label" id="label">Step 1 · Opening from the app drawer…</div>
-        <div class="nextWrap"><a href="#page2" class="nextBtn">Next →</a></div>
+        <div class="nextWrap"><button id="nextBtn" class="nextBtn" type="button">Next →</button></div>
       </div>
 
       <div>
         <h2>Exactly what happens</h2>
-        <p>The demo auto-plays like a video, no taps needed. Use the green button to jump to the real (dummy) app flow below.</p>
+        <p>The demo auto-plays like a video, no taps needed. Hit <b>Next</b> to reveal Page 2 (hidden) and auto-scroll to it.</p>
       </div>
     </div>
   </section>
 
-  <!-- ================= PAGE 2: DUMMY APP ================= -->
-  <section id="page2" class="page2">
+  <!-- ================= PAGE 2: DUMMY APP (HIDDEN UNTIL NEXT) ================= -->
+  <section id="page2" class="page2 hidden">
     <div class="formCard">
       <h2>Get your phone’s value</h2>
       <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
@@ -454,6 +477,13 @@ nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-
   });
 })();
 
+/* ================= SPLASH TIMING (logo shows) ================= */
+(function intro(){
+  const splash = document.getElementById('splash');
+  const HOLD = 950; // short & clean
+  window.addEventListener('load', ()=>{ setTimeout(()=>{ splash.classList.add('hide'); }, HOLD); });
+})();
+
 /* ================= PAGE 1 DEMO AUTOPLAY ================= */
 const s0=document.getElementById('s0'), s1=document.getElementById('s1');
 const bar=document.getElementById('bar'), label=document.getElementById('label');
@@ -509,8 +539,21 @@ window.addEventListener('load', ()=>{
   }
   document.getElementById('frontImg').src=drawPhonePNG({cracked:true});
   document.getElementById('backImg').src =drawPhonePNG({back:true});
-  // auto start demo
-  setTimeout(openAppAuto, 700);
+  // auto start demo after splash duration
+  setTimeout(openAppAuto, 1000);
+});
+
+/* ================= NEXT BUTTON: REVEAL + AUTOSCROLL ================= */
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  const page2 = document.getElementById('page2');
+  if(page2.classList.contains('hidden')){
+    page2.classList.remove('hidden');            // reveal page 2
+    setTimeout(()=>{                              // let layout update, then scroll
+      page2.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 30);
+  }else{
+    page2.scrollIntoView({behavior:'smooth', block:'start'});
+  }
 });
 
 /* ================= PAGE 2: DUMMY FLOW ================= */
@@ -529,7 +572,7 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
   document.querySelectorAll('.options .opt[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));
   hideAllSteps();
   document.getElementById('resultBlock').classList.remove('show');
-  location.hash = '#page2';
+  document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
 });
 
 function show(el){ el.classList.add('show'); }
@@ -554,7 +597,7 @@ document.getElementById('predictBtn').addEventListener('click', ()=>{
   // Show dummy result → then full flow
   const res = document.getElementById('resultBlock');
   hideAllSteps();
-  show(res);
+  res.classList.add('show');
   show(document.getElementById('qRecycle'));
   res.scrollIntoView({behavior:'smooth', block:'start'});
 });
@@ -564,10 +607,7 @@ document.querySelectorAll('#qRecycle .opt').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const val = btn.dataset.val;
     if(val==='yes'){ show(document.getElementById('qLocation')); }
-    else {
-      // If No recycle → Still show suggested ask + honesty warning
-      hideAllSteps(); show(document.getElementById('ask'));
-    }
+    else { hideAllSteps(); show(document.getElementById('ask')); }
   });
 });
 
@@ -585,13 +625,13 @@ document.querySelectorAll('#qMoney .opt').forEach(btn=>{
     const wantMoney = btn.dataset.val==='yes';
     if(wantMoney){
       show(document.getElementById('partners'));
-      // Compute a simple "working" condition from earlier answers
+      // quick "condition" message using earlier answers
       const age = parseFloat(document.getElementById('age').value||'0');
       const bat = parseInt(document.getElementById('bat').value||'0',10);
       const isWorking = (radioState.cam==='yes') && (radioState.port==='yes') && bat>=70 && age<=4;
       const cond = isWorking ? 'Working condition: direct partners like Cashify, Servify.' :
                                'Not fully working: refurb/recycle partners like Zolopik, Attero.';
-      const note = document.getElementById('condNote'); note.textContent = cond;
+      document.getElementById('condNote').textContent = cond;
     }else{
       show(document.getElementById('donate'));
     }
@@ -603,7 +643,7 @@ document.querySelectorAll('#qMoney .opt').forEach(btn=>{
 document.getElementById('restartFlow').addEventListener('click', ()=>{
   hideAllSteps();
   document.getElementById('resultBlock').classList.remove('show');
-  window.scrollTo({top:document.getElementById('page2').offsetTop-60, behavior:'smooth'});
+  document.getElementById('page2').scrollIntoView({behavior:'smooth', block:'start'});
 });
 </script>
 </body>
