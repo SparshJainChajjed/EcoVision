@@ -446,9 +446,13 @@ document.querySelectorAll('#qRecycle .pill').forEach(btn=>btn.addEventListener('
 document.querySelectorAll('#qLocation .pill').forEach(btn=>btn.addEventListener('click',()=>{document.getElementById('locStatus').style.display='block';show(document.getElementById('qMoney'))}));
 document.querySelectorAll('#qMoney .pill').forEach(btn=>btn.addEventListener('click',()=>{const wantMoney=btn.dataset.val==='yes';if(wantMoney){show(document.getElementById('partners'));const age=parseFloat(document.getElementById('age').value||'0');const bh=parseInt(document.getElementById('bat').value||'0',10);const camOk=state.cam==='yes';const portOk=state.port==='yes';const isWorking=camOk&&portOk&&bh>=70&&age<=4;const cond=isWorking?'Working condition: direct partners like Cashify, Servify.':'Not fully working: refurb/recycle partners like Zolopik, Attero.';document.getElementById('condNote').textContent=cond}else{show(document.getElementById('donate'))}show(document.getElementById('ask'))}));
 
-document.getElementById('restartFlow').addEventListener('click',()=>{hideAllSteps();document.getElementById('resultBlock').classList.remove('show');document.getElementById('page2').scrollIntoView({behavior:'smooth',block:'start')});
+document.getElementById('restartFlow').addEventListener('click', () => {
+  hideAllSteps();
+  document.getElementById('resultBlock').classList.remove('show');
+  document.getElementById('page2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
-const chatFab=document.getElementById('chatFab');const chatPanel=document.getElementById('chatPanel');const chatClose=document.getElementById('chatClose');const chatBody=document.getElementById('chatBody');const chatInput=document.getElementById('chatInput');const chatSend=document.getElementById('chatSend');const crashOverlay=document.getElementById('crash');
+const chatFab=document.getElementById('chatFab');const chatPanel=document.getElementById('chatPanel');const chatClose=document.getElementById('chatClose');const chatBody=document.getElementById('chatBody');const chatInput=document.getElementById('chatInput');const chatSend=document.getElementById('chatSend');
 function openChat(){chatPanel.classList.add('open');if(!chatBody.dataset.boot){addBot('Hi! I’m the EcoVision chatbot. Ask me anything about the project.');chatBody.dataset.boot='1'}chatInput.focus()}
 function closeChat(){chatPanel.classList.remove('open')}
 chatFab.addEventListener('click',openChat);chatClose.addEventListener('click',closeChat);chatSend.addEventListener('click',handleChat);chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handleChat()}})
