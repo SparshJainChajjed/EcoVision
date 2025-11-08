@@ -13,19 +13,18 @@
 html{scroll-behavior:smooth}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 
+/* Intro */
 .splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:var(--bg);transition:opacity .35s ease,visibility .35s ease}
 .splash.hide{opacity:0;visibility:hidden}
 .word{display:flex;gap:4px;filter:drop-shadow(0 18px 40px rgba(34,197,94,.25))}
 .letter{font-weight:900;font-size:42px;line-height:1;color:#c8ffd8;letter-spacing:.5px;opacity:0;transform:translateY(24px) scale(.9)}
-@keyframes pop {0%{opacity:0;transform:translateY(24px) scale(.9) rotate(-3deg)}
-60%{opacity:1;transform:translateY(-6px) scale(1.06)}
-100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes pop {0%{opacity:0;transform:translateY(24px) scale(.9) rotate(-3deg)}60%{opacity:1;transform:translateY(-6px) scale(1.06)}100%{opacity:1;transform:translateY(0) scale(1)}}
 .letter.show{animation:pop .55s cubic-bezier(.2,1,.2,1) forwards}
 .dotLeaf{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#a7f3d0,#22c55e 65%,#16a34a);display:inline-block;margin-left:2px;opacity:0;transform:translateY(-10px)}
 @keyframes fall {0%{opacity:0;transform:translate(-10px,-40px) rotate(-25deg)}80%{opacity:1;transform:translate(0,2px) rotate(4deg)}100%{opacity:1;transform:translate(0,0) rotate(0)}}
 .dotLeaf.show{animation:fall .7s .55s ease forwards}
 
-/* ====== Header / layout ====== */
+/* Header / layout */
 header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line)}
 .brand{display:flex;gap:12px;align-items:center}
 .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(34,197,94,.25),rgba(34,197,94,.10))}
@@ -42,7 +41,7 @@ p{color:var(--muted);line-height:1.55;margin:0 0 10px}
 ul.clean{margin:10px 0 0 0;padding:0;list-style:none}
 ul.clean li{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
 
-/* Phone stub (kept) */
+/* Phone walkthrough */
 .phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:20px;padding:6px;background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.35)}
 .screen{position:absolute;inset:6px;border-radius:16px;overflow:hidden;background:#0a0f16;display:grid}
 .stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);transition:opacity .42s ease,transform .42s ease}
@@ -108,7 +107,7 @@ input[type=range]::-moz-range-track{background:transparent}
 .badge{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill);cursor:pointer;font-weight:700}
 .warn{color:#b45309}
 
-/* Bottom sheet for partner contact */
+/* Partner sheet */
 .sheet{position:fixed;left:50%;bottom:12px;transform:translateX(-50%) translateY(120%);z-index:120;background:var(--card);border:1px solid var(--line);border-radius:16px;max-width:820px;width:calc(100vw - 24px);box-shadow:0 16px 40px rgba(0,0,0,.4);transition:transform .35s ease}
 .sheet.open{transform:translateX(-50%) translateY(0)}
 .sheetHead{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
@@ -119,7 +118,7 @@ input[type=range]::-moz-range-track{background:transparent}
 .linkRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
 .linkRow a{text-decoration:none;border:1px solid var(--line);padding:6px 10px;border-radius:8px;background:var(--pill);color:var(--text);font-weight:700}
 
-/* Chat + crash (kept) */
+/* Chat + crash */
 .chatFab{position:fixed;right:16px;bottom:16px;z-index:80;width:64px;height:64px;border-radius:50%;background:var(--accent2);color:#053a16;border:none;font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.35)}
 .chatPanel{position:fixed;right:16px;bottom:92px;width:min(600px,calc(100vw - 32px));max-height:88vh;display:none;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;z-index:85}
 .chatPanel.open{display:flex}
@@ -144,7 +143,7 @@ input[type=range]::-moz-range-track{background:transparent}
 </style>
 </head>
 <body>
-<!-- ====== Bouncing-letter Intro ====== -->
+<!-- Intro -->
 <div id="splash" class="splash" role="dialog" aria-label="EcoVision intro">
   <div class="word" aria-hidden="true">
     <span class="letter">E</span>
@@ -159,7 +158,7 @@ input[type=range]::-moz-range-track{background:transparent}
   </div>
 </div>
 
-<!-- Simple reusable logo for header -->
+<!-- Logo defs -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/></linearGradient>
@@ -193,7 +192,7 @@ input[type=range]::-moz-range-track{background:transparent}
         <p>Upload a photo, answer a few quick questions, then choose to <b>get paid</b> or <b>recycle responsibly</b>.</p>
         <ul class="clean">
           <li>✅ Fast estimate for visible damage.</li>
-          <li>🔒 Photo stays in your browser for this demo.</li>
+          <li>🔒 Photo stays in your browser on this page.</li>
           <li>🤝 Cash partners or donation centers.</li>
         </ul>
         <div class="progress" aria-hidden="true" style="margin-top:16px"><div class="bar" id="bar"></div></div>
@@ -201,7 +200,6 @@ input[type=range]::-moz-range-track{background:transparent}
         <div style="margin-top:10px"><button id="nextBtn" class="primary" type="button">Next →</button></div>
       </div>
 
-      <!-- Kept the phone walkthrough exactly as before -->
       <div>
         <div class="phone" aria-label="EcoVision walkthrough">
           <div class="screen">
@@ -256,9 +254,9 @@ input[type=range]::-moz-range-track{background:transparent}
                   <div class="stage" id="v10"><div class="ui" style="text-align:center"><div style="font-weight:900">Do you want money from this?</div><div class="row" style="margin-top:8px"><span class="pill">Yes</span><span class="pill">No</span></div></div></div>
                   <div class="stage" id="v11"><div class="ui" style="text-align:center"><div class="k">We can connect you to:</div><div class="badges" style="margin-top:8px"><span class="badge">Cashify</span><span class="badge">Zolopik</span><span class="badge">Servify</span><span class="badge">ReGlobe</span><span class="badge">Attero</span><span class="badge">Karo Sambhav</span></div></div></div>
                   <div class="stage" id="v12"><div class="ui" style="text-align:center"><div class="k">Prefer to give it away yourself?</div><div class="badges" style="margin-top:8px"><span class="badge">e-Waste Center</span><span class="badge">City Hub</span><span class="badge">Green NGO</span></div></div></div>
-                  <div class="stage" id="v13"><div class="ui" style="text-align:center"><div>Suggested ask (self-listing):</div><div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div><div style="margin-top:8px;color:#ffdf7f"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
+                  <div class="stage" id="v13"><div class="ui" style="text-align:center"><div class="warn"><b>⚠️ Be honest:</b> Price is from your inputs; not a dealer offer.</div></div></div>
                 </div>
-                <div class="navbar" style="border-top:1px solid var(--line);padding:8px 0;text-align:center;color:#cfe7ff">Demo</div>
+                <div class="navbar" style="border-top:1px solid var(--line);padding:8px 0;text-align:center;color:#cfe7ff">EcoVision</div>
               </div>
             </div>
           </div>
@@ -272,12 +270,10 @@ input[type=range]::-moz-range-track{background:transparent}
   <section id="page2" class="page2 hidden">
     <div class="formCard">
       <h2>Get your phone’s value</h2>
-      <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
+      <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. You’ll see your estimate and the full recycle/resell flow.</p>
 
       <form class="eco" id="ecoForm" onsubmit="return false;">
-        <!-- NEW: model now a true dropdown -->
-        <label>
-          <span>Phone model</span>
+        <label><span>Phone model</span>
           <select id="model" required>
             <option value="" disabled selected>Select model</option>
             <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
@@ -289,21 +285,18 @@ input[type=range]::-moz-range-track{background:transparent}
           </select>
         </label>
 
-        <label>
-          <span>Age of the phone (years)</span>
+        <label><span>Age of the phone (years)</span>
           <input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" required />
         </label>
 
-        <label>
-          <span>Storage (GB)</span>
+        <label><span>Storage (GB)</span>
           <select id="ssd" required>
             <option value="" disabled selected>Select storage</option>
             <option>16</option><option>32</option><option>64</option><option>128</option><option>256</option><option>512</option><option value="1024">1024</option>
           </select>
         </label>
 
-        <label>
-          <span>RAM (GB)</span>
+        <label><span>RAM (GB)</span>
           <select id="ram" required>
             <option value="" disabled selected>Select RAM</option>
             <option>2</option><option>3</option><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option><option>24</option>
@@ -318,8 +311,7 @@ input[type=range]::-moz-range-track{background:transparent}
           </div>
         </div>
 
-        <label>
-          <span>Battery health</span>
+        <label><span>Battery health</span>
           <div class="rangeRow">
             <input id="bat" type="range" min="50" max="100" value="85" />
             <output id="batOut">85%</output>
@@ -334,8 +326,7 @@ input[type=range]::-moz-range-track{background:transparent}
           </div>
         </div>
 
-        <label>
-          <span>Upload a photo</span>
+        <label><span>Upload a photo</span>
           <input id="photo" type="file" accept="image/*" required />
         </label>
 
@@ -364,7 +355,7 @@ input[type=range]::-moz-range-track{background:transparent}
         <div id="qLocation" class="step">
           <div style="font-weight:900;margin-bottom:6px">Share your location?</div>
           <div class="actions"><button class="pill primary" type="button" data-flow="loc" data-val="once">Allow Once</button><button class="pill ghost" type="button" data-flow="loc" data-val="while">Allow While Using App</button></div>
-          <div id="locStatus" style="margin-top:8px;display:none;color:var(--muted)">Location captured (demo).</div>
+          <div id="locStatus" style="margin-top:8px;display:none;color:var(--muted)">Location captured.</div>
         </div>
         <div id="qMoney" class="step">
           <div style="font-weight:900;margin-bottom:6px">Do you want money from this?</div>
@@ -384,9 +375,7 @@ input[type=range]::-moz-range-track{background:transparent}
         </div>
 
         <div id="ask" class="step">
-          <div>Suggested ask (self-listing):</div>
-          <div style="font-size:22px;font-weight:900;margin-top:4px">₹13,000 – ₹14,000</div>
-          <div style="margin-top:8px" class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div>
+          <div class="warn"><b>⚠️ Be honest:</b> This price is based on what you entered; it’s not a dealer quote.</div>
         </div>
 
         <div class="actions" style="margin-top:10px"><button id="restartFlow" class="ghost" type="button">Start Again</button></div>
@@ -395,7 +384,7 @@ input[type=range]::-moz-range-track{background:transparent}
   </section>
 </main>
 
-<!-- Bottom Sheet for partner contacts + talk script -->
+<!-- Partner contact sheet -->
 <section id="sheet" class="sheet" aria-label="Partner contact and script">
   <div class="sheetHead">
     <div style="font-weight:900" id="sheetTitle">Partner</div>
@@ -429,7 +418,7 @@ input[type=range]::-moz-range-track{background:transparent}
 <div id="err" class="err"></div>
 
 <script>
-/* error & theme handlers (kept) */
+/* errors + theme */
 (function(){
   const e=document.getElementById('err');
   window.addEventListener('error',ev=>{e.textContent='Script error: '+(ev.message||'unknown');e.classList.add('show');document.getElementById('splash').classList.add('hide')});
@@ -444,7 +433,7 @@ input[type=range]::-moz-range-track{background:transparent}
     else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('ecovision_theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}})
 }catch(_){}})();
 
-/* ====== Intro bouncing letters ====== */
+/* Intro */
 (function(){
   const splash=document.getElementById('splash');
   const letters=[...splash.querySelectorAll('.letter')];
@@ -456,7 +445,7 @@ input[type=range]::-moz-range-track{background:transparent}
   });
 })();
 
-/* Phone demo: draw phone images & autoplay steps (kept) */
+/* Walkthrough */
 let opened=false;const s0=document.getElementById('s0'),s1=document.getElementById('s1');const bar=document.getElementById('bar'),label=document.getElementById('label');const vStages=[...document.querySelectorAll('.viewport .stage')];let vidx=1,speedMs=1600,timer=null;
 function openAppAuto(){if(opened) return; opened=true; try{s0.classList.remove('active');s1.classList.add('active');label.textContent='Walkthrough playing…';bar.style.width=(2/14*100)+'%';setTimeout(()=>{playInner(1)},380)}catch(_){}} 
 function playInner(start){try{clearInterval(timer);vidx=start;showInner(vidx);timer=setInterval(()=>{vidx=(vidx%13)+1;showInner(vidx)},speedMs)}catch(_){}} 
@@ -469,7 +458,7 @@ window.addEventListener('load',()=>{try{
 }catch(_){openAppAuto()}});
 document.getElementById('nextBtn').addEventListener('click',()=>{const page2=document.getElementById('page2');page2.classList.remove('hidden');setTimeout(()=>page2.scrollIntoView({behavior:'smooth',block:'start'}),30)});
 
-/* Form interactions */
+/* Form + range */
 const form=document.getElementById('ecoForm');const bat=document.getElementById('bat');const batOut=document.getElementById('batOut');
 function paintRange(){const min=parseInt(bat.min,10),max=parseInt(bat.max,10),val=parseInt(bat.value,10);const pct=((val-min)*100)/(max-min);bat.style.backgroundSize=pct+'% 100%';batOut.textContent=val+'%'}
 bat.addEventListener('input',paintRange);window.addEventListener('load',paintRange);
@@ -481,10 +470,9 @@ function show(el){el.classList.add('show')}
 function hide(el){el.classList.remove('show')}
 function hideAllSteps(){['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=>{const el=document.getElementById(id);if(el)hide(el)})}
 
-/* Optional local saving (kept) */
+/* Optional local saving */
 let dirHandle=null;
 const canFS=()=>!!window.showDirectoryPicker&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1');
-const canServer=()=>location.origin.startsWith('http://localhost')||location.origin.startsWith('http://127.0.0.1');
 document.getElementById('chooseDir').addEventListener('click',async()=>{try{if(!canFS()){document.getElementById('saveHint').textContent='Pick folder works only on HTTPS/localhost in Chromium browsers.';return}dirHandle=await window.showDirectoryPicker();document.getElementById('saveHint').textContent='Saving to: '+(dirHandle.name||'selected folder')}catch{document.getElementById('saveHint').textContent='Folder not selected'}});
 
 function slug(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
@@ -496,7 +484,7 @@ async function appendCSVFS(fileName,header,row){try{const fh=await dirHandle.get
 function oneTimeDownload(filename,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type||'text/plain'}));a.download=filename;return a}
 function wrapCSV(s){if(s.includes(',')||s.includes('"')||s.includes('\n'))return '"'+s.replace(/"/g,'""')+'"';return s}
 
-/* Predict: now shows a 5s loader before result */
+/* Predict (5s loader) */
 const predBtn=document.getElementById('predictBtn'),predSpin=document.getElementById('predSpin'),predText=document.getElementById('predText');
 function setPredictLoading(on){if(on){predBtn.setAttribute('disabled','');predSpin.style.display='inline-block';predText.textContent='Predicting…'}else{predBtn.removeAttribute('disabled');predSpin.style.display='none';predText.textContent='Predict'}}
 document.getElementById('predictBtn').addEventListener('click',async()=>{
@@ -513,10 +501,10 @@ document.getElementById('predictBtn').addEventListener('click',async()=>{
     if(!photo){alert('Please upload a photo first.');return}
 
     setPredictLoading(true);
-    await new Promise(r=>setTimeout(r,5000)); // 5-sec demo processing
+    await new Promise(r=>setTimeout(r,5000));
 
     let saved=null; saved=await saveViaFS(photo);
-    document.getElementById('savedPath').textContent=saved?('Saved image: '+saved):'Saved locally disabled (use Choose Save Folder).';
+    document.getElementById('savedPath').textContent=saved?('Saved image: '+saved):'Saving is available when you choose a folder.';
 
     const header='timestamp,model,age_years,storage_gb,ram_gb,camera_ok,battery_health,port_ok,approx_value,cracked_screen';
     const ts=new Date().toISOString();
@@ -539,7 +527,7 @@ document.querySelectorAll('#qLocation .pill').forEach(btn=>btn.addEventListener(
 document.querySelectorAll('#qMoney .pill').forEach(btn=>btn.addEventListener('click',()=>{const wantMoney=btn.dataset.val==='yes';if(wantMoney){renderPartners();show(document.getElementById('partners'));show(document.getElementById('ask'))}else{show(document.getElementById('donate'));show(document.getElementById('ask'))}}));
 document.getElementById('restartFlow').addEventListener('click',()=>{hideAllSteps();document.getElementById('resultBlock').classList.remove('show');document.getElementById('page2').scrollIntoView({behavior:'smooth',block:'start'})});
 
-/* Partner contacts + script */
+/* Partners */
 const partnerData={
   "Cashify":{site:"https://www.cashify.in",contacts:[{type:"Phone",value:"+91 72900 68900"},{type:"Email",value:"support@cashify.in"}],more:"https://www.cashify.in/faq/cashify-customer-support-form"},
   "Zolopik":{site:"https://www.zolopik.com",contacts:[{type:"Phone",value:"+91 97434 40440"},{type:"Phone",value:"88841 22253"},{type:"Email",value:"recycle@zolopik.com"}],more:"https://zolopik.com/contact/"},
@@ -564,7 +552,7 @@ document.getElementById('copyScript').addEventListener('click',async()=>{try{awa
 function openSheet(name){
   const data=partnerData[name]; if(!data)return;
   sheetTitle.textContent=name; sheetContacts.innerHTML=''; sheetLinks.innerHTML='';
-  data.contacts.forEach(c=>{const p=document.createElement('div');p.innerHTML=`<b>${c.type}:</b> ${c.value}`;sheetContacts.appendChild(p)});
+  (data.contacts||[]).forEach(c=>{const p=document.createElement('div');p.innerHTML=`<b>${c.type}:</b> ${c.value}`;sheetContacts.appendChild(p)});
   const a=document.createElement('a');a.href=data.site;a.target="_blank";a.rel="noopener";a.textContent="Website";sheetLinks.appendChild(a);
   if(data.more){const m=document.createElement('a');m.href=data.more;m.target="_blank";m.rel="noopener";m.textContent="More / Contact page";sheetLinks.appendChild(m)}
   const model=document.getElementById('model').value||'[model]';
@@ -592,7 +580,7 @@ Please confirm:
   sheet.classList.add('open');
 }
 
-/* Chat (kept) + 404 trigger on “who made this” */
+/* Chat + crash */
 const chatFab=document.getElementById('chatFab');const chatPanel=document.getElementById('chatPanel');const chatClose=document.getElementById('chatClose');const chatBody=document.getElementById('chatBody');const chatInput=document.getElementById('chatInput');const chatSend=document.getElementById('chatSend');const crash=document.getElementById('crash');
 function addMsg(txt,who){const div=document.createElement('div');div.className='chatMsg '+(who||'bot');div.textContent=txt;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight}
 function normalize(s){return (s||'').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').trim()}
@@ -603,9 +591,9 @@ chatSend.addEventListener('click',handleChat);chatInput.addEventListener('keydow
 function handleChat(){
   const raw=(chatInput.value||'').trim();if(!raw)return;const q=normalize(raw);addMsg(raw,'user');chatInput.value='';
   if(/who.*(made|built)|creator/.test(q)){addMsg('Sparsh Jain and Eshaan Godbole. Sparsh is proficient in hardware and website and Eshaan is good in ','bot');setTimeout(()=>addMsg('loading… ⟳','bot'),700);setTimeout(()=>{crash.classList.add('show');},1600);return}
-  if(/privacy|image|photo|data|where.*(go|store)/.test(q)){addMsg('In this demo, your image stays in your browser unless you pick a save folder (or run it on localhost).','bot');return}
+  if(/privacy|image|photo|data|where.*(go|store)/.test(q)){addMsg('On this page, your image stays in your browser unless you pick a save folder (or run it on localhost).','bot');return}
   if(/(dataset|csv|save|images\.txt)/.test(q)){addMsg('Use “Choose Save Folder” to write `images.txt` and `ecovision_dataset.csv` into that folder. Otherwise we offer downloads.','bot');return}
-  if(/price|value|estimate|worth/.test(q)){addMsg('₹23,200 is a demo estimate based on your answers; not a dealer quote.','bot');return}
+  if(/price|value|estimate|worth/.test(q)){addMsg('₹23,200 is an estimated value based on your answers; not a dealer quote.','bot');return}
   if(/partner|contact|cashify|zolopik|servify|attero|karo/.test(q)){addMsg('After Predict → Money = Yes, tap a partner badge for website, phone/email, and a ready talk script.','bot');return}
   if(/how.*use|start|guide|steps/.test(q)){addMsg('Flow: model → age/storage/RAM → camera/port/battery → upload photo → Predict (5s) → result → recycle/location/money → partners or donate.','bot');return}
   addMsg('Ask about privacy, saving dataset, pricing, partners/contacts, or how to use.','bot');
