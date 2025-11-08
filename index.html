@@ -12,14 +12,42 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;gap:10px;background:#0a0b0f;transition:opacity .35s ease,visibility .35s ease}
+
+/* ---------- Splash (intro) ---------- */
+.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(1200px 800px at 50% -10%,rgba(34,197,94,.16),transparent 60%),#071012;transition:opacity .45s ease,visibility .45s ease}
 .splash.hide{opacity:0;visibility:hidden}
-.splash-logo{width:148px;height:148px;border-radius:30px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(22,163,74,.20),rgba(34,197,94,.12));box-shadow:0 18px 40px rgba(34,197,94,.30),inset 0 0 30px rgba(255,255,255,.05)}
-.splash-name{font-weight:900;font-size:18px;color:#e8ffe9;letter-spacing:.3px}
-.ring{stroke-dasharray:452;stroke-dashoffset:452;animation:ring-draw .8s ease-out .05s forwards}
+.splashInner{display:grid;place-items:center;gap:18px}
+#introSVG{width:min(260px,65vw);height:auto;display:block;filter:drop-shadow(0 22px 40px rgba(0,0,0,.35))}
+.seed{opacity:0;transform-origin:100px 140px;animation:seed-in .28s ease forwards .05s}
+@keyframes seed-in{to{opacity:1;transform:scale(1)}}
+.stem{stroke-dasharray:300;stroke-dashoffset:300;animation:stem-draw .8s ease-out .22s forwards}
+@keyframes stem-draw{to{stroke-dashoffset:0}}
+.leafL,.leafR{opacity:0;transform:scale(.85);animation:leaf-pop .38s cubic-bezier(.2,1,.2,1) .65s forwards}
+.leafR{animation-delay:.77s}
+@keyframes leaf-pop{to{opacity:1;transform:scale(1)}}
+.phoneRing{stroke-dasharray:360;stroke-dashoffset:360;opacity:.9;animation:ring-draw .7s ease-out .88s forwards}
 @keyframes ring-draw{to{stroke-dashoffset:0}}
-.leafIn{transform-origin:100px 100px;opacity:0;animation:leaf-in .6s cubic-bezier(.2,1,.2,1) .35s forwards}
-@keyframes leaf-in{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+.phoneRect{opacity:0;transform:translateY(6px) scale(.98);animation:phone-in .45s ease .98s forwards}
+@keyframes phone-in{to{opacity:1;transform:translateY(0) scale(1)}}
+.brandWord{opacity:0;transform:translateY(10px);animation:word-in .5s ease forwards 1.05s}
+.brandWord:nth-child(2){animation-delay:1.12s}
+.brandWord:nth-child(3){animation-delay:1.19s}
+.brandWord:nth-child(4){animation-delay:1.26s}
+.brandWord:nth-child(5){animation-delay:1.33s}
+.brandWord:nth-child(6){animation-delay:1.40s}
+.brandWord:nth-child(7){animation-delay:1.47s}
+.brandWord:nth-child(8){animation-delay:1.54s}
+.brandWord:nth-child(9){animation-delay:1.61s}
+@keyframes word-in{to{opacity:1;transform:translateY(0)}}
+.carousel{font-weight:800;color:#bbf7d0;letter-spacing:.5px;height:18px;overflow:hidden}
+.carousel span{position:absolute;opacity:0;transform:translateY(8px);animation:line-cycle 4s ease-in-out infinite}
+.carousel span:nth-child(1){animation-delay:.2s}
+.carousel span:nth-child(2){animation-delay:1.2s}
+.carousel span:nth-child(3){animation-delay:2.2s}
+.carousel span:nth-child(4){animation-delay:3.2s}
+@keyframes line-cycle{0%{opacity:0;transform:translateY(8px)}10%,35%{opacity:1;transform:translateY(0)}50%,100%{opacity:0;transform:translateY(-8px)}}
+
+/* ---------- Top bar ---------- */
 header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line)}
 .brand{display:flex;gap:12px;align-items:center}
 .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(34,197,94,.25),rgba(34,197,94,.10))}
@@ -27,6 +55,8 @@ header.app{position:sticky;top:0;z-index:50;display:flex;align-items:center;just
 h1{margin:0;font-size:18px;font-weight:900}
 .tag{margin:2px 0 0;font-size:12px;color:#94a3b8}
 .btn{padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
+
+/* ---------- Layout / cards ---------- */
 .wrap{max-width:980px;margin:0 auto;padding:16px 16px 84px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
 .grid{display:grid;gap:16px}
@@ -35,6 +65,8 @@ h2{font-size:28px;margin:0 0 8px}
 p{color:var(--muted);line-height:1.55;margin:0 0 10px}
 ul.clean{margin:10px 0 0 0;padding:0;list-style:none}
 ul.clean li{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
+
+/* ---------- Phone demo ---------- */
 .phone{position:relative;margin:0 auto;width:312px;max-width:100%;aspect-ratio:9/19;border-radius:20px;padding:6px;background:linear-gradient(180deg,#0d0f14,#0a0c11);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.35)}
 .screen{position:absolute;inset:6px;border-radius:16px;overflow:hidden;background:#0a0f16;display:grid}
 .stage{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(8px) scale(.985);transition:opacity .42s ease,transform .42s ease}
@@ -75,6 +107,8 @@ ul.clean li{display:flex;gap:8px;align-items:flex-start;margin:8px 0}
 .progress{height:6px;border-radius:999px;background:#0d1117;border:1px solid var(--line);overflow:hidden;margin:14px 0 6px}
 .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
 .label{font-size:12px;color:#cfe7ff;text-align:center;margin-top:6px}
+
+/* ---------- Page 2 & form ---------- */
 .page2{scroll-margin-top:70px}
 .hidden{display:none}
 .formCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
@@ -82,21 +116,31 @@ form.eco{display:grid;gap:12px}
 label span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
 input,select,button{font:inherit;color:inherit}
 select,input[type="file"],input[type="text"],input[type="number"]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--pill)}
+
+/* battery slider */
 .rangeRow{display:flex;align-items:center;gap:10px}
 .rangeRow output{min-width:54px;text-align:right;font-weight:800}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:999px;background:linear-gradient(var(--accent2),var(--accent2)) 0/0% 100% no-repeat, var(--pill);border:1px solid var(--line);outline:0}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent2);border:2px solid #0b0f16;box-shadow:0 0 0 3px rgba(34,197,94,.25);cursor:pointer}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#22c55e;border:2px solid #0b0f16;box-shadow:0 0 0 3px rgba(34,197,94,.25);cursor:pointer}
 input[type=range]::-moz-range-track{background:transparent}
+
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-.primary{background:var(--accent2);color:#053a16;border:none;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer}
+.primary{background:var(--accent2);color:#053a16;border:none;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.primary[disabled]{opacity:.65;cursor:not-allowed}
 .ghost{background:transparent;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-weight:800;color:var(--text)}
+.spinSm{width:16px;height:16px;border:3px solid rgba(0,0,0,.25);border-top-color:#053a16;border-radius:50%;animation:spin 1s linear infinite}
+.spinSmL{width:16px;height:16px;border:3px solid rgba(255,255,255,.25);border-top-color:var(--accent2);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 .step{display:none;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
 .step.show{display:block;opacity:1;transform:translateY(0)}
 .resultCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
 .callouts{display:flex;gap:8px;flex-wrap:wrap}
 .callout{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill)}
 .warn{color:#b45309}
+
+/* ---------- Chat ---------- */
 .chatFab{position:fixed;right:16px;bottom:16px;z-index:80;width:64px;height:64px;border-radius:50%;background:var(--accent2);color:#053a16;border:none;font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.35)}
 .chatPanel{position:fixed;right:16px;bottom:92px;width:min(600px,calc(100vw - 32px));max-height:88vh;display:none;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;z-index:85}
 .chatPanel.open{display:flex}
@@ -109,12 +153,8 @@ input[type=range]::-moz-range-track{background:transparent}
 .chatFoot{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
 .chatFoot input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--pill);color:var(--text)}
 .chatFoot button{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text);font-weight:800;cursor:pointer}
-.spin{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.25);border-top-color:var(--accent2);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-.crash{position:fixed;inset:0;z-index:5000;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column}
-.crash.show{display:flex}
-.crash h1{margin:0;font-size:42px}
-.crash p{color:#848d99}
+
+/* ---------- Misc ---------- */
 .small{font-size:12px;color:#cfe7f0}
 .linkRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
 .linkRow a{text-decoration:none;border:1px solid var(--line);padding:6px 10px;border-radius:8px;background:var(--pill);color:var(--text);font-weight:700}
@@ -123,12 +163,14 @@ input[type=range]::-moz-range-track{background:transparent}
 </style>
 </head>
 <body>
+
+<!-- SVG defs for logo in header -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="leafCore" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#16A34A"/></linearGradient>
     <g id="EcoMark">
-      <circle class="ring" cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
-      <g class="leafIn">
+      <circle cx="100" cy="100" r="72" fill="none" stroke="url(#leafCore)" stroke-width="8"/>
+      <g>
         <rect x="66" y="54" width="68" height="92" rx="12" fill="none" stroke="#BFEFD0" stroke-width="6"/>
         <circle cx="100" cy="64" r="3.2" fill="#BFEFD0"/>
         <rect x="72" y="70" width="56" height="70" rx="8" fill="#0B1320" opacity=".9"/>
@@ -140,11 +182,33 @@ input[type=range]::-moz-range-track{background:transparent}
   </defs>
 </svg>
 
+<!-- Intro Splash -->
 <div id="splash" class="splash" role="dialog" aria-label="EcoVision intro">
-  <div class="splash-logo"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
-  <div class="splash-name">EcoVision</div>
+  <div class="splashInner">
+    <svg id="introSVG" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#16A34A"/>
+        </linearGradient>
+      </defs>
+      <circle class="seed" cx="100" cy="140" r="5" fill="#86efac"/>
+      <path class="stem" d="M100 140 C98 120, 102 100, 100 85" fill="none" stroke="url(#lg1)" stroke-width="3.5" stroke-linecap="round"/>
+      <path class="leafL" d="M96 110 C82 104,78 92,95 92 C112 92,110 106,96 110 Z" fill="url(#lg1)"/>
+      <path class="leafR" d="M104 98 C116 92,122 82,105 80 C90 78,92 92,104 98 Z" fill="url(#lg1)"/>
+      <circle class="phoneRing" cx="100" cy="100" r="70" fill="none" stroke="rgba(34,197,94,.45)" stroke-width="8"/>
+      <rect class="phoneRect" x="62" y="46" width="76" height="108" rx="14" fill="none" stroke="#bfffd6" stroke-width="4"/>
+    </svg>
+    <div style="font-weight:900;font-size:22px;letter-spacing:.6px;color:#eafff0">
+      <span class="brandWord">E</span><span class="brandWord">C</span><span class="brandWord">O</span>
+      <span class="brandWord" style="margin-left:6px">V</span><span class="brandWord">I</span><span class="brandWord">S</span><span class="brandWord">I</span><span class="brandWord">O</span><span class="brandWord">N</span>
+    </div>
+    <div class="carousel" style="position:relative;height:18px">
+      <span>Scan</span><span>Answer</span><span>Price</span><span>Recycle</span>
+    </div>
+  </div>
 </div>
 
+<!-- App Header -->
 <header class="app">
   <div class="brand">
     <div class="logo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#EcoMark"/></svg></div>
@@ -153,12 +217,11 @@ input[type=range]::-moz-range-track{background:transparent}
       <div class="tag">Check value • Sell or Recycle • Do good</div>
     </div>
   </div>
-  <div class="actions-right">
-    <button id="themeBtn" class="btn" aria-pressed="false" title="Switch theme">🌞 Light Mode</button>
-  </div>
+  <button id="themeBtn" class="btn" aria-pressed="false" title="Switch theme">🌞 Light Mode</button>
 </header>
 
 <main class="wrap">
+  <!-- Page 1 -->
   <section id="page1" class="card">
     <div class="grid">
       <div>
@@ -169,23 +232,34 @@ input[type=range]::-moz-range-track{background:transparent}
           <li>🔒 Photo stays in your browser for this demo.</li>
           <li>🤝 Cash partners or donation centers.</li>
         </ul>
-        <div class="progress" aria-hidden="true" style="margin-top:16px"><div class="bar" id="bar"></div></div>
+        <div class="progress" style="margin-top:16px"><div class="bar" id="bar"></div></div>
         <div class="label" id="label">Walkthrough playing…</div>
         <div style="margin-top:10px"><button id="nextBtn" class="primary" type="button">Next →</button></div>
       </div>
       <div>
         <div class="phone" aria-label="EcoVision walkthrough">
           <div class="screen">
+            <!-- Drawer -->
             <div class="stage active" id="s0">
               <div class="drawer">
                 <div class="search">🔎 Search apps</div>
                 <div class="grid">
-                  <div class="appicon"><span>Camera</span></div><div class="appicon"><span>Mail</span></div><div class="appicon"><span>Maps</span></div><div class="appicon"><span>Music</span></div><div class="appicon eco" id="ecoApp"><span>EcoVision</span></div><div class="appicon"><span>Chat</span></div><div class="appicon"><span>Files</span></div><div class="appicon"><span>Calendar</span></div><div class="appicon"><span>Browser</span></div><div class="appicon"><span>Gallery</span></div>
+                  <div class="appicon"><span>Camera</span></div>
+                  <div class="appicon"><span>Mail</span></div>
+                  <div class="appicon"><span>Maps</span></div>
+                  <div class="appicon"><span>Music</span></div>
+                  <div class="appicon eco" id="ecoApp"><span>EcoVision</span></div>
+                  <div class="appicon"><span>Chat</span></div>
+                  <div class="appicon"><span>Files</span></div>
+                  <div class="appicon"><span>Calendar</span></div>
+                  <div class="appicon"><span>Browser</span></div>
+                  <div class="appicon"><span>Gallery</span></div>
                 </div>
                 <div class="pager"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
                 <div class="dock"><div class="dockicon">📞</div><div class="dockicon">💬</div><div class="dockicon">🌐</div><div class="dockicon">📷</div></div>
               </div>
             </div>
+            <!-- App -->
             <div class="stage" id="s1">
               <div class="appframe">
                 <div class="statusbar"><div>09:41</div><div>📶 📡 🔋 87%</div></div>
@@ -194,17 +268,27 @@ input[type=range]::-moz-range-track{background:transparent}
                   <div class="stage active" id="v1">
                     <div class="ui" style="text-align:center">
                       <div style="font-size:18px;font-weight:900;margin-bottom:6px">EcoVision</div>
-                      <div style="width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:var(--accent2);margin:8px auto;animation:spin 1s linear infinite"></div>
+                      <div class="spinSmL" style="margin:8px auto"></div>
                       <div style="font-size:12px;color:#8ea1b8">Starting…</div>
                     </div>
                   </div>
                   <div class="stage" id="v2">
                     <div class="ui">
-                      <div style="display:flex;justify-content:space-between;align-items:center"><b>Upload phone photos</b><span class="pill" aria-pressed="false">Front & Back</span></div>
-                      <div class="preview" style="margin-top:10px"><div class="ph"><img id="frontImg" alt="Front phone" /></div><div class="ph"><img id="backImg" alt="Back phone" /></div></div>
+                      <div style="display:flex;justify-content:space-between;align-items:center">
+                        <b>Upload phone photos</b><span class="pill" aria-pressed="false">Front & Back</span>
+                      </div>
+                      <div class="preview" style="margin-top:10px">
+                        <div class="ph"><img id="frontImg" alt="Front phone"/></div>
+                        <div class="ph"><img id="backImg" alt="Back phone"/></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="stage" id="v3"><div class="photoWrap"><div class="hot red" style="width:88px;height:68px;left:18%;top:22%"></div><div class="hot orange" style="width:70px;height:60px;left:60%;top:52%"></div></div></div>
+                  <div class="stage" id="v3">
+                    <div class="photoWrap">
+                      <div class="hot red" style="width:88px;height:68px;left:18%;top:22%"></div>
+                      <div class="hot orange" style="width:70px;height:60px;left:60%;top:52%"></div>
+                    </div>
+                  </div>
                   <div class="stage" id="v4"><div class="ui"><div class="k">Model</div><div class="v">Generic Phone 12</div></div></div>
                   <div class="stage" id="v5"><div class="ui"><div class="k">Purchased</div><div class="v">Oct 2021</div></div></div>
                   <div class="stage" id="v6"><div class="ui"><div style="font-weight:900;margin-bottom:8px">Quick internals</div><div class="row"><span class="pill" aria-pressed="true">Turns on: Yes</span><span class="pill" aria-pressed="true">Cameras: Yes</span><span class="pill" aria-pressed="true">Charging: Yes</span><span class="pill" aria-pressed="true">Speakers: Yes</span><span class="pill" aria-pressed="true">Motherboard: No</span></div></div></div>
@@ -225,28 +309,32 @@ input[type=range]::-moz-range-track{background:transparent}
     </div>
   </section>
 
+  <!-- Page 2 -->
   <section id="page2" class="page2 hidden">
     <div class="formCard">
       <h2>Get your phone’s value</h2>
-      <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a dummy result and the full recycle/resell flow.</p>
+      <p>Answer a few questions, upload a photo, then tap <b>Predict</b>. We’ll show a demo estimate and the full recycle/resell flow.</p>
 
       <form class="eco" id="ecoForm" onsubmit="return false;">
         <label>
           <span>Phone model</span>
-          <input id="model" type="text" placeholder="Type your model" list="modelsList" required />
-          <datalist id="modelsList">
+          <select id="model" required>
+            <option value="" disabled selected>Select model</option>
             <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
             <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
             <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
             <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
             <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
             <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
-          </datalist>
+          </select>
         </label>
 
         <label>
           <span>Age of the phone (years)</span>
-          <input id="age" type="number" min="0" max="12" step="0.5" placeholder="e.g., 2.5" required />
+          <select id="age" required>
+            <option value="" disabled selected>Select age</option>
+            <option>0</option><option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option><option>5.5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
         </label>
 
         <label>
@@ -296,7 +384,7 @@ input[type=range]::-moz-range-track{background:transparent}
 
         <div class="actions">
           <button id="chooseDir" class="ghost" type="button">Choose Save Folder</button>
-          <button id="predictBtn" class="primary" type="button">Predict</button>
+          <button id="predictBtn" class="primary" type="button"><span class="spinSm" style="display:none"></span><span class="pText">Predict</span></button>
           <button id="resetBtn" class="ghost" type="button">Reset</button>
         </div>
         <div id="saveHint" class="small"></div>
@@ -341,6 +429,7 @@ input[type=range]::-moz-range-track{background:transparent}
   </section>
 </main>
 
+<!-- Chat -->
 <button id="chatFab" class="chatFab" title="Chat">💬</button>
 <section id="chatPanel" class="chatPanel" aria-label="EcoVision Chat">
   <div class="chatHead"><div class="chatTitle"><svg width="20" height="20" viewBox="0 0 200 200"><use href="#EcoMark"/></svg> EcoVision Chat</div><button id="chatClose" class="btn" style="padding:6px 10px">Close</button></div>
@@ -348,63 +437,156 @@ input[type=range]::-moz-range-track{background:transparent}
   <div class="chatFoot"><input id="chatInput" type="text" placeholder="Ask about the project…" /><button id="chatSend" type="button">Send</button></div>
 </section>
 
-<div id="crash" class="crash" role="alert" aria-live="assertive"><h1>Error 404</h1><p>Reload the page.</p></div>
 <div id="err" class="err"></div>
 
 <script>
+/* error surface */
 (function(){
   const e=document.getElementById('err');
   window.addEventListener('error',ev=>{e.textContent='Script error: '+(ev.message||'unknown');e.classList.add('show');document.getElementById('splash').classList.add('hide')});
   window.addEventListener('unhandledrejection',ev=>{e.textContent='Promise error: '+(ev.reason&&ev.reason.message?ev.reason.message:String(ev.reason));e.classList.add('show');document.getElementById('splash').classList.add('hide')});
 })();
-(function(){try{const btn=document.getElementById('themeBtn');const saved=localStorage.getItem('ecovision_theme');if(saved==='light'){document.documentElement.setAttribute('data-theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}else{document.documentElement.removeAttribute('data-theme');btn.textContent='🌞 Light Mode';btn.setAttribute('aria-pressed','false')}btn.addEventListener('click',()=>{const isLight=document.documentElement.getAttribute('data-theme')==='light';if(isLight){document.documentElement.removeAttribute('data-theme');localStorage.setItem('ecovision_theme','dark');btn.textContent='🌞 Light Mode';btn.setAttribute('aria-pressed','false')}else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('ecovision_theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}})}catch(_){}})();
-(function(){try{const splash=document.getElementById('splash');const HOLD=900;window.addEventListener('load',()=>{setTimeout(()=>{splash.classList.add('hide')},HOLD)})}catch(_){}})();
-let opened=false;const s0=document.getElementById('s0'),s1=document.getElementById('s1');const bar=document.getElementById('bar'),label=document.getElementById('label');const vStages=[...document.querySelectorAll('.viewport .stage')];let vidx=1,speedMs=1600,timer=null;
-function openAppAuto(){if(opened)return;opened=true;try{s0.classList.remove('active');s1.classList.add('active');label.textContent='Walkthrough playing…';bar.style.width=(2/14*100)+'%';setTimeout(()=>{playInner(1)},380)}catch(_){}} 
-function playInner(start){try{clearInterval(timer);vidx=start;showInner(vidx);timer=setInterval(()=>{vidx=(vidx%13)+1;showInner(vidx)},speedMs)}catch(_){}} 
-function showInner(i){try{vStages.forEach((s,n)=>s.classList.toggle('active',n===i-1));const outerStep=i+1;bar.style.width=(outerStep/14*100)+'%';if(i===7){document.getElementById('gauge')?.style.setProperty('--pct','66%');const p=document.getElementById('price');if(p)p.textContent='₹12,800'}}catch(_){}} 
-window.addEventListener('load',()=>{try{function drawPhonePNG({cracked=false,back=false}){const w=160,h=240,r=10;const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#0f1a23';rr(ctx,10,8,w-20,h-16,r);ctx.fill();ctx.strokeStyle='#2b3e55';ctx.lineWidth=2;rr(ctx,10,8,w-20,h-16,r);ctx.stroke();if(back){ctx.fillStyle='#101b26';ctx.strokeStyle='#2b3e55';rr(ctx,w/2-22,22,44,36,8);ctx.fill();ctx.stroke();ctx.fillStyle='#223b55';ctx.beginPath();ctx.arc(w/2-10,40,6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(w/2+10,40,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0b1620';ctx.strokeStyle='#2b3e55';rr(ctx,26,70,w-52,h-90,8);ctx.fill();ctx.stroke()}else{ctx.fillStyle='#223b55';ctx.beginPath();ctx.arc(w/2,22,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0b1620';ctx.strokeStyle='#2b3e55';rr(ctx,26,30,w-52,h-50,8);ctx.fill();ctx.stroke();if(cracked){ctx.strokeStyle='#ff5d5d';ctx.lineWidth=2;pl(ctx,[[30,140],[80,120],[100,130],[130,110]]);pl(ctx,[[70,90],[66,105],[95,112]])}}return c.toDataURL('image/png');function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}function pl(ctx,pts){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.stroke()}}document.getElementById('frontImg').src=drawPhonePNG({cracked:true});document.getElementById('backImg').src=drawPhonePNG({back:true});setTimeout(openAppAuto,800)}catch(_){openAppAuto()}}); 
-document.getElementById('nextBtn').addEventListener('click',()=>{try{const page2=document.getElementById('page2');if(page2.classList.contains('hidden')){page2.classList.remove('hidden');setTimeout(()=>{page2.scrollIntoView({behavior:'smooth',block:'start'})},30)}else{page2.scrollIntoView({behavior:'smooth',block:'start'})}}catch(_){}});
 
+/* theme */
+(function(){try{
+  const btn=document.getElementById('themeBtn');
+  const saved=localStorage.getItem('ecovision_theme');
+  if(saved==='light'){document.documentElement.setAttribute('data-theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}
+  else{document.documentElement.removeAttribute('data-theme');btn.textContent='🌞 Light Mode';btn.setAttribute('aria-pressed','false')}
+  btn.addEventListener('click',()=>{const isLight=document.documentElement.getAttribute('data-theme')==='light';
+    if(isLight){document.documentElement.removeAttribute('data-theme');localStorage.setItem('ecovision_theme','dark');btn.textContent='🌞 Light Mode';btn.setAttribute('aria-pressed','false')}
+    else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('ecovision_theme','light');btn.textContent='🌙 Dark Mode';btn.setAttribute('aria-pressed','true')}
+  });
+}catch(_){}})();
+
+/* splash -> hide, then start demo */
+(function(){try{
+  const splash=document.getElementById('splash');
+  const HOLD=1400; /* short but pretty */
+  window.addEventListener('load',()=>{setTimeout(()=>{splash.classList.add('hide')},HOLD)});
+}catch(_){}})();
+
+/* phone demo autoplay */
+let opened=false;
+const s0=document.getElementById('s0'),s1=document.getElementById('s1');
+const bar=document.getElementById('bar'),label=document.getElementById('label');
+const vStages=[...document.querySelectorAll('.viewport .stage')];
+let vidx=1,speedMs=1600,timer=null;
+
+function openAppAuto(){
+  if(opened) return; opened=true;
+  try{
+    s0.classList.remove('active'); s1.classList.add('active');
+    label.textContent='Walkthrough playing…';
+    bar.style.width=(2/14*100)+'%';
+    setTimeout(()=>{playInner(1)},380);
+  }catch(_){}
+}
+function playInner(start){
+  try{
+    clearInterval(timer); vidx=start; showInner(vidx);
+    timer=setInterval(()=>{vidx=(vidx%13)+1;showInner(vidx)},speedMs);
+  }catch(_){}
+}
+function showInner(i){
+  try{
+    vStages.forEach((s,n)=>s.classList.toggle('active',n===i-1));
+    const outerStep=i+1; bar.style.width=(outerStep/14*100)+'%';
+    if(i===7){document.getElementById('gauge')?.style.setProperty('--pct','66%');const p=document.getElementById('price');if(p)p.textContent='₹12,800'}
+  }catch(_){}
+}
+window.addEventListener('load',()=>{try{
+  function drawPhonePNG({cracked=false,back=false}){
+    const w=160,h=240,r=10;const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');
+    ctx.fillStyle='#0f1a23';rr(ctx,10,8,w-20,h-16,r);ctx.fill();ctx.strokeStyle='#2b3e55';ctx.lineWidth=2;rr(ctx,10,8,w-20,h-16,r);ctx.stroke();
+    if(back){
+      ctx.fillStyle='#101b26';ctx.strokeStyle='#2b3e55';rr(ctx,w/2-22,22,44,36,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#223b55';ctx.beginPath();ctx.arc(w/2-10,40,6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(w/2+10,40,6,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#0b1620';ctx.strokeStyle='#2b3e55';rr(ctx,26,70,w-52,h-90,8);ctx.fill();ctx.stroke();
+    }else{
+      ctx.fillStyle='#223b55';ctx.beginPath();ctx.arc(w/2,22,3,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#0b1620';ctx.strokeStyle='#2b3e55';rr(ctx,26,30,w-52,h-50,8);ctx.fill();ctx.stroke();
+      if(cracked){ctx.strokeStyle='#ff5d5d';ctx.lineWidth=2;pl(ctx,[[30,140],[80,120],[100,130],[130,110]]);pl(ctx,[[70,90],[66,105],[95,112]])}
+    }
+    return c.toDataURL('image/png');
+    function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+    function pl(ctx,pts){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.stroke()}
+  }
+  document.getElementById('frontImg').src=drawPhonePNG({cracked:true});
+  document.getElementById('backImg').src=drawPhonePNG({back:true});
+  setTimeout(openAppAuto,900); /* starts just after splash fades */
+}catch(_){openAppAuto()}});
+document.getElementById('nextBtn').addEventListener('click',()=>{try{
+  const page2=document.getElementById('page2');
+  if(page2.classList.contains('hidden')){page2.classList.remove('hidden');setTimeout(()=>{page2.scrollIntoView({behavior:'smooth',block:'start'})},30)}
+  else{page2.scrollIntoView({behavior:'smooth',block:'start'})}
+}catch(_){}});
+
+/* form controls */
 const form=document.getElementById('ecoForm');const bat=document.getElementById('bat');const batOut=document.getElementById('batOut');
-function paintRange(){try{const min=parseInt(bat.min,10),max=parseInt(bat.max,10),val=parseInt(bat.value,10);const pct=((val-min)*100)/(max-min);bat.style.backgroundSize=pct+'% 100%';batOut.textContent=val+'%'}catch(_){}} 
+function paintRange(){try{
+  const min=parseInt(bat.min,10),max=parseInt(bat.max,10),val=parseInt(bat.value,10);
+  const pct=((val-min)*100)/(max-min);bat.style.backgroundSize=pct+'% 100%';batOut.textContent=val+'%';
+}catch(_){}}
 bat.addEventListener('input',paintRange);window.addEventListener('load',paintRange);
 
 const state={cam:null,port:null};
 document.querySelectorAll('.pill[data-name="cam"]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.pill[data-name="cam"]').forEach(b=>b.setAttribute('aria-pressed','false'));btn.setAttribute('aria-pressed','true');state.cam=btn.dataset.val}));
 document.querySelectorAll('.pill[data-name="port"]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.pill[data-name="port"]').forEach(b=>b.setAttribute('aria-pressed','false'));btn.setAttribute('aria-pressed','true');state.port=btn.dataset.val}));
-document.getElementById('resetBtn').addEventListener('click',()=>{try{form.reset();setTimeout(paintRange,0);document.querySelectorAll('.pill[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));state.cam=null;state.port=null;hideAllSteps();document.getElementById('resultBlock').classList.remove('show');document.getElementById('page2').scrollIntoView({behavior:'smooth',block:'start'})}catch(_){}});
+document.getElementById('resetBtn').addEventListener('click',()=>{try{
+  form.reset();setTimeout(paintRange,0);
+  document.querySelectorAll('.pill[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));state.cam=null;state.port=null;
+  hideAllSteps();document.getElementById('resultBlock').classList.remove('show');
+  document.getElementById('page2').scrollIntoView({behavior:'smooth',block:'start'});
+}catch(_){}});
 
-function show(el){el.classList.add('show')}
-function hide(el){el.classList.remove('show')}
+function show(el){el.classList.add('show')} function hide(el){el.classList.remove('show')}
 function hideAllSteps(){['qRecycle','qLocation','qMoney','partners','donate','ask'].forEach(id=>{const el=document.getElementById(id);if(el)hide(el)})}
 
+/* saving */
 let dirHandle=null;
 const canFS=()=>!!window.showDirectoryPicker&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1');
 const canServer=()=>location.origin.startsWith('http://localhost')||location.origin.startsWith('http://127.0.0.1');
-async function chooseFolder(){try{if(!canFS()){document.getElementById('saveHint').textContent='Pick folder works only on HTTPS/localhost in Chromium browsers.';return}dirHandle=await window.showDirectoryPicker();document.getElementById('saveHint').textContent='Saving to: '+(dirHandle.name||'selected folder')}catch(e){document.getElementById('saveHint').textContent='Folder not selected'}}
+async function chooseFolder(){try{
+  if(!canFS()){document.getElementById('saveHint').textContent='Pick folder works only on HTTPS/localhost in Chromium browsers.';return}
+  dirHandle=await window.showDirectoryPicker();
+  document.getElementById('saveHint').textContent='Saving to: '+(dirHandle.name||'selected folder');
+}catch(e){document.getElementById('saveHint').textContent='Folder not selected'}}
 document.getElementById('chooseDir').addEventListener('click',chooseFolder);
 
 function slug(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
 function extFromName(n){const m=String(n).match(/\.([a-zA-Z0-9]+)$/);return m?m[1].toLowerCase():'png'}
 function makeFileName(file){const model=document.getElementById('model').value||'unknown';const ts=Date.now();const ext=extFromName(file.name)||'png';return `ecovision_${slug(model)}_${ts}.${ext}`}
 
-async function saveViaFS(file){if(!dirHandle||!canFS())return null;try{const name=makeFileName(file);const fh=await dirHandle.getFileHandle(name,{create:true});const w=await fh.createWritable();await w.write(await file.arrayBuffer());await w.close();return name}catch(e){return null}}
-async function saveViaServer(file){if(!canServer())return null;try{const name=makeFileName(file);const fd=new FormData();fd.append('image',file,name);const r=await fetch('/save-image',{method:'POST',body:fd});if(!r.ok)return null;const data=await r.json().catch(()=>({}));return data.path||name}catch(e){return null}}
+async function saveViaFS(file){if(!dirHandle||!canFS())return null;try{
+  const name=makeFileName(file);const fh=await dirHandle.getFileHandle(name,{create:true});const w=await fh.createWritable();await w.write(await file.arrayBuffer());await w.close();return name
+}catch(e){return null}}
+async function saveViaServer(file){if(!canServer())return null;try{
+  const name=makeFileName(file);const fd=new FormData();fd.append('image',file,name);
+  const r=await fetch('/save-image',{method:'POST',body:fd});if(!r.ok)return null;const data=await r.json().catch(()=>({}));return data.path||name
+}catch(e){return null}}
 
-async function appendTextFS(fileName,line){try{const fh=await dirHandle.getFileHandle(fileName,{create:true});const f=await fh.getFile();const prev=await f.text().catch(()=>(''));const w=await fh.createWritable();await w.write(prev+(prev.endsWith('\n')?'':'\n')+line+'\n');await w.close();return true}catch(e){return false}}
-async function appendCSVFS(fileName,header,row){try{const fh=await dirHandle.getFileHandle(fileName,{create:true});const f=await fh.getFile();const prev=await f.text().catch(()=>(''));const needHeader=prev.trim().length===0;const w=await fh.createWritable();await w.write(needHeader?(header+'\n'+row+'\n'):(prev+(prev.endsWith('\n')?'':'\n')+row+'\n'));await w.close();return true}catch(e){return false}}
-
+async function appendTextFS(fileName,line){try{
+  const fh=await dirHandle.getFileHandle(fileName,{create:true});const f=await fh.getFile();const prev=await f.text().catch(()=>(''));
+  const w=await fh.createWritable();await w.write(prev+(prev.endsWith('\n')?'':'\n')+line+'\n');await w.close();return true
+}catch(e){return false}}
+async function appendCSVFS(fileName,header,row){try{
+  const fh=await dirHandle.getFileHandle(fileName,{create:true});const f=await fh.getFile();const prev=await f.text().catch(()=>(''));const needHeader=prev.trim().length===0;
+  const w=await fh.createWritable();await w.write(needHeader?(header+'\n'+row+'\n'):(prev+(prev.endsWith('\n')?'':'\n')+row+'\n'));await w.close();return true
+}catch(e){return false}}
 async function appendTextServer(line){if(!canServer())return false;try{const r=await fetch('/append-text',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line})});return r.ok}catch(e){return false}}
 async function appendCSVServer(header,row){if(!canServer())return false;try{const r=await fetch('/append-csv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({header,row})});return r.ok}catch(e){return false}}
-
 function oneTimeDownload(filename,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type||'text/plain'}));a.download=filename;return a}
 function wrapCSV(s){if(s.includes(',')||s.includes('"')||s.includes('\n'))return '"'+s.replace(/"/g,'""')+'"';return s}
 
+/* Predict with loader */
+const predictBtn=document.getElementById('predictBtn');const pSpin=predictBtn.querySelector('.spinSm');const pText=predictBtn.querySelector('.pText');
+function setPredictLoading(on){if(on){predictBtn.setAttribute('disabled','');pSpin.style.display='inline-block';pText.textContent='Predicting…'}else{predictBtn.removeAttribute('disabled');pSpin.style.display='none';pText.textContent='Predict'}}
+
 document.getElementById('predictBtn').addEventListener('click',async()=>{
   try{
-    const model=document.getElementById('model').value.trim();
-    const age=document.getElementById('age').value.trim();
+    const model=document.getElementById('model').value.trim?document.getElementById('model').value.trim():document.getElementById('model').value;
+    const age=document.getElementById('age').value;
     const ssd=document.getElementById('ssd').value;
     const ram=document.getElementById('ram').value;
     const cam=state.cam;
@@ -412,8 +594,12 @@ document.getElementById('predictBtn').addEventListener('click',async()=>{
     const port=state.port;
     const photoEl=document.getElementById('photo');
     const photo=photoEl.files[0];
+
     if(!model||!age||!ssd||!ram||!cam||!port){alert('Please answer all questions first.');return}
     if(!photo){alert('Please upload a photo first.');return}
+
+    setPredictLoading(true);
+    await new Promise(res=>setTimeout(res,900)); /* quick loading effect */
 
     let saved=null;saved=await saveViaFS(photo);if(!saved)saved=await saveViaServer(photo);
     document.getElementById('savedPath').textContent=saved?('Saved image: '+saved):'Saved locally disabled';
@@ -427,24 +613,41 @@ document.getElementById('predictBtn').addEventListener('click',async()=>{
     const links=document.getElementById('datasetLinks');links.innerHTML='';
     let wrote=false;
     if(dirHandle&&canFS()){await appendTextFS('images.txt',imgNameLine);await appendCSVFS('ecovision_dataset.csv',header,row);wrote=true}
-    else{
-      const okT=await appendTextServer(imgNameLine);
-      const okC=await appendCSVServer(header,row);
-      wrote=okT&&okC;
-    }
+    else{const okT=await appendTextServer(imgNameLine);const okC=await appendCSVServer(header,row);wrote=okT&&okC}
     if(!wrote){
       const textA=oneTimeDownload('images.txt',imgNameLine+'\n','text/plain');textA.textContent='Download images.txt';
       const csvContent=header+'\n'+row+'\n';const csvA=oneTimeDownload('ecovision_dataset.csv',csvContent,'text/csv');csvA.textContent='Download ecovision_dataset.csv';
       links.appendChild(textA);links.appendChild(csvA);
     }
 
-    hideAllSteps();const res=document.getElementById('resultBlock');res.classList.add('show');show(document.getElementById('qRecycle'));res.scrollIntoView({behavior:'smooth',block:'start'})
-  }catch(err){const e=document.getElementById('err');e.textContent='Predict failed: '+(err.message||err);e.classList.add('show')}
+    hideAllSteps();
+    const res=document.getElementById('resultBlock');res.classList.add('show');
+    show(document.getElementById('qRecycle'));
+    res.scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(err){
+    const e=document.getElementById('err');e.textContent='Predict failed: '+(err.message||err);e.classList.add('show');
+  }finally{
+    setPredictLoading(false);
+  }
 });
 
+/* post-result flow */
 document.querySelectorAll('#qRecycle .pill').forEach(btn=>btn.addEventListener('click',()=>{const val=btn.dataset.val;if(val==='yes'){show(document.getElementById('qLocation'))}else{hideAllSteps();show(document.getElementById('ask'))}}));
 document.querySelectorAll('#qLocation .pill').forEach(btn=>btn.addEventListener('click',()=>{document.getElementById('locStatus').style.display='block';show(document.getElementById('qMoney'))}));
-document.querySelectorAll('#qMoney .pill').forEach(btn=>btn.addEventListener('click',()=>{const wantMoney=btn.dataset.val==='yes';if(wantMoney){show(document.getElementById('partners'));const age=parseFloat(document.getElementById('age').value||'0');const bh=parseInt(document.getElementById('bat').value||'0',10);const camOk=state.cam==='yes';const portOk=state.port==='yes';const isWorking=camOk&&portOk&&bh>=70&&age<=4;const cond=isWorking?'Working condition: direct partners like Cashify, Servify.':'Not fully working: refurb/recycle partners like Zolopik, Attero.';document.getElementById('condNote').textContent=cond}else{show(document.getElementById('donate'))}show(document.getElementById('ask'))}));
+document.querySelectorAll('#qMoney .pill').forEach(btn=>btn.addEventListener('click',()=>{const wantMoney=btn.dataset.val==='yes';
+  if(wantMoney){
+    show(document.getElementById('partners'));
+    const age=parseFloat(document.getElementById('age').value||'0');
+    const bh=parseInt(document.getElementById('bat').value||'0',10);
+    const camOk=state.cam==='yes';const portOk=state.port==='yes';
+    const isWorking=camOk&&portOk&&bh>=70&&age<=4;
+    const cond=isWorking?'Working condition: direct partners like Cashify, Servify.':'Not fully working: refurb/recycle partners like Zolopik, Attero.';
+    document.getElementById('condNote').textContent=cond;
+  }else{
+    show(document.getElementById('donate'));
+  }
+  show(document.getElementById('ask'));
+}));
 
 document.getElementById('restartFlow').addEventListener('click', () => {
   hideAllSteps();
@@ -452,13 +655,13 @@ document.getElementById('restartFlow').addEventListener('click', () => {
   document.getElementById('page2').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
+/* simple chatbot with fuzzy FAQ */
 const chatFab=document.getElementById('chatFab');const chatPanel=document.getElementById('chatPanel');const chatClose=document.getElementById('chatClose');const chatBody=document.getElementById('chatBody');const chatInput=document.getElementById('chatInput');const chatSend=document.getElementById('chatSend');
 function openChat(){chatPanel.classList.add('open');if(!chatBody.dataset.boot){addBot('Hi! I’m the EcoVision chatbot. Ask me anything about the project.');chatBody.dataset.boot='1'}chatInput.focus()}
 function closeChat(){chatPanel.classList.remove('open')}
 chatFab.addEventListener('click',openChat);chatClose.addEventListener('click',closeChat);chatSend.addEventListener('click',handleChat);chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handleChat()}})
 function addUser(text){const div=document.createElement('div');div.className='chatMsg user';div.textContent=text;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight}
 function addBot(text){const div=document.createElement('div');div.className='chatMsg bot';div.textContent=text;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight;return div}
-function typeOut(div,text,speed,cb){speed=speed||45;let i=0;(function step(){div.textContent=text.slice(0,++i);chatBody.scrollTop=chatBody.scrollHeight;if(i<text.length)setTimeout(step,speed);else cb&&cb()})()}
 function normalize(s){return (s||'').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').replace(/(.)\1{2,}/g,'$1$1').trim()}
 function editDistance(a,b){a=normalize(a);b=normalize(b);const al=a.length,bl=b.length;if(!al||!bl)return Math.max(al,bl);const dp=Array.from({length:al+1},()=>Array(bl+1).fill(0));for(let i=0;i<=al;i++)dp[i][0]=i;for(let j=0;j<=bl;j++)dp[0][j]=j;for(let i=1;i<=al;i++){for(let j=1;j<=bl;j++){const cost=a[i-1]===b[j-1]?0:1;dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+cost);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]){dp[i][j]=Math.min(dp[i][j],dp[i-2][j-2]+1)}}}return dp[al][bl]}
 function closeMatch(q,key,thr){thr=thr||2;return editDistance(q,key)<=Math.max(2,Math.floor(key.length*0.25),thr)}
@@ -467,28 +670,41 @@ function words(q){return new Set(normalize(q).split(' '))}
 function hasAll(q,arr){const w=words(q);return arr.every(t=>w.has(t))}
 function getLS(k,def){try{return JSON.parse(localStorage.getItem(k)||'null')??def}catch(e){return def}}
 function setLS(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-const FAQ_BASE=[{keys:['what is ecovision','ecovision','about ecovision','whats this','what does this do'],ans:'EcoVision helps you estimate your phone’s value from a photo and a few quick checks, then guides you to sell for money or recycle responsibly.'},{keys:['how does it work','how it works','how do i use','steps','guide','flow','how to start'],ans:'1) Choose your model and quick checks. 2) Upload a photo. 3) See an estimate and choose money or donation, then follow the prompts.'},{keys:['privacy','data','where do images go','upload go','photos go','safe','store'],ans:'In this demo, your image never leaves your device unless you pick a save folder or run the local server.'},{keys:['supported phones','which phones','phone list','models'],ans:'Supported: iPhone 11–15, Galaxy S20–S23 & A52, OnePlus 7–10 & Nord 2, Redmi Note 9–11, Mi 10, Mi 11X, Vivo V20/V21/Y20/Y21/X60, Oppo F17/F19/Reno 6/A74/A55.'},{keys:['partners','cashify','zolopik','servify','sell','recycle','money','buyback'],ans:'If you want money, we can connect you to Cashify, Servify, ReGlobe, etc. If not fully working, options like Zolopik/Attero. For donation, we show e-waste centers/NGOs.'},{keys:['donate','give away','no money','charity'],ans:'Choose “No” for money and we’ll list e-waste collection centers and NGOs so you can donate responsibly.'},{keys:['value','price','how much worth','calculate','estimate','accuracy'],ans:'The number shown is a demo estimate based on your inputs and visible damage. Actual dealer offers can differ.'},{keys:['theme','light mode','dark mode'],ans:'Use the Light/Dark button on the top-right to switch themes.'},{keys:['next button','page two','page 2','where is next'],ans:'On Page 1, tap the green “Next →” button to reveal Page 2 and auto-scroll to it.'},{keys:['file type','photo type','png','jpg','jpeg','heic'],ans:'Use common image formats like JPG or PNG. Large HEIC files may need conversion in some browsers.'},{keys:['offline','internet','network'],ans:'The demo works offline after the page loads. If you selected a save folder, files write to that folder.'},{keys:['reset','start again','clear form'],ans:'Use the “Reset” button on Page 2 to clear your answers and start again.'},{keys:['pickup','doorstep','collect','home collection'],ans:'Pickup depends on the partner you choose. The demo only shows potential partners after your assessment.'},{keys:['support','contact','help'],ans:'Use this chatbot. You can also keep notes by typing “note: your text” and view them with “list notes”.'},{keys:['location','city','available where'],ans:'The demo runs anywhere. Partner availability varies by city; we show examples based on your choices.'}];
+const FAQ_BASE=[
+  {keys:['what is ecovision','ecovision','about ecovision','what does this do'],ans:'EcoVision estimates your phone’s value from a photo and quick checks, then guides you to sell or recycle responsibly.'},
+  {keys:['how does it work','how to use','steps','guide','flow','start'],ans:'1) Choose model, age, storage, RAM; 2) set quick checks; 3) upload a photo; 4) tap Predict; 5) follow money/donation prompts.'},
+  {keys:['privacy','where do images go','upload go','photos go','store'],ans:'In this demo, your image stays in your browser unless you pick a save folder or run a local server.'},
+  {keys:['supported phones','which phones','phone list','models'],ans:'Supported: iPhone 11–15; Galaxy S20–S23 & A52; OnePlus 7–10 & Nord 2; Redmi Note 9–11; Mi 10; Mi 11X; Vivo V20/V21/Y20/Y21/X60; Oppo F17/F19/Reno 6/A74/A55.'},
+  {keys:['partners','cashify','zolopik','servify','sell','recycle','money'],ans:'For money: Cashify, Servify, ReGlobe. If not fully working: Zolopik, Attero. For donation: local e-waste centers/NGOs.'},
+  {keys:['donate','give away','no money','charity'],ans:'Choose “No” for money to see e-waste collection centers/NGOs.'},
+  {keys:['value','price','accuracy','estimate'],ans:'Shown value is a demo estimate based on your inputs and visible damage. Dealer offers can differ.'},
+  {keys:['theme','light mode','dark mode'],ans:'Use the Light/Dark button at top-right.'},
+  {keys:['next button','page two','page 2','where is next'],ans:'Tap the green “Next →” button on Page 1 to reveal Page 2 and auto-scroll.'},
+  {keys:['file type','photo type','png','jpg','jpeg','heic'],ans:'Use JPG or PNG. Large HEIC may need conversion in some browsers.'},
+  {keys:['offline','internet','network'],ans:'Works offline after load. Select a save folder to write files locally (Chromium, HTTPS/localhost).'}
+];
 function customFaq(){return getLS('ecovision_faq_custom',[])}
 function addCustomFaq(q,a){const arr=customFaq();arr.push({q:q.trim(),a:a.trim()});setLS('ecovision_faq_custom',arr)}
 function listCustomFaq(){const arr=customFaq();if(!arr.length)return 'No custom FAQs yet.';return arr.map((x,i)=>`${i+1}. Q: ${x.q} — A: ${x.a}`).join('\n')}
+function addUserMsg(t){const div=document.createElement('div');div.className='chatMsg user';div.textContent=t;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight}
+function addBot(t){const div=document.createElement('div');div.className='chatMsg bot';div.textContent=t;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight;return div}
+function typeOut(div,text,speed,cb){speed=speed||45;let i=0;(function step(){div.textContent=text.slice(0,++i);chatBody.scrollTop=chatBody.scrollHeight;if(i<text.length)setTimeout(step,speed);else cb&&cb()})()}
 function handleChat(){
-  const raw=(chatInput.value||'').trim();if(!raw)return;addUser(raw);chatInput.value='';
+  const raw=(chatInput.value||'').trim();if(!raw)return;addUserMsg(raw);chatInput.value='';
   const qNorm=normalize(raw);
   if(/who\s+(made|built)\s+(this|it)|\bcreator\b|made this/.test(qNorm)){
     const bot=addBot('');const p1='Sparsh Jain and Eshaan Godbole. ';const p2='Sparsh is proficient in hardware and website and Eshaan is good in ';
-    typeOut(bot,p1,65,()=>{typeOut(bot,p2,65,()=>{const sp=document.createElement('span');sp.className='spin';sp.style.marginLeft='6px';bot.appendChild(sp);chatBody.scrollTop=chatBody.scrollHeight;setTimeout(()=>{bot.textContent='Error 404';document.getElementById('crash').classList.add('show');document.body.style.overflow='hidden';document.querySelectorAll('body *:not(#crash)').forEach(el=>{el.style.pointerEvents='none'})},2200)})});
+    typeOut(bot,p1,65,()=>{typeOut(bot,p2,65,()=>{const sp=document.createElement('span');sp.className='spinSmL';sp.style.marginLeft='6px';bot.appendChild(sp);chatBody.scrollTop=chatBody.scrollHeight;setTimeout(()=>{bot.textContent='Error 404'},2200)})});
     return;
   }
   if(/^add\s*faq\s*:/i.test(raw)){const m=raw.match(/^add\s*faq\s*:\s*(.+?)\s*\|\s*(.+)$/i);if(m&&m[1]&&m[2]){addCustomFaq(m[1],m[2]);addBot('Added your FAQ. Ask it to test.');return}addBot('Format: add faq: your question | your answer');return}
   if(/^list\s*faq/i.test(qNorm)){addBot(listCustomFaq());return}
-  if(/^(note|add|remember)\s*:/i.test(raw)){const txt=raw.replace(/^(note|add|remember)\s*:/i,'').trim();const notes=getLS('ecovision_notes',[]);notes.push({t:Date.now(),v:txt});setLS('ecovision_notes',notes);addBot('Saved. Type “list notes” to view.');return}
-  if(/^list\s*notes/i.test(qNorm)){const notes=getLS('ecovision_notes',[]);if(!notes.length){addBot('No notes yet.');return}const out=notes.map((n,i)=>`${i+1}. ${n.v}`).join('\n');addBot(out);return}
-  const allFaq=[...FAQ_BASE,...customFaq().map(x=>({keys:[x.q],ans:x.a}))];
-  for(const item of allFaq){if(item.keys.some(k=> qNorm.includes(normalize(k)) )){addBot(item.ans);return}}
-  for(const item of allFaq){if(item.keys.some(k=> closeMatch(qNorm,normalize(k)) )){addBot(item.ans);return}}
-  if(hasAll(qNorm,['how','use'])||hasAll(qNorm,['get','started'])){addBot('Tap “Next →”, fill the fields, upload a photo, then press Predict. Follow the prompts.');return}
-  if(hasAll(qNorm,['where','photo'])||any(qNorm,['upload go','image store','privacy'])){addBot('Your photo stays in your browser unless you pick a save folder or run the local server.');return}
-  addBot('Ask about how EcoVision works, privacy, supported phones, partners, donation vs money, value estimates, theme, Next button, file types, offline use. Teach me with “add faq: Q | A”.')
+  const all=[...FAQ_BASE,...customFaq().map(x=>({keys:[x.q],ans:x.a}))];
+  for(const it of all){if(it.keys.some(k=> qNorm.includes(normalize(k)) )){addBot(it.ans);return}}
+  for(const it of all){if(it.keys.some(k=> closeMatch(qNorm,normalize(k)) )){addBot(it.ans);return}}
+  if(qNorm.includes('note:')){addBot('Noted. Use “add faq: Q | A” to teach me permanent answers.');return}
+  if(hasAll(qNorm,['how','use'])||hasAll(qNorm,['get','started'])){addBot('Tap “Next →”, fill fields, upload a photo, then press Predict.');return}
+  addBot('Ask about how EcoVision works, privacy, supported phones, partners, donation vs money, value estimates, theme, or Next button. Teach me with “add faq: Q | A”.');
 }
 </script>
 </body>
