@@ -1,347 +1,363 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EcoVision</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a3622'/%3E%3Cpath d='M92 36c-20 4-36 20-40 40 20-4 36-20 40-40Z' fill='%2342b883'/%3E%3Cpath d='M64 68c4 12 4 22 0 30-8-10-10-22 0-30Z' fill='%2393e9b8'/%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#0b0f12; --card:#141a20; --muted:#98a2ad; --text:#e6edf3; --accent:#1db954; --accent-2:#0ea5e9; --danger:#ef4444;
-  --ring:rgba(29,185,84,.4);
+  --bg:#0b1114;--ink:#eaf2ee;--muted:#9fb0a6;--brand:#34d399;--brand-2:#16a34a;--card:#11181c;--card-2:#0e1519;--accent:#1f2a2e;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+  --pad:16px;
+  --w: min(520px, 92vw);
+  --speed: .9s;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"}
-a{color:inherit;text-decoration:none}
-button{font:inherit}
-.container{max-width:960px;margin:0 auto;padding:16px}
-.section{min-height:100svh;display:flex;align-items:center}
-.card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.row{display:grid;gap:12px}
-@media(min-width:720px){.row{grid-template-columns:repeat(2,1fr)}}
-.h1{font-size:28px;font-weight:800;letter-spacing:.2px;margin:0 0 8px}
-.p{margin:0;color:var(--muted)}
-.badge{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12px;color:#cbd5e1}
-.hero{padding:28px}
-.hero-logo{width:68px;height:68px;border-radius:16px;background:
-  radial-gradient(60% 60% at 50% 20%, #34d399 0 60%, transparent 61%),
-  conic-gradient(from 210deg at 50% 60%, #22c55e, #16a34a 60%, #065f46 100%);
-box-shadow:0 10px 30px rgba(34,197,94,.35), inset 0 0 40px rgba(255,255,255,.08);
-animation:float 3.2s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.hero-wrap{display:grid;gap:16px}
-.cta{display:flex;gap:10px;flex-wrap:wrap}
-.btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
-.btn-primary{background:var(--accent);color:#04130a}
-.btn-primary:active{transform:translateY(1px)}
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--text)}
-.sep{height:1px;background:rgba(255,255,255,.06);margin:16px 0}
-.form{padding:18px}
-.label{font-size:13px;color:#cbd5e1;margin-bottom:6px}
-.select,.input,.slider{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1419;color:var(--text);outline:none}
-.select:focus,.input:focus{border-color:var(--accent);box-shadow:0 0 0 6px var(--ring)}
-.pills{display:flex;gap:10px;flex-wrap:wrap}
-.pill{padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);cursor:pointer;background:#0f1419}
-.pill[aria-pressed="true"]{background:rgba(29,185,84,.15);border-color:var(--accent);color:#c0f7d6}
-.help{font-size:12px;color:#9aa6b2}
-.thumb{display:grid;place-items:center;height:180px;border:1px dashed rgba(255,255,255,.12);border-radius:12px;background:#0f1419}
-.thumb img{max-width:100%;max-height:160px;border-radius:8px}
-.actions{display:flex;gap:12px;flex-wrap:wrap}
-.result{padding:16px;display:none}
-.result.show{display:block}
+html,body{margin:0;background:linear-gradient(180deg,#071013 0%,#0b1114 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+a{color:var(--brand)}
+.btn{appearance:none;border:0;background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#071013;font-weight:700;border-radius:999px;padding:14px 18px;box-shadow:var(--shadow);display:inline-flex;align-items:center;gap:10px;cursor:pointer;letter-spacing:.3px}
+.btn.secondary{background:#132026;color:var(--ink);border:1px solid #22353b}
+.btn:active{transform:translateY(1px)}
+.tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#102125;color:var(--muted);font-size:12px;font-weight:600}
+.wrap{width:var(--w);margin:0 auto;padding:0 var(--pad)}
+/* INTRO */
+#intro{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#intro .leaf{width:min(380px,90vw);aspect-ratio:1/1;position:absolute;inset:8% auto auto 50%;transform:translateX(-50%);opacity:.08;filter:blur(1px)}
+#intro .brand{display:flex;flex-direction:column;align-items:center;gap:18px;z-index:2;text-align:center}
+.logoRow{display:flex;align-items:center;gap:12px}
+.logoOrb{width:54px;height:54px;border-radius:16px;background:radial-gradient( circle at 30% 30%, #4ef0b3 0%, #1ea86b 55%, #077244 100% );box-shadow:0 12px 40px rgba(14,212,139,.35), inset 0 0 20px rgba(0,0,0,.3);position:relative;overflow:hidden}
+.logoStem{position:absolute;left:50%;top:54%;width:8px;height:36px;background:#0b4e34;border-radius:8px;transform:translateX(-50%) scaleY(0);transform-origin:50% 100%;animation:stem 900ms ease forwards .25s}
+.logoLeaf{position:absolute;width:32px;height:22px;background:#93e9b8;border-radius:0 22px 22px 22px;right:-6px;top:8px;transform:rotate(12deg) scale(0);transform-origin:0 100%;box-shadow:inset 0 0 10px rgba(0,0,0,.15);animation:leaf .9s cubic-bezier(.2,.8,.2,1) forwards .55s}
+@keyframes stem{to{transform:translateX(-50%) scaleY(1)}}
+@keyframes leaf{0%{transform:rotate(12deg) scale(0)}100%{transform:rotate(12deg) scale(1)}}
+/* word animation */
+.brandTitle{font-size:36px;font-weight:900;letter-spacing:.6px}
+.brandTitle span{display:inline-block;opacity:0;transform:translateY(22px);animation:rise .65s cubic-bezier(.2,.9,.2,1) forwards}
+.brandTitle span:nth-child(1){animation-delay:.10s}
+.brandTitle span:nth-child(2){animation-delay:.18s}
+.brandTitle span:nth-child(3){animation-delay:.26s}
+.brandTitle span:nth-child(4){animation-delay:.34s}
+.brandTitle span:nth-child(5){animation-delay:.42s}
+.brandTitle span:nth-child(6){animation-delay:.50s}
+.brandTitle span:nth-child(7){animation-delay:.58s}
+.tagline{color:var(--muted);font-weight:600;opacity:0;animation:fade .8s ease forwards .85s}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+@keyframes fade{to{opacity:1}}
+/* demo "video" */
+.phoneDemo{margin-top:24px;width:min(320px,86vw);aspect-ratio:9/19;position:relative;border-radius:38px;background:linear-gradient(180deg,#0e171a,#0c1316);box-shadow:0 14px 60px rgba(0,0,0,.5), inset 0 0 0 2px #1d2a2f}
+.phoneDemo::before{content:"";position:absolute;inset:8px;border-radius:30px;background:#0a1215;box-shadow:inset 0 0 0 1px #112127}
+.punch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:32%;height:8px;background:#0e1519;border-radius:0 0 12px 12px}
+.demoScreen{position:absolute;inset:16px;border-radius:24px;overflow:hidden;background:#071013}
+.demoBar{position:absolute;top:0;left:0;right:0;height:54px;background:#061217;display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:.3px}
+.demoStep{position:absolute;inset:54px 0 0 0;padding:18px;display:grid;place-items:center;text-align:center}
+.cardDemo{width:86%;background:linear-gradient(180deg,#0f1a1e,#0b1316);border:1px solid #1e3036;border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.demoDot{width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.demoLine{height:3px;border-radius:3px;background:#163234}
+.demoLabel{font-weight:800;margin-top:8px}
+.demoGrid{display:grid;grid-template-columns:24px 1fr;grid-auto-rows:auto;gap:10px;align-items:center;margin-top:4px}
+.demoScene{position:absolute;inset:54px 0 0;display:grid;place-items:center;opacity:0;transform:translateY(14px);animation:scene 12s linear infinite}
+.demoScene:nth-child(1){animation-delay:.2s}
+.demoScene:nth-child(2){animation-delay:4.2s}
+.demoScene:nth-child(3){animation-delay:8.2s}
+@keyframes scene{
+  0%{opacity:0;transform:translateY(14px)}
+  5%{opacity:1;transform:translateY(0)}
+  28%{opacity:1;transform:translateY(0)}
+  33%{opacity:0;transform:translateY(-10px)}
+  100%{opacity:0}
+}
+/* next */
+.nextWrap{margin-top:24px}
+.arrow{width:18px;height:18px;border:2px solid #071013;border-left:none;border-top:none;transform:rotate(-45deg)}
+/* APP SECTION */
+#app{padding:44px 0 64px;background:linear-gradient(180deg,#0b1114 0%,#0a1215 100%);border-top:1px solid #152126}
+.card{background:linear-gradient(180deg,#0e161a,#0b1215);border:1px solid #1b2a2f;border-radius:var(--radius);box-shadow:var(--shadow)}
+.head{padding:18px var(--pad) 8px}
+.body{padding:10px var(--pad) 20px}
+.field{display:grid;gap:8px;margin:14px 0}
+label{font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.3px}
+select, input[type="file"], input[type="range"]{
+  width:100%;background:#0a171b;border:1px solid #1b2f35;border-radius:12px;color:var(--ink);
+  padding:14px 12px;font-weight:600;appearance:none
+}
+.rangeRow{display:flex;align-items:center;gap:10px}
+.rangeBubble{min-width:54px;text-align:right;font-weight:800}
+.pills{display:flex;gap:10px}
+.pill{flex:1;display:flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid #264247;background:#0a171b;color:var(--ink);padding:12px 8px;font-weight:800;cursor:pointer}
+.pill[aria-pressed="true"]{background:linear-gradient(90deg,#0d2d25,#0c221c);border-color:#2f6c57;box-shadow:inset 0 0 0 1px #2a6f59}
+.actions{display:flex;gap:10px;margin-top:16px}
+.help{color:var(--muted);font-size:12px;margin-top:8px}
+/* RESULT */
+#resultBlock{display:none;margin-top:16px}
+#resultBlock.show{display:block}
 .callouts{display:grid;gap:10px}
-.callout{padding:10px 12px;border-radius:12px;background:#0f1419;border:1px solid rgba(255,255,255,.08)}
-.success{color:#86efac}
-.warn{color:#fde047}
-.error{color:#fecaca}
-#loadingOverlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999}
+.callout{background:#0c181b;border:1px solid #1a2b31;border-radius:12px;padding:12px;font-weight:700}
+#qRecycle{display:none;margin-top:12px}
+#qRecycle.show{display:block}
+.notice{font-size:12px;color:var(--muted)}
+/* LOADING */
+#loadingOverlay{position:fixed;inset:0;background:rgba(0,0,0,.66);display:none;align-items:center;justify-content:center;z-index:99999}
 #loadingOverlay.show{display:flex}
-#loadingOverlay .spinner{width:40px;height:40px;border-radius:50%;border:4px solid #fff;border-right-color:transparent;animation:spin 1s linear infinite;margin-right:12px}
-#loadingOverlay p{color:#fff;font-weight:700}
+#loadingOverlay .loader{width:38px;height:38px;border-radius:50%;border:4px solid #fff;border-right-color:transparent;animation:spin 1s linear infinite;margin-right:12px}
+#loadingOverlay p{color:#fff;font-weight:800;margin:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-footer{opacity:.7;font-size:12px;text-align:center;padding:18px}
-.small{font-size:12px;color:#9aa6b2}
+/* small */
+.small{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
 
-<section id="page1" class="section">
-  <div class="container">
-    <div class="card hero">
-      <div class="hero-wrap">
-        <div style="display:flex; gap:14px; align-items:center;">
-          <div class="hero-logo" aria-hidden="true"></div>
-          <div>
-            <div class="badge">EcoVision • Damage-aware valuation</div>
-            <h1 class="h1">Know your device’s real worth. Act with confidence.</h1>
-            <p class="p">Upload one photo, answer a few quick questions, get a fair estimate, then sell or recycle with verified partners.</p>
+<section id="intro">
+  <svg class="leaf" viewBox="0 0 400 400" aria-hidden="true">
+    <defs>
+      <radialGradient id="g1" cx="35%" cy="35%">
+        <stop offset="0%" stop-color="#86ffcc"/>
+        <stop offset="60%" stop-color="#49e6a8"/>
+        <stop offset="100%" stop-color="#0a6b43"/>
+      </radialGradient>
+    </defs>
+    <circle cx="200" cy="200" r="180" fill="url(#g1)"/>
+  </svg>
+
+  <div class="brand wrap">
+    <div class="logoRow">
+      <div class="logoOrb">
+        <div class="logoStem"></div>
+        <div class="logoLeaf"></div>
+      </div>
+      <div class="tag">Scan · Value · Recycle</div>
+    </div>
+    <div class="brandTitle" aria-label="EcoVision">
+      <span>E</span><span>c</span><span>o</span><span>V</span><span>i</span><span>s</span><span>ion</span>
+    </div>
+    <div class="tagline">A gentle, green intro that feels like a “video”</div>
+
+    <div class="phoneDemo" role="img" aria-label="EcoVision demo">
+      <div class="punch"></div>
+      <div class="demoBar">EcoVision</div>
+
+      <div class="demoScene">
+        <div class="cardDemo">
+          <div class="demoGrid">
+            <div class="demoDot"></div>
+            <div class="demoLabel">Choose your phone model</div>
+            <div class="demoDot"></div>
+            <div class="demoLine" style="width:82%"></div>
+            <div class="demoDot"></div>
+            <div class="demoLine" style="width:60%"></div>
           </div>
         </div>
-        <div class="cta">
-          <button id="nextBtn" class="btn btn-primary">Next</button>
-          <button class="btn btn-ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
-        </div>
-        <div class="sep"></div>
-        <p class="small">Tip: This demo is mobile-first. For best results open on a phone or narrow your browser window.</p>
       </div>
+
+      <div class="demoScene">
+        <div class="cardDemo">
+          <div class="demoGrid">
+            <div class="demoDot"></div>
+            <div class="demoLabel">Upload a photo</div>
+            <div class="demoDot"></div>
+            <div class="demoLine" style="width:78%"></div>
+            <div class="demoDot"></div>
+            <div class="demoLine" style="width:52%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demoScene">
+        <div class="cardDemo">
+          <div class="demoGrid">
+            <div class="demoDot"></div>
+            <div class="demoLabel">Get a fair estimate</div>
+            <div class="demoDot"></div>
+            <div class="demoLine" style="width:88%"></div>
+            <div class="demoDot"></div>
+            <div class="demoLine" style="width:68%"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nextWrap">
+      <button class="btn" id="nextBtn">
+        Start · Get your estimate
+        <span class="arrow"></span>
+      </button>
     </div>
   </div>
 </section>
 
-<section id="page2" class="section" style="padding-top:24px;">
-  <div class="container">
-    <div class="card form">
-      <div class="row">
-        <div class="col">
-          <div class="label">Phone model</div>
-          <select id="model" class="select">
-            <option value="">Select model…</option>
-            <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
-            <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
-            <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
-            <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
-            <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
-            <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
-          </select>
-        </div>
-        <div class="col">
-          <div class="label">Age (years)</div>
-          <select id="age" class="select">
-            <option value="">Select age…</option>
-            <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
-          </select>
-        </div>
-        <div class="col">
-          <div class="label">Storage (GB)</div>
-          <select id="ssd" class="select">
-            <option value="">Select storage…</option>
-            <option>32</option><option>64</option><option>128</option><option>256</option><option>512</option>
-          </select>
-        </div>
-        <div class="col">
-          <div class="label">RAM (GB)</div>
-          <select id="ram" class="select">
-            <option value="">Select RAM…</option>
-            <option>2</option><option>3</option><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option>
-          </select>
-        </div>
-        <div class="col">
-          <div class="label">Battery health: <span id="batVal">85%</span></div>
-          <input id="bat" class="slider" type="range" min="40" max="100" value="85" step="1" />
-          <div class="help">Adjust if you know it; otherwise keep default.</div>
-        </div>
-        <div class="col">
-          <div class="label">Camera working?</div>
-          <div class="pills" role="group" aria-label="Camera working">
-            <button class="pill" data-name="cam" data-val="yes">Yes</button>
-            <button class="pill" data-name="cam" data-val="no">No</button>
-          </div>
-        </div>
-        <div class="col">
-          <div class="label">Charging port working?</div>
-          <div class="pills" role="group" aria-label="Charging port working">
-            <button class="pill" data-name="port" data-val="yes">Yes</button>
-            <button class="pill" data-name="port" data-val="no">No</button>
-          </div>
-        </div>
-        <div class="col">
-          <div class="label">Device photo</div>
-          <input id="photo" class="input" type="file" accept="image/*" />
-          <div class="thumb" id="thumb"><span class="help">Preview will appear here</span></div>
+<section id="app">
+  <div class="wrap card">
+    <div class="head">
+      <div class="tag">Step 1</div>
+      <h2 style="margin:8px 0 0">Tell us about your device</h2>
+      <p class="small">Every option is a dropdown except battery, camera and charging port.</p>
+    </div>
+    <div class="body">
+
+      <div class="field">
+        <label for="model">Phone model</label>
+        <select id="model">
+          <option value="" selected disabled>Select model</option>
+          <option>iPhone 11</option><option>iPhone 12</option><option>iPhone 13</option><option>iPhone 14</option><option>iPhone 15</option>
+          <option>Galaxy S20</option><option>Galaxy S21</option><option>Galaxy S22</option><option>Galaxy S23</option><option>Galaxy A52</option>
+          <option>OnePlus 7</option><option>OnePlus 8</option><option>OnePlus 9</option><option>OnePlus 10</option><option>OnePlus Nord 2</option>
+          <option>Redmi Note 9</option><option>Redmi Note 10</option><option>Redmi Note 11</option><option>Mi 10</option><option>Mi 11X</option>
+          <option>Vivo V20</option><option>Vivo V21</option><option>Vivo Y20</option><option>Vivo Y21</option><option>Vivo X60</option>
+          <option>Oppo F17</option><option>Oppo F19</option><option>Oppo Reno 6</option><option>Oppo A74</option><option>Oppo A55</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="age">Age of phone (years)</label>
+        <select id="age">
+          <option value="" selected disabled>Select age</option>
+          <option value="0">Less than 1</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5+</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="ssd">Storage</label>
+        <select id="ssd">
+          <option value="" selected disabled>Select storage</option>
+          <option>32</option><option>64</option><option>128</option><option>256</option><option>512</option><option>1024</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="ram">RAM (GB)</label>
+        <select id="ram">
+          <option value="" selected disabled>Select RAM</option>
+          <option>2</option><option>3</option><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="bat">Battery health</label>
+        <div class="rangeRow">
+          <input id="bat" type="range" min="40" max="100" step="1" value="85">
+          <div class="rangeBubble"><span id="batVal">85</span>%</div>
         </div>
       </div>
 
-      <div class="sep"></div>
+      <div class="field">
+        <label>Camera working?</label>
+        <div class="pills">
+          <button class="pill" data-name="cam" data-val="yes" aria-pressed="true">Yes</button>
+          <button class="pill" data-name="cam" data-val="no" aria-pressed="false">No</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Charging port working?</label>
+        <div class="pills">
+          <button class="pill" data-name="port" data-val="yes" aria-pressed="true">Yes</button>
+          <button class="pill" data-name="port" data-val="no" aria-pressed="false">No</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="photo">Upload a clear photo</label>
+        <input id="photo" type="file" accept="image/*" capture="environment">
+        <div class="help">Use good light. A front shot works best.</div>
+      </div>
 
       <div class="actions">
-        <button id="predictBtn" class="btn btn-primary">Predict</button>
-        <button id="resetBtn" class="btn btn-ghost">Reset</button>
+        <button class="btn" id="predictBtn">Predict value</button>
+        <button class="btn secondary" id="resetBtn">Reset</button>
       </div>
 
-      <div id="resultBlock" class="result">
-        <div class="sep"></div>
-        <div class="callouts" id="callouts"></div>
-
-        <div id="qRecycle" style="margin-top:14px; display:none;">
-          <div class="label">Do you wish to recycle or sell this item?</div>
-          <div class="pills">
-            <button class="pill" data-name="action" data-val="sell">Sell for money</button>
-            <button class="pill" data-name="action" data-val="recycle">Recycle / Donate</button>
-          </div>
-        </div>
-
-        <div id="locBlock" style="margin-top:14px; display:none;">
-          <div class="label">Your city</div>
-          <select id="city" class="select">
-            <option value="">Select city…</option>
-            <option>Bengaluru</option><option>Mumbai</option><option>Delhi</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Others</option>
-          </select>
-        </div>
-
-        <div id="moneyBlock" style="margin-top:14px; display:none;">
-          <div class="label">Do you want money for this item?</div>
-          <div class="pills">
-            <button class="pill" data-name="money" data-val="yes">Yes</button>
-            <button class="pill" data-name="money" data-val="no">No</button>
-          </div>
-        </div>
-
-        <div id="partners" style="margin-top:14px; display:none;">
-          <div class="label">Suggested partners</div>
-          <div class="callouts" id="partnerList"></div>
-          <p class="help">Prices shown are estimates based on your answers. Dealers may adjust after inspection.</p>
-        </div>
+      <div id="resultBlock" class="card" style="padding:14px;margin-top:16px">
+        <div class="callouts"></div>
+        <div id="qRecycle" class="notice">If you wish to recycle or sell, we’ll show nearby verified options after this step.</div>
       </div>
 
     </div>
-    <footer>EcoVision • demo</footer>
   </div>
 </section>
 
 <div id="loadingOverlay" aria-live="polite" aria-busy="true">
-  <div class="spinner"></div>
-  <p>Loading… predicting…</p>
+  <div class="loader"></div>
+  <p id="loadingText">Loading… predicting…</p>
 </div>
 
 <script>
-const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
-const $=(s)=>document.querySelector(s);
-const $$=(s)=>Array.from(document.querySelectorAll(s));
+const nextBtn=document.getElementById('nextBtn');
+nextBtn.addEventListener('click',()=>document.getElementById('app').scrollIntoView({behavior:'smooth'}));
+const bat=document.getElementById('bat'),batVal=document.getElementById('batVal');bat.addEventListener('input',e=>batVal.textContent=e.target.value);
+document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{document.querySelectorAll('.pill[data-name="'+p.dataset.name+'"]').forEach(b=>b.setAttribute('aria-pressed','false'));p.setAttribute('aria-pressed','true')}));
 
-$('#nextBtn').addEventListener('click',()=>document.getElementById('page2').scrollIntoView({behavior:'smooth'}));
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function showLoading(msg){document.getElementById('loadingText').textContent=msg||'Loading… predicting…';document.getElementById('loadingOverlay').classList.add('show')}
+function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
 
-$('#bat').addEventListener('input',e=>{$('#batVal').textContent=e.target.value+'%'});
+const BASE={
+  "iPhone 11":25000,"iPhone 12":35000,"iPhone 13":45000,"iPhone 14":55000,"iPhone 15":65000,
+  "Galaxy S20":25000,"Galaxy S21":35000,"Galaxy S22":45000,"Galaxy S23":60000,"Galaxy A52":15000,
+  "OnePlus 7":12000,"OnePlus 8":18000,"OnePlus 9":25000,"OnePlus 10":30000,"OnePlus Nord 2":18000,
+  "Redmi Note 9":8000,"Redmi Note 10":10000,"Redmi Note 11":12000,"Mi 10":15000,"Mi 11X":18000,
+  "Vivo V20":12000,"Vivo V21":15000,"Vivo Y20":8000,"Vivo Y21":9000,"Vivo X60":20000,
+  "Oppo F17":9000,"Oppo F19":11000,"Oppo Reno 6":20000,"Oppo A74":10000,"Oppo A55":9000
+};
 
-function bindPills(name){
-  $$('.pill[data-name="'+name+'"]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      $$('.pill[data-name="'+name+'"]').forEach(b=>b.setAttribute('aria-pressed','false'));
-      btn.setAttribute('aria-pressed','true');
-    });
-  });
-}
-bindPills('cam'); bindPills('port'); bindPills('action'); bindPills('money');
-
-$('#photo').addEventListener('change',e=>{
-  const f=e.target.files[0]; const t=$('#thumb');
-  t.innerHTML='';
-  if(!f){ t.innerHTML='<span class="help">Preview will appear here</span>'; return; }
-  const img=new Image(); img.onload=()=>t.appendChild(img); img.src=URL.createObjectURL(f);
-});
-
-$('#resetBtn').addEventListener('click',()=>{
-  ['model','age','ssd','ram','city'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';});
-  $('#bat').value=85; $('#batVal').textContent='85%';
-  ['cam','port','action','money'].forEach(n=>$$('.pill[data-name="'+n+'"]').forEach(b=>b.setAttribute('aria-pressed','false')));
-  $('#photo').value=''; $('#thumb').innerHTML='<span class="help">Preview will appear here</span>';
-  $('#resultBlock').classList.remove('show');
-  $('#qRecycle').style.display='none';
-  $('#locBlock').style.display='none';
-  $('#moneyBlock').style.display='none';
-  $('#partners').style.display='none';
-  $('#partnerList').innerHTML='';
-});
-
-function showLoading(show){
-  const o=document.getElementById('loadingOverlay');
-  if(show) o.classList.add('show'); else o.classList.remove('show');
-}
-
-function baseTable(){
-  return {
-    "iPhone 11":25000,"iPhone 12":35000,"iPhone 13":45000,"iPhone 14":55000,"iPhone 15":65000,
-    "Galaxy S20":25000,"Galaxy S21":35000,"Galaxy S22":45000,"Galaxy S23":60000,"Galaxy A52":15000,
-    "OnePlus 7":12000,"OnePlus 8":18000,"OnePlus 9":25000,"OnePlus 10":30000,"OnePlus Nord 2":18000,
-    "Redmi Note 9":8000,"Redmi Note 10":10000,"Redmi Note 11":12000,"Mi 10":15000,"Mi 11X":18000,
-    "Vivo V20":12000,"Vivo V21":15000,"Vivo Y20":8000,"Vivo Y21":9000,"Vivo X60":20000,
-    "Oppo F17":9000,"Oppo F19":11000,"Oppo Reno 6":20000,"Oppo A74":10000,"Oppo A55":9000
-  };
-}
-
-function estimateINR(model, cracked, age, bat, cam, port){
-  const BASE=baseTable();
-  let v = BASE[model] || 20000;
-  v *= 1 - Math.min(Number(age||0)*0.12, 0.6);
-  v *= (Number(bat||85)/100)*0.4 + 0.6;
-  if(cracked) v *= 0.70;
-  if(cam==='no') v *= 0.85;
-  if(port==='no') v *= 0.75;
-  v = Math.max(Math.round(v/100)*100, 500);
+function estimateINR(model, age, bat, cam, port){
+  let v=BASE[model]||20000;
+  v*=1-Math.min(age*0.12,0.6);
+  v*=(bat/100)*0.4+0.6;
+  if(cam==='no') v*=0.85;
+  if(port==='no') v*=0.75;
+  v=Math.max(Math.round(v/100)*100,500);
   return v;
 }
 
-function getPillVal(name){
-  const el=document.querySelector('.pill[data-name="'+name+'"][aria-pressed="true"]');
-  return el ? el.dataset.val : '';
-}
+const predictBtn=document.getElementById('predictBtn');
+predictBtn.addEventListener('click', async ()=>{
+  const model=document.getElementById('model').value;
+  const age = document.getElementById('age').value;
+  const ssd = document.getElementById('ssd').value;
+  const ram = document.getElementById('ram').value;
+  const cam = (document.querySelector('.pill[data-name="cam"][aria-pressed="true"]')?.dataset.val)||'';
+  const port = (document.querySelector('.pill[data-name="port"][aria-pressed="true"]')?.dataset.val)||'';
+  const batPct=parseInt(document.getElementById('bat').value||'85',10);
+  const photo=document.getElementById('photo').files[0];
 
-function addCallout(html){
-  const d=document.createElement('div'); d.className='callout'; d.innerHTML=html; return d;
-}
+  if(!model||age===""||!ssd||!ram||!cam||!port){alert('Please complete all fields.');return}
+  if(!photo){alert('Please upload a photo.');return}
 
-$('#predictBtn').addEventListener('click', async ()=>{
-  const model=$('#model').value.trim();
-  const age=$('#age').value.trim();
-  const ssd=$('#ssd').value.trim();
-  const ram=$('#ram').value.trim();
-  const bat=$('#bat').value.trim();
-  const cam=getPillVal('cam');
-  const port=getPillVal('port');
-  const photo=$('#photo').files[0];
-
-  if(!model||!age||!ssd||!ram||!cam||!port){alert('Please complete all fields.');return}
-  if(!photo){alert('Please upload a device photo.');return}
-
-  showLoading(true);
+  showLoading('Loading… predicting…');
   await sleep(5000);
-  showLoading(false);
 
-  const cracked = Math.random()<0.5; 
-  const price = estimateINR(model, cracked, age, bat, cam, port);
+  const cracked = /crack|broken|shatter/i.test(photo.name) ? true : false;
+  const value = estimateINR(model, parseFloat(age||'0'), batPct, cam, port);
 
-  const callouts=$('#callouts'); callouts.innerHTML='';
-  callouts.appendChild(addCallout('📄 <b>AI damage check:</b> '+(cracked?'Cracked screen detected':'No visible screen crack')));
-  callouts.appendChild(addCallout('💰 <b>Approx value:</b> ₹'+price.toLocaleString('en-IN')));
-  callouts.appendChild(addCallout('ℹ️ This is an estimate based on your answers. Dealers may adjust after inspection.'));
+  const resultBlock=document.getElementById('resultBlock');
+  const callouts=resultBlock.querySelector('.callouts');
+  callouts.innerHTML='';
+  const mk=t=>{const d=document.createElement('div');d.className='callout';d.innerHTML=t;return d}
+  callouts.appendChild(mk(`📄 <b>AI check:</b> ${cracked?'Possible cracked screen detected':'No obvious crack detected in photo name'}`));
+  callouts.appendChild(mk(`💰 <b>Approx value:</b> ₹${value.toLocaleString('en-IN')}`));
+  callouts.appendChild(mk(`🧩 <b>Condition:</b> Cam ${cam==='yes'?'OK':'Issue'}, Port ${port==='yes'?'OK':'Issue'}, Battery ${batPct}%`));
+  resultBlock.classList.add('show');
+  document.getElementById('qRecycle').classList.add('show');
+  resultBlock.scrollIntoView({behavior:'smooth',block:'start'});
+  hideLoading();
+});
 
-  $('#resultBlock').classList.add('show');
-  $('#qRecycle').style.display='block';
-
-  $$('.pill[data-name="action"]').forEach(b=>b.onclick=()=>{
-    $$('.pill[data-name="action"]').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true');
-    $('#locBlock').style.display='block';
-    $('#moneyBlock').style.display= b.dataset.val==='sell' ? 'block' : 'none';
-    $('#partners').style.display='none';
-    $('#partnerList').innerHTML='';
-  });
-
-  $$('.pill[data-name="money"]').forEach(b=>b.onclick=()=>{
-    $$('.pill[data-name="money"]').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true');
-    renderPartners();
-  });
-
-  $('#city').addEventListener('change',renderPartners,{once:false});
-
-  function renderPartners(){
-    const act=getPillVal('action'); if(!act) return;
-    const city=$('#city').value; if(!city) return;
-    const needMoney=getPillVal('money')==='yes' || act==='sell';
-    const working = (cam==='yes' && port==='yes' && !cracked && Number(bat)>=70);
-    const list=$('#partnerList'); list.innerHTML='';
-    const items=[];
-    if(needMoney && working){
-      items.push('Cashify — trade-in for functioning phones');
-      items.push('Servify — buy-back for good condition devices');
-    }else if(needMoney && !working){
-      items.push('Zolopik — pays for damaged/non-working phones');
-      items.push('ReGlobe — bulk/condition-agnostic quotes');
-    }else{
-      items.push('CPCB-authorized recycler — certified disposal');
-      items.push('Attero / TES-AMM — formal recycling partners');
-    }
-    if(city==='Bengaluru') items.unshift('Bengaluru: Zolopik (pickup), city-verified e-waste centers');
-    items.forEach(t=>list.appendChild(addCallout('• '+t)));
-    $('#partners').style.display='block';
-  }
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  ['model','age','ssd','ram'].forEach(id=>document.getElementById(id).selectedIndex=0);
+  bat.value=85;batVal.textContent='85';
+  document.querySelectorAll('.pill[data-name="cam"]').forEach((b,i)=>b.setAttribute('aria-pressed',i===0?'true':'false'));
+  document.querySelectorAll('.pill[data-name="port"]').forEach((b,i)=>b.setAttribute('aria-pressed',i===0?'true':'false'));
+  document.getElementById('photo').value='';
+  document.getElementById('resultBlock').classList.remove('show');
+  document.getElementById('qRecycle').classList.remove('show');
 });
 </script>
 </body>
